@@ -19,6 +19,8 @@
 <meta name="description" content="Portfólio de Mariana Naomi Ota, UGC Creator em São Paulo: vídeos, fotos e conteúdo com jeito de gente de verdade para marcas.">
 <meta name="theme-color" content="#f2e9dc">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23b5563a'/%3E%3Ctext x='16' y='23' font-size='19' text-anchor='middle' fill='%23f2e9dc' font-family='Georgia,serif'%3EM%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://gakuzpwnwmzxuaefiohf.supabase.co" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600;1,700&family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
@@ -893,12 +895,10 @@ const SERVICOS = [
   function usarListasFixas() { renderDestaques(DESTAQUES); renderTrabalhos(TRABALHOS); }
 
   function buscarVideos() {
-    var limite = new Promise(function (resolve) { setTimeout(function () { resolve(null); }, 3000); });
-    var painel = bancoP.then(function (b) {
+    return bancoP.then(function (b) {
       if (!b) return null;
       return Promise.resolve(b.rpc('videos_do_site')).then(function (r) { return (r && !r.error && r.data && r.data.length) ? r.data : null; });
     }).catch(function () { return null; });
-    return Promise.race([painel, limite]);
   }
   /* ---------- serviços ---------- */
   $('#lista-servicos').innerHTML = SERVICOS.map(function (s, i) {
@@ -931,10 +931,14 @@ const SERVICOS = [
     contadores.forEach(function (el) { el.textContent = el.getAttribute('data-pref') + fmt(+el.getAttribute('data-alvo')) + el.getAttribute('data-suf'); });
   }
 
-  /* Vídeos: espera o painel (até 3 segundos); se não vier, usa as listas fixas. */
-  buscarVideos().then(function (lista) {
-    if (lista) usarVideosDoPainel(lista); else usarListasFixas();
+  /* Vídeos: espera o painel (até 5 segundos); se não vier, mostra as listas fixas.
+     Se o painel responder depois (internet lenta), troca pelas listas de verdade. */
+  var painelP = buscarVideos(), usouPainel = false;
+  status.textContent = 'Carregando os vídeos...';
+  Promise.race([painelP, new Promise(function (r) { setTimeout(function () { r(null); }, 5000); })]).then(function (lista) {
+    if (lista) { usouPainel = true; usarVideosDoPainel(lista); } else usarListasFixas();
     observar();
+    painelP.then(function (l) { if (l && !usouPainel) { usouPainel = true; usarVideosDoPainel(l); observar(); } });
   });
   /* ---------- menu, sanduíche e seção ativa ---------- */
   var topo = $('#topo'), burger = $('.burger'), menu = $('#menu');

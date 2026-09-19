@@ -113,6 +113,15 @@ a{color:inherit}
   .menu a[aria-current="true"]{color:var(--terracota-esc)}
 }
 
+/* ===== BOTÃO DE IDIOMA (PT | EN) ===== */
+.topo-dir{display:flex;align-items:center;gap:1.6rem}
+.idioma{display:inline-flex;border:1.5px solid rgba(58,39,31,.3);border-radius:99px;padding:2px;gap:2px;background:rgba(255,250,241,.6)}
+.idioma button{border:0;background:transparent;color:var(--tinta);font:500 .78rem/1 var(--f-corpo);letter-spacing:.06em;padding:.5rem .7rem;min-height:32px;border-radius:99px;cursor:pointer;transition:background-color .2s,color .2s}
+.idioma button:hover:not([aria-pressed="true"]){background:var(--linho-2)}
+.idioma button[aria-pressed="true"]{background:var(--terracota);color:#fff}
+@media (max-width:1100px){.menu ul{gap:1.3rem}.topo-dir{gap:1.1rem}}
+@media (max-width:900px){.topo-dir{gap:.5rem}.idioma button{min-height:36px;padding:.5rem .75rem}}
+
 /* ===== OBJETOS FLUTUANTES (CSS puro) ===== */
 .obj{position:absolute;z-index:0;pointer-events:none;filter:drop-shadow(0 12px 10px rgba(58,39,31,.2));
   animation:flutuar var(--t,9s) ease-in-out infinite;animation-delay:var(--dl,0s)}
@@ -417,19 +426,25 @@ html:has(dialog[open]){overflow:hidden}
 <header class="topo" id="topo">
   <div class="wrap topo-in">
     <a class="marca" href="#capa" aria-label="Mariana Naomi, voltar ao início">Mariana <em>Naomi</em></a>
-    <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu">
-      <span></span><span></span><span></span>
-    </button>
-    <nav class="menu" id="menu" aria-label="Principal">
-      <ul>
-        <li><a href="#sobre">Sobre</a></li>
-        <li><a href="#destaques">Destaques</a></li>
-        <li><a href="#trabalhos">Trabalhos</a></li>
-        <li><a href="#fotos">Fotos</a></li>
-        <li><a href="#servicos">Serviços</a></li>
-        <li><a href="#contato">Contato</a></li>
-      </ul>
-    </nav>
+    <div class="topo-dir">
+      <nav class="menu" id="menu" aria-label="Principal">
+        <ul>
+          <li><a href="#sobre">Sobre</a></li>
+          <li><a href="#destaques">Destaques</a></li>
+          <li><a href="#trabalhos">Trabalhos</a></li>
+          <li><a href="#fotos">Fotos</a></li>
+          <li><a href="#servicos">Serviços</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </nav>
+        <div class="idioma" role="group" aria-label="Idioma">
+        <button type="button" data-lang="pt" lang="pt" aria-pressed="true" aria-label="Português">PT</button>
+        <button type="button" data-lang="en" lang="en" aria-pressed="false" aria-label="English">EN</button>
+      </div>
+      <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu">
+        <span></span><span></span><span></span>
+      </button>
+      </div>
   </div>
 </header>
 
@@ -742,6 +757,101 @@ const SERVICOS = [
 ];
 
 /* =====================================================================
+   VERSÃO EM INGLÊS: traduções dos textos do site.
+   Cada linha é  "texto em português": "texto em inglês".
+   O botão PT/EN no topo do site usa esta lista. Para mudar uma tradução,
+   edite só o lado direito. O texto em português precisa ficar igual ao do site.
+   Um texto que começa com ¤ é colocado sem espaços em volta (uso técnico).
+   Os títulos, marcas e textos que você escreve no painel (vídeos e fotos)
+   NÃO são traduzidos: aparecem do jeito que você escreveu.
+   ===================================================================== */
+const TEXTOS_EN = {
+  /* menu e topo */
+  "Pular para o conteúdo": "Skip to content",
+  "Sobre": "About", "Destaques": "Featured", "Trabalhos": "Work", "Fotos": "Photos", "Serviços": "Services", "Contato": "Contact",
+  "Mariana Naomi, voltar ao início": "Mariana Naomi, back to top",
+  "Abrir menu": "Open menu", "Fechar menu": "Close menu", "Principal": "Main", "Apresentação": "Introduction",
+  /* capa */
+  "UGC Creator em São Paulo": "UGC Creator in São Paulo",
+  "Eu crio vídeos e fotos com jeito de recomendação de amiga, para marcas que querem ser vistas e lembradas.": "I create videos and photos that feel like a friend's recommendation, for brands that want to be seen and remembered.",
+  "Falar comigo": "Talk to me", "Ver os trabalhos": "See my work",
+  "Espaço reservado para a foto principal da creator": "Placeholder for the creator's main photo",
+  "foto da creator 4:5": "creator photo 4:5",
+  "Números em resumo": "Numbers at a glance",
+  "vídeos entregues": "videos delivered", "marcas atendidas": "brands served", "views somadas": "total views",
+  /* sobre */
+  "um pouco de mim": "a little about me",
+  "Oii, eu sou a": "Hi, I'm",
+  "Moro em São Paulo, tenho 31 anos e trabalho com criação de conteúdos UGC. Sou apaixonada em trabalhar com marcas que geram transformações reais na vida das pessoas.": "I live in São Paulo, I'm 31 and I work creating UGC content. I love working with brands that create real change in people's lives.",
+  "Espaço reservado para a foto da seção sobre mim": "Placeholder for the about me photo",
+  "meu portfólio inclui conteúdos voltados para": "my portfolio includes content focused on",
+  "Beleza": "Beauty", "Skincare": "Skincare", "Moda": "Fashion", "Comida": "Food", "Casa e decoração": "Home and decor", "Fitness": "Fitness", "Pet": "Pets", "Tech": "Tech",
+  "meu estilo de conteúdo": "my content style", "Meu estilo de conteúdo": "My content style",
+  "Clean": "Clean", "Visual limpo e luz natural.": "Clean visuals and natural light.",
+  "Leve": "Light", "Conversa com o público de forma natural.": "A natural conversation with the audience.",
+  "Identificação": "Relatable", "Situações reais do dia a dia.": "Real everyday situations.",
+  /* destaques */
+  "vale apertar o play": "worth pressing play",
+  "Conteúdos de": "¤Featured ", "destaque": "content",
+  "Três trabalhos que mostram como eu transformo um produto em vídeo.": "Three projects that show how I turn a product into a video.",
+  "views no reels": "reel views", "curtidas no reels": "reel likes",
+  "Abre o vídeo em uma nova aba.": "Opens the video in a new tab.",
+  "capa do vídeo 9:16": "video cover 9:16",
+  /* trabalhos */
+  "para todo gosto": "something for every taste",
+  "Trabalhos por": "Work by", "nicho": "niche",
+  "Escolha um nicho e veja só os vídeos dele.": "Pick a niche and see only its videos.",
+  "Filtrar vídeos por nicho": "Filter videos by niche",
+  "Todos": "All", "Carregando os vídeos...": "Loading videos...",
+  "vídeo 9:16": "video 9:16", "foto 4:5": "photo 4:5", "foto 1:1": "photo 1:1", "Foto do portfólio": "Portfolio photo",
+  /* fotos */
+  "olhar de perto": "a closer look",
+  "Fotos de": "¤Product ", "produto": "photos",
+  "Imagens reais, com luz natural e cenário do dia a dia.": "Real images, with natural light and everyday settings.",
+  /* serviços */
+  "meu ofício": "my craft",
+  "Como eu": "How I", "te ajudo": "can help you",
+  "Seis jeitos de levar o seu produto para perto de quem vai comprar.": "Six ways to bring your product closer to the people who will buy it.",
+  "Vídeo UGC": "UGC video",
+  "Vídeo gravado com jeito de gente de verdade, com roteiro aprovado por você antes de eu ligar a câmera.": "A video shot like a real person made it, with a script you approve before I turn on the camera.",
+  "Corte para anúncio": "Ad cut",
+  "Versões curtas e prontas para tráfego pago, com gancho nos primeiros segundos e legenda na tela.": "Short versions ready for paid traffic, with a hook in the first seconds and on-screen captions.",
+  "Fotos do produto": "Product photos",
+  "Fotos reais, com luz natural e cenário do dia a dia, para vitrine, feed e página de venda.": "Real photos with natural light and everyday settings, for storefronts, feeds and sales pages.",
+  "Unboxing": "Unboxing",
+  "Abertura filmada com calma e curiosidade, mostrando embalagem, textura e primeira impressão.": "An opening filmed with calm and curiosity, showing the packaging, the texture and the first impression.",
+  "Publicação no meu perfil": "Post on my profile",
+  "Divulgo o produto no meu Instagram, com marcação e detalhes combinados com a marca.": "I share the product on my Instagram, with tags and details agreed with the brand.",
+  "Pacote mensal": "Monthly package",
+  "Vídeos e fotos todo mês, com calendário combinado e um único contato para tudo.": "Videos and photos every month, with an agreed calendar and a single point of contact.",
+  /* contato */
+  "vamos conversar": "let's talk",
+  "Bora criar": "Let's create", "juntos": "together",
+  "Conta o que você tem em mente. A gente combina roteiro, prazo e formato, e eu cuido do resto com carinho.": "Tell me what you have in mind. We agree on the script, deadline and format, and I take care of the rest with care.",
+  "(abre em nova aba)": "(opens in a new tab)", "E-mail": "Email",
+  "Seu nome": "Your name", "Seu e-mail": "Your email", "Mensagem": "Message", "Enviar mensagem": "Send message",
+  "Mensagem enviada!": "Message sent!", "Obrigada,": "Thank you,",
+  "! Sua mensagem foi enviada e eu volto a falar com você em breve.": "¤! Your message was sent and I will get back to you soon.",
+  "Enviar outra mensagem": "Send another message",
+  "Preencha nome, um e-mail válido e a mensagem.": "Fill in your name, a valid email and the message.",
+  "Não consegui enviar agora. Tente pelo WhatsApp ou pelo e-mail.": "I couldn't send it right now. Try WhatsApp or email.",
+  /* rodapé */
+  "Minhas redes": "My links",
+  "Mariana Naomi. Todo o conteúdo é criado pensando nos valores de cada marca.": "Mariana Naomi. All content is created with each brand's values in mind.",
+  /* card do mídia kit */
+  "um presente para você": "a gift for you",
+  "Quer meu": "Want my full", "mídia kit": "media kit", "completo?": "¤?",
+  "Deixe seu nome e seu e-mail que eu envio o material para você.": "Leave your name and email and I will send you the material.",
+  "Quero receber": "Send it to me", "Fechar": "Close",
+  "Preencha seu nome e um e-mail válido.": "Fill in your name and a valid email.",
+  "Não consegui enviar agora. Tente de novo em instantes.": "I couldn't send it right now. Try again in a moment.",
+  "Anotado,": "Noted,",
+  "Seu pedido do mídia kit foi enviado. Obrigada pelo interesse.": "Your media kit request was sent. Thank you for your interest.",
+  /* player de vídeo */
+  "Vídeo": "Video", "Fechar vídeo": "Close video", "Abrir no site original": "Open on the original site"
+};
+
+/* =====================================================================
    A PARTIR DAQUI É O FUNCIONAMENTO DA PÁGINA (não precisa editar)
    ===================================================================== */
 (function () {
@@ -759,6 +869,98 @@ const SERVICOS = [
   var cap = function (s) { return s.charAt(0).toUpperCase() + s.slice(1); };
   var fmt = function (n) { return n.toLocaleString('pt-BR'); };
   var grad = function (i) { return 'g' + ((i % 6) + 1); };
+
+  /* ---------- idioma: português ou inglês ---------- */
+  var LANG = 'pt';
+  try { var pedido = new URLSearchParams(location.search).get('lang'); if (pedido === 'en' || pedido === 'pt') LANG = pedido; else { var salvo = localStorage.getItem('idioma'); if (salvo === 'en' || salvo === 'pt') LANG = salvo; } } catch (e) { /* sem armazenamento: fica em português */ }
+  var TITULO_PT = document.title, DESC_PT = ($('meta[name="description"]') || {}).content || '';
+  var TITULO_EN = 'Mariana Naomi | UGC Portfolio';
+  var DESC_EN = 'Portfolio of Mariana Naomi, UGC Creator in São Paulo: videos, photos and content that feels like real people, for brands.';
+  var NICHOS_EN = { 'beleza': 'beauty', 'skincare': 'skincare', 'moda': 'fashion', 'comida': 'food', 'casa e decoração': 'home and decor', 'fitness': 'fitness', 'pet': 'pets', 'tech': 'tech' };
+  function nichoEn(n) { return NICHOS_EN[n] || n; }
+  /* textos que têm número ou nome no meio e por isso não cabem na lista fixa */
+  var REGRAS_EN = [
+    [/^Mostrando o vídeo\.$/, function () { return 'Showing the video.'; }],
+    [/^Mostrando todos os (\d+) vídeos\.$/, function (m) { return 'Showing all ' + m[1] + ' videos.'; }],
+    [/^Mostrando (\d+) vídeos? de (.+)\.$/, function (m) { return 'Showing ' + m[1] + (m[1] === '1' ? ' video' : ' videos') + ' in ' + nichoEn(m[2]) + '.'; }],
+    [/^Marcas atendidas: (.+)\.$/, function (m) { return 'Brands served: ' + m[1].replace(/Marca (\d+)/g, 'Brand $1') + '.'; }],
+    [/^Capa do vídeo: (.+)$/, function (m) { return 'Video cover: ' + m[1]; }],
+    [/^Marca (\d+)$/, function (m) { return 'Brand ' + m[1]; }],
+    [/^Trabalho (\d+)$/, function (m) { return 'Work ' + m[1]; }],
+    [/^Foto (\d+)$/, function (m) { return 'Photo ' + m[1]; }],
+    [/^Título do conteúdo (\d+)$/, function (m) { return 'Content title ' + m[1]; }],
+    [/^Marca (\d+), (.+)\. Escreva aqui uma linha sobre o que foi feito\.$/, function (m) { return 'Brand ' + m[1] + ', ' + nichoEn(m[2]) + '. Write one line here about what was done.'; }]
+  ];
+  function traduzirTexto(txt) {
+    var m = /^(\s*)([\s\S]*?)(\s*)$/.exec(txt), miolo = m[2].replace(/\s+/g, ' ');
+    if (!miolo) return txt;
+    var v = Object.prototype.hasOwnProperty.call(TEXTOS_EN, miolo) ? TEXTOS_EN[miolo] : null;
+    if (v === null) for (var i = 0; i < REGRAS_EN.length; i++) { var r = REGRAS_EN[i][0].exec(miolo); if (r) { v = REGRAS_EN[i][1](r); break; } }
+    if (v === null) return txt;
+    return v.charAt(0) === '¤' ? v.slice(1) : m[1] + v + m[3];
+  }
+  function T(pt) { return LANG === 'en' ? traduzirTexto(pt) : pt; }
+
+  /* Troca os textos da página. O original em português fica guardado no próprio texto, para poder voltar. */
+  var ATRIBUTOS = ['aria-label', 'alt', 'placeholder', 'title'];
+  function traduzirNo(n) {
+    var pai = n.parentNode;
+    if (!pai || /^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA)$/.test(pai.nodeName) || (pai.classList && pai.classList.contains('num'))) return;
+    var orig = n.__pt !== undefined ? n.__pt : n.nodeValue;
+    var novo = LANG === 'en' ? traduzirTexto(orig) : orig;
+    if (n.__pt === undefined) { if (novo === orig) return; n.__pt = orig; }
+    if (n.nodeValue !== novo) n.nodeValue = novo;
+  }
+  function traduzirAtributos(el) {
+    if (!el.hasAttribute || (el.classList && el.classList.contains('burger'))) return;
+    ATRIBUTOS.forEach(function (a) {
+      if (!el.hasAttribute(a)) return;
+      var guarda = 'data-pt-' + a, orig = el.hasAttribute(guarda) ? el.getAttribute(guarda) : el.getAttribute(a);
+      var novo = LANG === 'en' ? traduzirTexto(orig) : orig;
+      if (!el.hasAttribute(guarda)) { if (novo === orig) return; el.setAttribute(guarda, orig); }
+      if (el.getAttribute(a) !== novo) el.setAttribute(a, novo);
+    });
+  }
+  function traduzirDOM(raiz) {
+    if (!raiz) return;
+    if (raiz.nodeType === 3) { traduzirNo(raiz); return; }
+    if (raiz.nodeType !== 1) return;
+    traduzirAtributos(raiz);
+    var w = document.createTreeWalker(raiz, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT, null), n;
+    while ((n = w.nextNode())) { if (n.nodeType === 3) traduzirNo(n); else traduzirAtributos(n); }
+  }
+  /* Tudo que a página desenha depois (vídeos e fotos do painel, mensagens) também é traduzido na hora. */
+  var obsIdioma = null;
+  function ligarObservador() {
+    if (obsIdioma || !window.MutationObserver) return;
+    obsIdioma = new MutationObserver(function (ms) {
+      if (LANG !== 'en') return;
+      ms.forEach(function (m) { for (var i = 0; i < m.addedNodes.length; i++) traduzirDOM(m.addedNodes[i]); });
+    });
+    obsIdioma.observe(document.body, { childList: true, subtree: true });
+  }
+  function rotuloBurger() {
+    var b = $('.burger'), m = $('#menu');
+    if (b && m) b.setAttribute('aria-label', T(m.classList.contains('aberto') ? 'Fechar menu' : 'Abrir menu'));
+  }
+  function aplicarIdioma(lang, inicial) {
+    LANG = lang === 'en' ? 'en' : 'pt';
+    document.documentElement.lang = LANG === 'en' ? 'en' : 'pt-BR';
+    document.title = LANG === 'en' ? TITULO_EN : TITULO_PT;
+    var md = $('meta[name="description"]'); if (md) md.setAttribute('content', LANG === 'en' ? DESC_EN : DESC_PT);
+    $$('.idioma button').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-lang') === LANG ? 'true' : 'false'); });
+    if (LANG === 'en') ligarObservador();
+    if (LANG === 'en' || !inicial) traduzirDOM(document.body);
+    rotuloBurger();
+    if (!inicial) {
+      try { localStorage.setItem('idioma', LANG); } catch (e) { /* sem armazenamento */ }
+      try { if (/[?&]lang=/.test(location.search)) history.replaceState(null, '', location.pathname + '?lang=' + LANG + location.hash); } catch (e) { /* segue */ }
+    }
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest ? e.target.closest('.idioma button[data-lang]') : null;
+    if (b) aplicarIdioma(b.getAttribute('data-lang'), false);
+  });
 
   /* ---------- faixas que rolam (marcas e serviços) ---------- */
   function montarFaixa(el, itens) {
@@ -992,7 +1194,7 @@ const SERVICOS = [
   function menuAbrir(abrir) {
     menu.classList.toggle('aberto', abrir);
     burger.setAttribute('aria-expanded', abrir ? 'true' : 'false');
-    burger.setAttribute('aria-label', abrir ? 'Fechar menu' : 'Abrir menu');
+    rotuloBurger();
   }
   burger.addEventListener('click', function () { menuAbrir(!menu.classList.contains('aberto')); });
   menu.addEventListener('click', function (e) { if (e.target.closest('a')) menuAbrir(false); });
@@ -1124,7 +1326,7 @@ const SERVICOS = [
   var player = $('#player'), playerIn = $('#player-in'), playerExt = $('#player-ext');
   function abrirPlayer(src, ar, original) {
     playerIn.style.setProperty('--ar', ar > 0 ? ar : 0.5625);
-    playerIn.innerHTML = '<iframe src="' + esc(src) + '" title="Vídeo" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+    playerIn.innerHTML = '<iframe src="' + esc(src) + '" title="' + esc(T('Vídeo')) + '" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>';
     playerExt.href = original || '#';
     player.showModal();
   }
@@ -1143,6 +1345,9 @@ const SERVICOS = [
 
   /* ---------- ano do rodapé ---------- */
   $('#ano').textContent = new Date().getFullYear();
+
+  /* Aplica o idioma escolhido (o padrão é português). */
+  aplicarIdioma(LANG, true);
 })();
 </script>
 </body>

@@ -7,7 +7,7 @@
      ficam em arrays no começo da tag script, no fim deste arquivo.
   2. FOTOS: procure por "TROCAR FOTO" e siga o comentário.
   3. LINKS DOS VÍDEOS E CAPAS: procure por "DESTAQUES" dentro do script.
-  4. FORMULÁRIOS: procure por "FORM_ENDPOINT" para receber as mensagens de verdade.
+  4. PAINEL: os vídeos, o formulário de contato e as visitas agora falam com o Supabase (veja js/banco.js e o painel em /admin/).
   5. Tudo que estiver como "SEU ...", "00" ou "Marca 06" é placeholder para trocar.
   ============================================================
 -->
@@ -608,7 +608,11 @@ html:has(dialog[open]){overflow:hidden}
   </div>
 </dialog>
 
-<script>
+<!-- Supabase por CDN (versão fixa, com selo de integridade) e os dados de acesso.
+     Carregam sem travar a página: o portfólio abre rápido mesmo com internet lenta. -->
+<script async src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0/dist/umd/supabase.js"
+        integrity="sha384-iLddHTLokph6Omwoyid4XKxHaWa6w41BnoEj0q5oOrzmYPpHIKt1wyjReA7s//pP" crossorigin="anonymous"></script>
+<script async src="js/banco.js"></script><script>
 /* =====================================================================
    DADOS PARA EDITAR (não precisa mexer no HTML)
    ===================================================================== */
@@ -641,6 +645,10 @@ const DESTAQUES = [
   { link: "https://instagram.com/littlethings_bymarii", capa: "", numero: "+0,0M", rotulo: "views no reels",
     titulo: "Título do conteúdo 03", contexto: "Marca 03, moda. Escreva aqui uma linha sobre o que foi feito." }
 ];
+
+/* ATENÇÃO: enquanto você não tiver vídeos no painel (/admin/), o site mostra as listas
+   abaixo. Assim que houver pelo menos um vídeo visível no painel, o site passa a mostrar
+   os vídeos do painel sozinho, sem publicar de novo.
 
 /* TRABALHOS: só vídeos, com filtro por nicho.
    formato: "vídeo 9:16" (a proporção do bloco segue o formato).
@@ -680,12 +688,6 @@ const SERVICOS = [
   { titulo: "Publicação no meu perfil", texto: "Divulgo o produto no meu Instagram, com marcação e detalhes combinados com a marca." },
   { titulo: "Pacote mensal", texto: "Vídeos e fotos todo mês, com calendário combinado e um único contato para tudo." }
 ];
-
-/* FORM_ENDPOINT / KIT_ENDPOINT: para receber as mensagens de verdade.
-   Crie um formulário gratuito (ex.: Formspree) e cole o endereço entre as aspas.
-   Vazio = só mostra a confirmação na tela e não envia nada para lugar nenhum. */
-const FORM_ENDPOINT = "";
-const KIT_ENDPOINT = "";
 
 /* =====================================================================
    A PARTIR DAQUI É O FUNCIONAMENTO DA PÁGINA (não precisa editar)
@@ -746,20 +748,30 @@ const KIT_ENDPOINT = "";
   /* ---------- nichos na seção sobre ---------- */
   $('#lista-nichos').innerHTML = NICHOS.map(function (n) { return '<li><span class="chip">' + esc(cap(n)) + '</span></li>'; }).join('');
 
+  /* ---------- conexão com o painel (Supabase) ---------- */
+  var bancoP = new Promise(function (resolve) {
+    if (window.bancoPronto) { resolve(window.banco); return; }
+    document.addEventListener('banco-pronto', function () { resolve(window.banco); }, { once: true });
+    setTimeout(function () { resolve(window.banco || null); }, 12000);
+  });
+  function hojeISO() { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+
   /* ---------- destaques ---------- */
-  $('#lista-destaques').innerHTML = DESTAQUES.map(function (d, i) {
-    /* CAPA entra aqui: se "capa" tiver um arquivo, vira <img>. Se não, fica o degradê. */
+  function cardDestaque(d, i) {
+    /* CAPA entra aqui: se "capa" tiver um endereço, vira <img>. Se não, fica o degradê. */
     var capa = d.capa
       ? '<img src="' + esc(d.capa) + '" alt="Capa do vídeo: ' + esc(d.titulo) + '" width="360" height="640" loading="lazy">'
       : '<span class="cap">capa do vídeo 9:16</span>';
-    /* LINK DO VÍDEO entra aqui: o href abaixo vem do campo "link" de DESTAQUES. */
-    return '<article class="dest reveal" style="--d:' + i + '">' +
-      '<a class="dest-link" href="' + esc(d.link) + '" target="_blank" rel="noopener noreferrer">' +
+    /* LINK DO VÍDEO entra aqui: o href abaixo vem do campo "link" do vídeo. */
+    var abre = d.link ? '<a class="dest-link" href="' + esc(d.link) + '" target="_blank" rel="noopener noreferrer">' : '<div class="dest-link">';
+    var fecha = d.link ? '</a>' : '</div>';
+    return '<article class="dest reveal" style="--d:' + i + '">' + abre +
       '<div class="capa-v ' + grad(i * 2) + '">' + capa + '<span class="play" aria-hidden="true"></span></div>' +
       '<div class="dest-corpo"><span class="dest-num">' + esc(d.numero) + '</span><span class="dest-rot">' + esc(d.rotulo) + '</span>' +
       '<h3>' + esc(d.titulo) + '</h3><p>' + esc(d.contexto) + '</p>' +
-      '<span class="sr-only">Abre o vídeo em uma nova aba.</span></div></a></article>';
-  }).join('');
+      (d.link ? '<span class="sr-only">Abre o vídeo em uma nova aba.</span>' : '') + '</div>' + fecha + '</article>';
+  }
+  function renderDestaques(lista) { $('#lista-destaques').innerHTML = lista.map(cardDestaque).join(''); }
 
   /* ---------- trabalhos e filtros ---------- */
   var galeria = $('#galeria'), status = $('#filtro-status'), filtrosEl = $('#filtros');
@@ -769,15 +781,11 @@ const KIT_ENDPOINT = "";
     /* TROCAR FOTO: preencha "imagem" em TRABALHOS ou FOTOS. Ela é cortada para a proporção do formato. */
     var bloco = '<div class="ph ' + grad(i) + '" style="aspect-ratio:' + ar + '">' +
       (t.imagem ? '<img src="' + esc(t.imagem) + '" alt="' + esc(t.titulo + ', ' + t.marca) + '" loading="lazy">' : '<span class="cap">' + esc(t.formato) + '</span>') + '</div>';
-    var fig = '<figure>' + bloco + '<figcaption><b>' + esc(t.titulo) + '</b><span class="m">' + esc(t.marca) + '</span><span class="chip">' + esc(cap(t.nicho)) + '</span></figcaption></figure>';
+    var fig = '<figure>' + bloco + '<figcaption><b>' + esc(t.titulo) + '</b><span class="m">' + esc(t.marca) + '</span>' + (t.nicho ? '<span class="chip">' + esc(cap(t.nicho)) + '</span>' : '') + '</figcaption></figure>';
     if (t.link) fig = '<a href="' + esc(t.link) + '" target="_blank" rel="noopener noreferrer">' + fig + '</a>';
     return '<li class="trab reveal" data-nicho="' + esc(t.nicho) + '" style="--d:' + (i % 4) + '">' + fig + '</li>';
   }
-  galeria.innerHTML = TRABALHOS.map(function (t, i) { return cardTrabalho(t, i); }).join('');
   $('#galeria-fotos').innerHTML = FOTOS.map(function (t, i) { return cardTrabalho(t, i + 3); }).join('');
-  filtrosEl.innerHTML = ['todos'].concat(NICHOS).map(function (n, i) {
-    return '<button type="button" class="filtro" data-nicho="' + esc(n) + '" aria-pressed="' + (i === 0) + '">' + esc(cap(n)) + '</button>';
-  }).join('');
 
   function filtrar(nicho, animar) {
     var n = 0;
@@ -793,14 +801,56 @@ const KIT_ENDPOINT = "";
       ? 'Mostrando todos os ' + n + ' vídeos.'
       : 'Mostrando ' + n + (n === 1 ? ' vídeo' : ' vídeos') + ' de ' + nicho + '.';
   }
+  function renderTrabalhos(lista) {
+    galeria.innerHTML = lista.map(function (t, i) { return cardTrabalho(t, i); }).join('');
+    /* só mostra botões de nichos que têm vídeo */
+    var presentes = [];
+    lista.forEach(function (t) { if (t.nicho && presentes.indexOf(t.nicho) < 0) presentes.push(t.nicho); });
+    var ordem = NICHOS.filter(function (n) { return presentes.indexOf(n) >= 0; }).concat(presentes.filter(function (n) { return NICHOS.indexOf(n) < 0; }));
+    filtrosEl.innerHTML = ['todos'].concat(ordem).map(function (n, i) {
+      return '<button type="button" class="filtro" data-nicho="' + esc(n) + '" aria-pressed="' + (i === 0) + '">' + esc(cap(n)) + '</button>';
+    }).join('');
+    filtrar('todos', false);
+  }
   filtrosEl.addEventListener('click', function (e) {
     var b = e.target.closest('.filtro');
     if (!b) return;
     $$('.filtro', filtrosEl).forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
     filtrar(b.getAttribute('data-nicho'), true);
   });
-  filtrar('todos', false);
 
+  /* Transforma "2,4M views" em número forte "2,4M" e rótulo "views". */
+  function dividirDestaque(txt) {
+    var m = /^\s*(\+?[\d.,]+\s?[kKmMbB]?)\s*(.*)$/.exec(txt || '');
+    return m ? { numero: m[1].trim(), rotulo: m[2].trim() } : { numero: txt, rotulo: '' };
+  }
+  /* Vídeos que vieram do painel (tabela videos, só os visíveis, na ordem escolhida). */
+  function usarVideosDoPainel(lista) {
+    renderTrabalhos(lista.map(function (v) {
+      return { titulo: v.titulo, marca: v.marca || '', nicho: String(v.nicho || '').toLowerCase(), formato: v.formato || 'vídeo 9:16', imagem: v.capa || '', link: v.link || '' };
+    }));
+    var dest = lista.filter(function (v) { return String(v.destaque || '').trim(); }).slice(0, 3).map(function (v) {
+      var p = dividirDestaque(String(v.destaque).trim());
+      return { link: v.link || '', capa: v.capa || '', numero: p.numero, rotulo: p.rotulo, titulo: v.titulo, contexto: [v.marca, v.nicho].filter(Boolean).join(', ') };
+    });
+    if (dest.length) renderDestaques(dest);
+    else {
+      /* Sem nenhum vídeo com destaque preenchido, esconde a seção em vez de mostrar exemplo. */
+      var sec = $('#destaques'); if (sec) sec.hidden = true;
+      var link = $('.menu a[href="#destaques"]'); if (link && link.parentNode) link.parentNode.hidden = true;
+    }
+  }
+  /* Sem painel ou sem nenhum vídeo visível ainda: usa as listas do começo do arquivo. */
+  function usarListasFixas() { renderDestaques(DESTAQUES); renderTrabalhos(TRABALHOS); }
+
+  function buscarVideos() {
+    var limite = new Promise(function (resolve) { setTimeout(function () { resolve(null); }, 3000); });
+    var painel = bancoP.then(function (b) {
+      if (!b) return null;
+      return Promise.resolve(b.rpc('videos_do_site')).then(function (r) { return (r && !r.error && r.data && r.data.length) ? r.data : null; });
+    }).catch(function () { return null; });
+    return Promise.race([painel, limite]);
+  }
   /* ---------- serviços ---------- */
   $('#lista-servicos').innerHTML = SERVICOS.map(function (s, i) {
     return '<li class="serv reveal" style="--d:' + (i % 3) + '"><span class="serv-n" aria-hidden="true">' + String(i + 1).padStart(2, '0') + '</span>' +
@@ -808,12 +858,20 @@ const KIT_ENDPOINT = "";
   }).join('');
 
   /* ---------- entrada ao rolar e contadores ---------- */
-  var reveals = $$('.reveal'), contadores = $$('.num[data-alvo]');
+  var contadores = $$('.num[data-alvo]');
+  var ioR = ('IntersectionObserver' in window) ? new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('visto'); ioR.unobserve(e.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' }) : null;
+  /* Pode ser chamada de novo depois que os vídeos do painel chegam. */
+  function observar() {
+    $$('.reveal').forEach(function (el) {
+      if (el.__obs) return;
+      el.__obs = true;
+      if (ioR) ioR.observe(el); else el.classList.add('visto');
+    });
+  }
+  observar();
   if ('IntersectionObserver' in window) {
-    var ioR = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('visto'); ioR.unobserve(e.target); } });
-    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
-    reveals.forEach(function (el) { ioR.observe(el); });
     if (!reduz) {
       var ioC = new IntersectionObserver(function (es) {
         es.forEach(function (e) { if (e.isIntersecting) { contar(e.target); ioC.unobserve(e.target); } });
@@ -821,10 +879,14 @@ const KIT_ENDPOINT = "";
       contadores.forEach(function (el) { ioC.observe(el); });
     }
   } else {
-    reveals.forEach(function (el) { el.classList.add('visto'); });
     contadores.forEach(function (el) { el.textContent = el.getAttribute('data-pref') + fmt(+el.getAttribute('data-alvo')) + el.getAttribute('data-suf'); });
   }
 
+  /* Vídeos: espera o painel (até 3 segundos); se não vier, usa as listas fixas. */
+  buscarVideos().then(function (lista) {
+    if (lista) usarVideosDoPainel(lista); else usarListasFixas();
+    observar();
+  });
   /* ---------- menu, sanduíche e seção ativa ---------- */
   var topo = $('#topo'), burger = $('.burger'), menu = $('#menu');
   function menuAbrir(abrir) {
@@ -852,13 +914,17 @@ const KIT_ENDPOINT = "";
   }
 
   /* ---------- envio dos formulários ---------- */
-  /* Sem endereço configurado, só confirma na tela. Com endereço, envia por POST (JSON). */
-  function enviar(endpoint, dados) {
-    if (!endpoint) return Promise.resolve(true);
-    return fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(dados) })
-      .then(function (r) { return r.ok; }).catch(function () { return false; });
-  }
-  function dadosDe(form) {
+  /* Formulários: gravam na tabela "marcas" do painel, sempre como "lead". */
+  function enviarMarca(d) {
+    var registro = {
+      nome: String(d.nome || '').slice(0, 200), email: String(d.email || '').slice(0, 200),
+      obs: String(d.obs || '').slice(0, 3000), situacao: 'lead', ultimo_contato: hojeISO()
+    };
+    return bancoP.then(function (b) {
+      if (!b) return false;
+      return Promise.resolve(b.from('marcas').insert(registro)).then(function (r) { return !r.error; });
+    }).catch(function () { return false; });
+  }  function dadosDe(form) {
     var o = {};
     $$('input,textarea', form).forEach(function (c) { o[c.name] = c.value.trim(); });
     return o;
@@ -881,7 +947,7 @@ const KIT_ENDPOINT = "";
     if (!validar(formC)) { erroC.textContent = 'Preencha nome, um e-mail válido e a mensagem.'; erroC.hidden = false; return; }
     var btn = $('button[type=submit]', formC), dados = dadosDe(formC);
     btn.disabled = true;
-    enviar(FORM_ENDPOINT, dados).then(function (ok) {
+    enviarMarca({ nome: dados.nome, email: dados.email, obs: dados.mensagem }).then(function (ok) {
       btn.disabled = false;
       if (!ok) { erroC.textContent = 'Não consegui enviar agora. Tente pelo WhatsApp ou pelo e-mail.'; erroC.hidden = false; return; }
       $('#ok-nome').textContent = dados.nome.split(' ')[0];
@@ -905,7 +971,7 @@ const KIT_ENDPOINT = "";
     if (!validar(formK)) { erroK.textContent = 'Preencha seu nome e um e-mail válido.'; erroK.hidden = false; return; }
     var btn = $('button[type=submit]', formK), dados = dadosDe(formK);
     btn.disabled = true;
-    enviar(KIT_ENDPOINT, dados).then(function (ok) {
+    enviarMarca({ nome: dados.nome, email: dados.email, obs: 'Pediu o mídia kit pelo site.' }).then(function (ok) {
       btn.disabled = false;
       if (!ok) { erroK.textContent = 'Não consegui enviar agora. Tente de novo em instantes.'; erroK.hidden = false; return; }
       $('#kit-nome').textContent = dados.nome.split(' ')[0];
@@ -918,6 +984,41 @@ const KIT_ENDPOINT = "";
     try { sessionStorage.setItem('kitVisto', '1'); } catch (err) { /* ignora */ }
     kit.showModal();
   }, 7000);
+
+  /* ---------- registro simples de visita (sem serviço de fora, sem cookie, sem pedir nada) ---------- */
+  function origemDaVisita() {
+    var utm = '', ref = '';
+    try { utm = String(new URLSearchParams(location.search).get('utm_source') || '').trim().toLowerCase(); } catch (e) { /* segue */ }
+    try { ref = document.referrer ? new URL(document.referrer).hostname.replace(/^www\./, '').toLowerCase() : ''; } catch (e) { /* segue */ }
+    if (ref && ref === location.hostname) ref = '';
+    var s = utm || ref;
+    if (!s) return 'Direto';
+    if (/instagram/.test(s)) return 'Instagram';
+    if (/whatsapp|wa\.me/.test(s)) return 'WhatsApp';
+    if (/google/.test(s)) return 'Google';
+    if (/facebook|fb\.com|fb$/.test(s)) return 'Facebook';
+    if (/tiktok/.test(s)) return 'TikTok';
+    if (/youtube|youtu\.be/.test(s)) return 'YouTube';
+    if (/linkedin|lnkd/.test(s)) return 'LinkedIn';
+    if (/^t\.co$|twitter|^x\.com$/.test(s)) return 'X';
+    if (/bing/.test(s)) return 'Bing';
+    return s.slice(0, 100);
+  }
+  function registrarVisita() {
+    if (location.protocol === 'file:' || /^(localhost|127\.0\.0\.1)$/.test(location.hostname)) return;   /* teste local não conta */
+    try { if (sessionStorage.getItem('visitaRegistrada') === '1') return; } catch (e) { /* segue */ }        /* uma vez por visita */
+    /* No painel (aba Portfólio) dá para marcar "não contar as minhas visitas neste navegador". */
+    try { if (localStorage.getItem('naoContarVisitas') === '1') return; } catch (e) { /* segue */ }
+    bancoP.then(function (b) {
+      if (!b) return;
+      /* A data vai pronta do navegador, no horário de Brasília, para o dia nunca sair errado à noite. */
+      var dia = new Date().toLocaleDateString('sv-SE', { timeZone: 'America/Sao_Paulo' });
+      return Promise.resolve(b.from('visitas').insert({ data: dia, pagina: (location.pathname || '/').slice(0, 200), origem: origemDaVisita() })).then(function (res) {
+        if (res && !res.error) { try { sessionStorage.setItem('visitaRegistrada', '1'); } catch (e) { /* segue */ } }
+      });
+    }).catch(function () { /* se falhar, o visitante nem percebe */ });
+  }
+  registrarVisita();
 
   /* ---------- ano do rodapé ---------- */
   $('#ano').textContent = new Date().getFullYear();

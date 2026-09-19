@@ -17,11 +17,19 @@
         '<div class="cartao"><h2>Visitas nos últimos 14 dias</h2><div id="pf-grafico"></div></div>' +
         '<div class="cartao"><h2>Por onde as pessoas chegaram</h2><div id="pf-origens"></div></div>' +
       '</div>' +
+      '<label class="vazio" style="display:flex;gap:.5rem;align-items:center;padding-top:0"><input type="checkbox" id="pf-nao-contar" style="width:18px;height:18px"> Não contar as minhas visitas neste navegador (vale só para este aparelho)</label>' +
       '<div class="barra"><h2 style="font-size:14px;font-weight:500;flex:1">Meus vídeos</h2>' +
         '<button class="btn" type="button" id="pf-novo">' + P.icone('mais') + 'Adicionar vídeo</button></div>' +
       '<p class="vazio" style="margin-top:-.4rem">O que estiver com o olhinho aberto aparece no seu portfólio sozinho, sem publicar de novo. Arraste pela alcinha para mudar a ordem. Vídeos com "destaque" preenchido (ex.: 2,4M views) podem entrar na seção de destaques do site.</p>' +
       '<div id="pf-videos"></div>';
     $('#pf-novo', raiz).addEventListener('click', function () { editar(null); });
+    /* "Não contar as minhas visitas": guarda uma marca neste navegador. O site lê essa marca antes de registrar a visita. */
+    var caixa = $('#pf-nao-contar', raiz);
+    try { caixa.checked = localStorage.getItem('naoContarVisitas') === '1'; } catch (e) { /* segue */ }
+    caixa.addEventListener('change', function () {
+      try { if (caixa.checked) localStorage.setItem('naoContarVisitas', '1'); else localStorage.removeItem('naoContarVisitas'); P.toast(caixa.checked ? 'Combinado: as suas visitas deste navegador não vão contar.' : 'Agora as suas visitas deste navegador voltam a contar.'); }
+      catch (e) { P.toast('Este navegador não deixou guardar a escolha.', 'erro'); }
+    });
   }
 
   function entrar() {

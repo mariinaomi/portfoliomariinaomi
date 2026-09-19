@@ -38,7 +38,7 @@
 }
 
 /* legendas em itálico elegante (Cormorant Garamond) */
-.kicker,.stat-rot,.cap,.nichos-rot,.assinatura span,.assinatura b,.carimbo span,.dest-rot,.filtro-status,.trab figcaption span.m,.rot-mao,.dep figcaption span,.rod-sub{font-style:italic;letter-spacing:.01em}
+.kicker,.stat-rot,.cap,.nichos-rot,.dest-rot,.filtro-status,.trab figcaption span.m,.rot-mao,.dep figcaption span,.rod-sub{font-style:italic;letter-spacing:.01em}
 
 /* ===== BASE ===== */
 *,*::before,*::after{box-sizing:border-box}
@@ -195,10 +195,6 @@ a{color:inherit}
 .moldura::before{content:"";position:absolute;top:-16px;left:50%;width:110px;height:32px;margin-left:-55px;background:rgba(109,122,76,.6);transform:rotate(-4deg);z-index:2}
 .moldura .ph{aspect-ratio:4/5;border-radius:3px}
 .moldura.inv{rotate:-2deg}
-.carimbo{position:absolute;left:-30px;bottom:-28px;z-index:3;width:120px;height:120px;border-radius:50%;display:grid;place-items:center;
-  color:var(--terracota-esc);background:rgba(242,233,220,.94);border:2.5px dashed var(--terracota);transform:rotate(-14deg);box-shadow:0 0 0 6px rgba(242,233,220,.94)}
-.carimbo::before{content:"";position:absolute;inset:8px;border-radius:50%;border:1.5px solid var(--terracota)}
-.carimbo span{font-family:var(--f-mao);font-weight:600;font-size:1.55rem;line-height:.95;text-align:center}
 
 /* ===== CAPA ===== */
 .hero{position:relative;overflow:hidden;padding-top:calc(var(--topo) + clamp(2rem,6vw,4rem))}
@@ -218,8 +214,6 @@ a{color:inherit}
 @media (max-width:860px){
   .hero-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"texto" "foto" "numeros"}
   .hero-foto{padding:1.4rem 0 2rem}
-  .carimbo{left:-8px;bottom:-16px;width:98px;height:98px}
-  .carimbo span{font-size:1.3rem}
   .moldura{width:min(100%,340px)}
 }
 
@@ -249,9 +243,6 @@ a{color:inherit}
 .promessas{list-style:none;padding:0;margin:0 0 1.6rem;display:grid;gap:.7rem}
 .promessas li{display:flex;align-items:center;gap:.8rem;font-weight:400;background:var(--papel);padding:.85rem 1.1rem;border-radius:14px;box-shadow:var(--sombra)}
 .promessas li::before{content:"";flex:none;width:26px;height:26px;border-radius:50%;background:var(--oliva) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fffaf1' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12.5 4 4 8-9'/%3E%3C/svg%3E") center/16px no-repeat}
-.assinatura{display:flex;align-items:baseline;flex-wrap:wrap;gap:.7rem;margin-top:.6rem}
-.assinatura span{font-family:var(--f-mao);font-size:1.4rem;color:var(--tinta-2)}
-.assinatura b{font-family:var(--f-mao);font-weight:600;font-size:clamp(2.2rem,5vw,3rem);line-height:1;color:var(--terracota-esc);rotate:-3deg;border-bottom:3px wavy rgba(181,86,58,.5);text-underline-offset:6px}
 @media (max-width:860px){.sobre-grid{grid-template-columns:minmax(0,1fr)}}
 
 /* ===== DESTAQUES ===== */
@@ -452,7 +443,6 @@ html:has(dialog[open]){overflow:hidden}
           <span class="cap">foto da creator 4:5</span>
         </div>
       </div>
-      <div class="carimbo" aria-hidden="true"><span>feito<br>à mão</span></div>
     </div>
 
     <!-- 3 números da capa: vêm da lista METRICAS (script), as três primeiras -->
@@ -488,7 +478,6 @@ html:has(dialog[open]){overflow:hidden}
         <li>Uma rodada de ajuste inclusa</li>
         <li>Entrega em até 72 horas úteis</li>
       </ul>
-      <p class="assinatura"><span>com carinho,</span> <b>Mariana Naomi Ota</b></p>
     </div>
   </div>
 </section>

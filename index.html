@@ -358,6 +358,20 @@ a{color:inherit}
 .kit .fechar:hover{background:var(--linho-2)}
 html:has(dialog[open]){overflow:hidden}
 
+/* ===== PLAYER DE VÍDEO ===== */
+.play.mini{width:52px;height:52px;margin:-26px 0 0 -26px;box-shadow:0 0 0 5px rgba(255,250,241,.35),0 8px 16px -6px rgba(58,39,31,.5)}
+.play.mini::after{margin:-8px 0 0 -5px;border-width:8px 0 8px 14px}
+.trab a:hover .play.mini{transform:scale(1.1)}
+.player{border:0;padding:0;background:transparent;max-width:none;max-height:none;overflow:visible;margin:auto}
+.player::backdrop{background:rgba(58,39,31,.86)}
+.player[open]{animation:surgir .35s cubic-bezier(.2,.7,.2,1)}
+.player-in{position:relative;width:min(92vw,calc(82dvh * var(--ar,.5625)));aspect-ratio:var(--ar,.5625);background:#000;border-radius:16px;overflow:hidden;box-shadow:0 40px 80px -20px rgba(0,0,0,.6)}
+.player-in iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.player .fechar{position:absolute;right:0;top:-52px;width:44px;height:44px;border:0;border-radius:50%;background:var(--papel);color:var(--tinta);font-size:1.7rem;line-height:1;cursor:pointer}
+.player .fechar:hover{background:var(--linho-2)}
+.player .externo{position:absolute;left:0;top:-42px;color:var(--linho);font-size:.9rem;font-weight:400;text-underline-offset:3px}
+.player .externo:focus-visible,.player .fechar:focus-visible{outline-color:var(--linho)}
+
 /* ===== ENTRADA AO ROLAR ===== */
 .js .reveal{opacity:0;transform:translateY(26px);
   transition:opacity .9s ease calc(var(--d,0) * 90ms),transform .9s cubic-bezier(.2,.7,.2,1) calc(var(--d,0) * 90ms),translate .3s ease,box-shadow .3s ease}
@@ -584,6 +598,13 @@ html:has(dialog[open]){overflow:hidden}
   </div>
 </footer>
 
+<!-- ============ PLAYER DE VÍDEO (abre por cima da página) ============ -->
+<dialog class="player" id="player" aria-label="Vídeo">
+  <a class="externo" id="player-ext" href="#" target="_blank" rel="noopener noreferrer">Abrir no site original</a>
+  <button class="fechar" type="button" id="player-fechar" aria-label="Fechar vídeo">&times;</button>
+  <div class="player-in" id="player-in"></div>
+</dialog>
+
 <!-- ============ CARD DE CAPTURA (aparece após 7 segundos, uma vez por visita) ============ -->
 <dialog class="kit" id="kit" aria-labelledby="kit-titulo">
   <div class="kit-in">
@@ -756,14 +777,41 @@ const SERVICOS = [
   });
   function hojeISO() { var d = new Date(); return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
 
+  /* ---------- vídeo dentro do portfólio ---------- */
+  /* Reconhece o link (YouTube, Vimeo, Instagram, TikTok) e devolve o endereço do player e a capa. */
+  function infoVideo(link) {
+    var s = String(link || '').trim(), m;
+    if ((m = /(?:youtube\.com\/(?:watch\?(?:[^#]*&)?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([\w-]{11})/i.exec(s))) {
+      return { embed: 'https://www.youtube-nocookie.com/embed/' + m[1] + '?autoplay=1&rel=0&playsinline=1',
+               thumb: 'https://i.ytimg.com/vi/' + m[1] + '/maxresdefault.jpg', thumbFb: 'https://i.ytimg.com/vi/' + m[1] + '/hqdefault.jpg' };
+    }
+    if ((m = /vimeo\.com\/(?:video\/)?(\d+)/i.exec(s))) return { embed: 'https://player.vimeo.com/video/' + m[1] + '?autoplay=1', thumb: '', thumbFb: '' };
+    if ((m = /instagram\.com\/(reel|reels|p|tv)\/([\w-]+)/i.exec(s))) return { embed: 'https://www.instagram.com/' + (m[1] === 'reels' ? 'reel' : m[1]) + '/' + m[2] + '/embed/', thumb: '', thumbFb: '' };
+    if ((m = /tiktok\.com\/.*\/video\/(\d+)/i.exec(s))) return { embed: 'https://www.tiktok.com/embed/v2/' + m[1], thumb: '', thumbFb: '' };
+    return null;
+  }
+  function miniaturaDe(link) { var i = infoVideo(link); return i ? i.thumb : ''; }
+  function miniaturaFb(link) { var i = infoVideo(link); return i ? i.thumbFb : ''; }
+  function arDe(formato) { var m = /(\d+):(\d+)/.exec(formato || ''); return m ? (+m[1] / +m[2]) : 0.5625; }
+  /* Imagem de capa; se a versão grande não existir, troca sozinha pela menor. */
+  function tagImg(src, alt, fb, dims) {
+    return '<img src="' + esc(src) + '" alt="' + esc(alt) + '"' + (fb ? ' data-fb="' + esc(fb) + '"' : '') + (dims || '') +
+      ' loading="lazy" onerror="if(this.dataset.fb){var f=this.dataset.fb;this.removeAttribute(\'data-fb\');this.src=f;}">';
+  }
+  /* Atributos que fazem o clique abrir o player aqui dentro em vez de abrir outra aba. */
+  function atributosPlayer(link, formato) {
+    var info = infoVideo(link);
+    return info ? ' data-embed="' + esc(info.embed) + '" data-ar="' + arDe(formato) + '"' : '';
+  }
+
   /* ---------- destaques ---------- */
   function cardDestaque(d, i) {
     /* CAPA entra aqui: se "capa" tiver um endereço, vira <img>. Se não, fica o degradê. */
     var capa = d.capa
-      ? '<img src="' + esc(d.capa) + '" alt="Capa do vídeo: ' + esc(d.titulo) + '" width="360" height="640" loading="lazy">'
+      ? tagImg(d.capa, 'Capa do vídeo: ' + d.titulo, d.capaFb, ' width="360" height="640"')
       : '<span class="cap">capa do vídeo 9:16</span>';
     /* LINK DO VÍDEO entra aqui: o href abaixo vem do campo "link" do vídeo. */
-    var abre = d.link ? '<a class="dest-link" href="' + esc(d.link) + '" target="_blank" rel="noopener noreferrer">' : '<div class="dest-link">';
+    var abre = d.link ? '<a class="dest-link" href="' + esc(d.link) + '" target="_blank" rel="noopener noreferrer"' + atributosPlayer(d.link, d.formato) + '>' : '<div class="dest-link">';
     var fecha = d.link ? '</a>' : '</div>';
     return '<article class="dest reveal" style="--d:' + i + '">' + abre +
       '<div class="capa-v ' + grad(i * 2) + '">' + capa + '<span class="play" aria-hidden="true"></span></div>' +
@@ -780,9 +828,10 @@ const SERVICOS = [
     var ar = m ? m[1] + '/' + m[2] : '4/5';
     /* TROCAR FOTO: preencha "imagem" em TRABALHOS ou FOTOS. Ela é cortada para a proporção do formato. */
     var bloco = '<div class="ph ' + grad(i) + '" style="aspect-ratio:' + ar + '">' +
-      (t.imagem ? '<img src="' + esc(t.imagem) + '" alt="' + esc(t.titulo + ', ' + t.marca) + '" loading="lazy">' : '<span class="cap">' + esc(t.formato) + '</span>') + '</div>';
+      (t.imagem ? tagImg(t.imagem, t.titulo + ', ' + t.marca, t.imagemFb) : '<span class="cap">' + esc(t.formato) + '</span>') +
+      (t.link ? '<span class="play mini" aria-hidden="true"></span>' : '') + '</div>';
     var fig = '<figure>' + bloco + '<figcaption><b>' + esc(t.titulo) + '</b><span class="m">' + esc(t.marca) + '</span>' + (t.nicho ? '<span class="chip">' + esc(cap(t.nicho)) + '</span>' : '') + '</figcaption></figure>';
-    if (t.link) fig = '<a href="' + esc(t.link) + '" target="_blank" rel="noopener noreferrer">' + fig + '</a>';
+    if (t.link) fig = '<a href="' + esc(t.link) + '" target="_blank" rel="noopener noreferrer"' + atributosPlayer(t.link, t.formato) + '>' + fig + '</a>';
     return '<li class="trab reveal" data-nicho="' + esc(t.nicho) + '" style="--d:' + (i % 4) + '">' + fig + '</li>';
   }
   $('#galeria-fotos').innerHTML = FOTOS.map(function (t, i) { return cardTrabalho(t, i + 3); }).join('');
@@ -798,7 +847,7 @@ const SERVICOS = [
       }
     });
     status.textContent = nicho === 'todos'
-      ? 'Mostrando todos os ' + n + ' vídeos.'
+      ? (n === 1 ? 'Mostrando o vídeo.' : 'Mostrando todos os ' + n + ' vídeos.')
       : 'Mostrando ' + n + (n === 1 ? ' vídeo' : ' vídeos') + ' de ' + nicho + '.';
   }
   function renderTrabalhos(lista) {
@@ -827,11 +876,11 @@ const SERVICOS = [
   /* Vídeos que vieram do painel (tabela videos, só os visíveis, na ordem escolhida). */
   function usarVideosDoPainel(lista) {
     renderTrabalhos(lista.map(function (v) {
-      return { titulo: v.titulo, marca: v.marca || '', nicho: String(v.nicho || '').toLowerCase(), formato: v.formato || 'vídeo 9:16', imagem: v.capa || '', link: v.link || '' };
+      return { titulo: v.titulo, marca: v.marca || '', nicho: String(v.nicho || '').toLowerCase(), formato: v.formato || 'vídeo 9:16', imagem: v.capa || miniaturaDe(v.link), imagemFb: v.capa ? '' : miniaturaFb(v.link), link: v.link || '' };
     }));
     var dest = lista.filter(function (v) { return String(v.destaque || '').trim(); }).slice(0, 3).map(function (v) {
       var p = dividirDestaque(String(v.destaque).trim());
-      return { link: v.link || '', capa: v.capa || '', numero: p.numero, rotulo: p.rotulo, titulo: v.titulo, contexto: [v.marca, v.nicho].filter(Boolean).join(', ') };
+      return { link: v.link || '', formato: v.formato || 'vídeo 9:16', capa: v.capa || miniaturaDe(v.link), capaFb: v.capa ? '' : miniaturaFb(v.link), numero: p.numero, rotulo: p.rotulo, titulo: v.titulo, contexto: [v.marca, v.nicho].filter(Boolean).join(', ') };
     });
     if (dest.length) renderDestaques(dest);
     else {
@@ -1019,6 +1068,27 @@ const SERVICOS = [
     }).catch(function () { /* se falhar, o visitante nem percebe */ });
   }
   registrarVisita();
+
+  /* ---------- player: o vídeo abre aqui dentro, sem sair do portfólio ---------- */
+  var player = $('#player'), playerIn = $('#player-in'), playerExt = $('#player-ext');
+  function abrirPlayer(src, ar, original) {
+    playerIn.style.setProperty('--ar', ar > 0 ? ar : 0.5625);
+    playerIn.innerHTML = '<iframe src="' + esc(src) + '" title="Vídeo" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+    playerExt.href = original || '#';
+    player.showModal();
+  }
+  function limparPlayer() { playerIn.innerHTML = ''; }   /* tirar o player da página faz o vídeo parar de tocar */
+  function fecharPlayer() { limparPlayer(); if (player.open) player.close(); }
+  player.addEventListener('close', limparPlayer);
+  player.addEventListener('cancel', limparPlayer);      /* tecla Esc */
+  player.addEventListener('click', function (e) { if (e.target === player) fecharPlayer(); });
+  $('#player-fechar').addEventListener('click', fecharPlayer);
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest ? e.target.closest('a[data-embed]') : null;
+    if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || typeof player.showModal !== 'function') return;   /* com Ctrl ou botão do meio, abre a aba normal */
+    e.preventDefault();
+    abrirPlayer(a.getAttribute('data-embed'), parseFloat(a.getAttribute('data-ar')), a.getAttribute('href'));
+  });
 
   /* ---------- ano do rodapé ---------- */
   $('#ano').textContent = new Date().getFullYear();

@@ -115,63 +115,64 @@ a{color:inherit}
   0%,100%{transform:translateY(0) rotate(var(--r,0deg)) scale(var(--s,1))}
   50%{transform:translateY(-14px) rotate(calc(var(--r,0deg) + 3deg)) scale(var(--s,1))}
 }
-/* rádio vintage */
-.radio{width:128px;height:88px;border-radius:16px;background:linear-gradient(#cf6f50,#b5563a);
-  box-shadow:inset 0 -6px 0 rgba(0,0,0,.14),inset 0 3px 0 rgba(255,255,255,.25)}
-.radio::before{content:"";position:absolute;right:26px;top:-46px;width:3px;height:46px;background:var(--tinta-2);border-radius:2px;transform-origin:50% 100%;transform:rotate(22deg)}
-.radio::after{content:"";position:absolute;left:14px;right:14px;bottom:-5px;height:6px;border-radius:0 0 4px 4px;background:var(--tinta)}
-.r-grille{position:absolute;left:10px;top:12px;width:56px;height:64px;border-radius:10px;
-  background:radial-gradient(#7a5a3f 1.5px,transparent 1.7px) 0 0/7px 7px,#ecd9b3;box-shadow:inset 0 0 0 2px var(--tinta)}
-.r-dial{position:absolute;right:10px;top:12px;width:46px;height:22px;border-radius:6px;background:
-  repeating-linear-gradient(90deg,var(--tinta) 0 1px,transparent 1px 6px) bottom/100% 8px no-repeat,#f6ebd2;box-shadow:inset 0 0 0 2px var(--tinta)}
-.r-dial::after{content:"";position:absolute;left:40%;top:3px;width:2px;height:14px;background:var(--terracota-esc)}
-.r-knob{position:absolute;right:38px;bottom:12px;width:20px;height:20px;border-radius:50%;
-  background:radial-gradient(circle at 35% 30%,#f6ebd2,#c9b08f);box-shadow:0 0 0 2px var(--tinta)}
-.r-knob.k2{right:12px}
-/* plantinha no vaso */
-.planta{width:96px;height:132px}
-.p-vaso{position:absolute;left:20px;bottom:0;width:56px;height:46px;background:linear-gradient(90deg,#c9694a,#b5563a 55%,#9a4630);clip-path:polygon(0 0,100% 0,84% 100%,16% 100%)}
-.p-borda{position:absolute;left:14px;bottom:40px;width:68px;height:12px;border-radius:4px;background:#c9694a;box-shadow:inset 0 -3px 0 rgba(0,0,0,.14)}
-.p-folha{position:absolute;left:50%;bottom:50px;width:30px;height:62px;margin-left:-15px;transform-origin:50% 100%;
-  border-radius:0 100% 0 100%;background:linear-gradient(135deg,#8a9862,#56623a);
-  transform:rotate(var(--a));animation:brisa 5s ease-in-out infinite alternate}
-.p-folha.f1{--a:-38deg}
-.p-folha.f2{--a:-3deg;height:76px;animation-delay:-1s}
-.p-folha.f3{--a:36deg;animation-delay:-2s}
-.p-folha.f4{--a:-72deg;height:40px;width:22px;margin-left:-11px;animation-delay:-3s}
-.p-folha.f5{--a:68deg;height:42px;width:22px;margin-left:-11px;animation-delay:-4s}
-@keyframes brisa{to{transform:rotate(calc(var(--a) + 5deg))}}
-/* xícara de café, vista de cima */
-.xicara{width:104px;height:104px}
-.x-pires{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fffaf1,#e9dcc4);box-shadow:inset 0 0 0 3px rgba(58,39,31,.08)}
-.x-pires::after{content:"";position:absolute;inset:8px;border-radius:50%;border:1px solid rgba(58,39,31,.12)}
-.x-copo{position:absolute;left:18px;top:18px;width:62px;height:62px;border-radius:50%;background:#fffaf1;box-shadow:0 3px 0 rgba(58,39,31,.12),inset 0 0 0 2px rgba(58,39,31,.1)}
-.x-cafe{position:absolute;left:24px;top:24px;width:50px;height:50px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#a5714d 0,#6b4130 45%,#3d2419 100%)}
-.x-cafe::after{content:"";position:absolute;left:12px;top:9px;width:16px;height:8px;border-radius:50%;background:rgba(255,255,255,.22);transform:rotate(-30deg)}
-.x-alca{position:absolute;right:3px;top:38px;width:24px;height:26px;border-radius:0 14px 14px 0;border:6px solid #fffaf1;border-left:0;filter:drop-shadow(1px 2px 0 rgba(58,39,31,.12))}
-.x-colher{position:absolute;left:6px;top:82px;width:46px;height:5px;border-radius:3px;background:#c9c3b6;transform:rotate(-14deg)}
-/* envelope */
-.envelope{position:relative;width:112px;height:76px;background:#f6ecda;border-radius:6px;box-shadow:inset 0 0 0 1px rgba(58,39,31,.1)}
-.envelope::before{content:"";position:absolute;inset:0;background:#e9dbc0;border-radius:6px 6px 0 0;clip-path:polygon(0 0,100% 0,50% 60%)}
-.envelope::after{content:"";position:absolute;inset:0;background:#efe2c8;border-radius:0 0 6px 6px;clip-path:polygon(0 100%,0 20%,46% 62%,54% 62%,100% 20%,100% 100%)}
-.e-lacre{position:absolute;left:50%;top:44%;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;z-index:2;
-  background:radial-gradient(circle at 35% 30%,#d9765a,#b5563a 60%,#8c3f29);box-shadow:0 2px 3px rgba(58,39,31,.35)}
-.e-selo{position:absolute;right:8px;top:8px;width:16px;height:20px;border:2px dashed var(--oliva);border-radius:2px;z-index:2}
+/* celular gravando em vertical */
+.celular{width:76px;height:146px;border-radius:17px;background:var(--tinta);box-shadow:inset 0 0 0 2px #5c463b}
+.celular::before{content:"";position:absolute;left:50%;top:9px;width:22px;height:5px;margin-left:-11px;border-radius:3px;background:var(--tinta);z-index:2}
+.celular::after{content:"";position:absolute;left:50%;bottom:10px;width:26px;height:3px;margin-left:-13px;border-radius:2px;background:rgba(255,250,241,.7);z-index:2}
+.c-tela{position:absolute;inset:6px;border-radius:12px;background:linear-gradient(160deg,#d98b6c,#b5563a 60%,#8f3f28);overflow:hidden}
+.c-tela::before{content:"";position:absolute;left:50%;top:50%;margin:-14px 0 0 -9px;border-style:solid;border-width:14px 0 14px 24px;border-color:transparent transparent transparent rgba(255,250,241,.95)}
+.c-rec{position:absolute;left:14px;top:20px;width:9px;height:9px;border-radius:50%;background:#fffaf1;box-shadow:0 0 0 2px rgba(255,250,241,.4);animation:piscar 1.6s steps(1) infinite}
+.c-barra{position:absolute;left:14px;right:14px;bottom:26px;height:4px;border-radius:2px;background:rgba(255,250,241,.4)}
+.c-barra::after{content:"";position:absolute;left:0;top:0;bottom:0;width:42%;border-radius:2px;background:#fffaf1}
+@keyframes piscar{50%{opacity:.15}}
+/* microfone de mesa */
+.mic{width:56px;height:140px}
+.m-u{position:absolute;left:2px;top:34px;width:52px;height:48px;border:4px solid #5c463b;border-top:0;border-radius:0 0 26px 26px}
+.m-cap{position:absolute;left:8px;top:0;width:40px;height:68px;border-radius:20px;background:radial-gradient(#3a271f 1.5px,transparent 1.7px) 0 0/6px 6px,#c9b08f;box-shadow:inset 0 0 0 3px #5c463b}
+.m-anel{position:absolute;left:6px;top:42px;width:44px;height:8px;border-radius:4px;background:var(--terracota)}
+.m-haste{position:absolute;left:23px;top:80px;width:10px;height:54px;background:linear-gradient(90deg,#5c463b,#3a271f)}
+.m-base{position:absolute;left:4px;bottom:0;width:48px;height:10px;border-radius:6px 6px 3px 3px;background:var(--tinta)}
+/* ring light com celular */
+.ring{width:110px;height:176px}
+.rg-aro{position:absolute;left:0;top:0;width:110px;height:110px;border-radius:50%;border:15px solid #fffaf1;
+  box-shadow:0 0 22px 4px rgba(255,236,190,.8),inset 0 0 0 3px #e9dcc4,0 0 0 3px #c9b08f}
+.rg-cel{position:absolute;left:41px;top:33px;width:28px;height:46px;border-radius:7px;background:var(--tinta);box-shadow:inset 0 0 0 2px #5c463b}
+.rg-cel::after{content:"";position:absolute;left:8px;top:6px;width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#a3ad7c,#3a271f 70%);box-shadow:0 0 0 2px #5c463b}
+.rg-haste{position:absolute;left:52px;top:110px;width:6px;height:44px;background:#5c463b}
+.rg-pes{position:absolute;left:20px;bottom:0;width:70px;height:34px;background:#5c463b;clip-path:polygon(44% 0,56% 0,100% 100%,90% 100%,50% 16%,10% 100%,0 100%)}
+/* claquete */
+.claquete{width:120px;height:104px}
+.cl-corpo{position:absolute;left:0;bottom:0;width:120px;height:74px;border-radius:5px 5px 10px 10px;background:var(--tinta)}
+.cl-corpo::before{content:"";position:absolute;left:12px;right:34px;top:22px;height:3px;border-radius:2px;background:rgba(242,233,220,.65);box-shadow:0 14px 0 rgba(242,233,220,.4),0 28px 0 rgba(242,233,220,.25)}
+.cl-corpo::after{content:"";position:absolute;right:12px;top:16px;width:14px;height:14px;border-radius:50%;background:var(--terracota)}
+.cl-fixa,.cl-abre{position:absolute;left:0;width:120px;height:20px;border-radius:5px}
+.cl-fixa{top:24px;background:repeating-linear-gradient(-45deg,var(--tinta) 0 12px,#f2e9dc 12px 24px)}
+.cl-abre{top:2px;background:repeating-linear-gradient(-45deg,var(--terracota) 0 12px,#fffaf1 12px 24px);transform-origin:0 100%;transform:rotate(-16deg);animation:bater 3s ease-in-out infinite}
+@keyframes bater{0%,58%,100%{transform:rotate(-16deg)}66%{transform:rotate(0deg)}82%{transform:rotate(-16deg)}}
+/* coração de curtida com comentário */
+.coracao{width:112px;height:92px}
+.co-h{position:absolute;left:0;top:0;width:96px;height:88px;background:linear-gradient(150deg,#d98b6c,#b5563a 55%,#94432c);
+  clip-path:path('M48 86C12 58 0 38 0 24C0 9 11 0 25 0C35 0 43 5 48 13C53 5 61 0 71 0C85 0 96 9 96 24C96 38 84 58 48 86Z');animation:pulsar 2.4s ease-in-out infinite}
+.co-h::before{content:"";position:absolute;left:14px;top:12px;width:22px;height:12px;border-radius:50%;background:rgba(255,250,241,.45);transform:rotate(-35deg)}
+.co-bolha{position:absolute;right:0;bottom:0;width:46px;height:32px;border-radius:14px;background:var(--oliva);box-shadow:0 0 0 3px var(--linho)}
+.co-bolha::before{content:"";position:absolute;left:8px;top:14px;width:5px;height:5px;border-radius:50%;background:#fffaf1;box-shadow:9px 0 0 #fffaf1,18px 0 0 #fffaf1}
+.co-bolha::after{content:"";position:absolute;left:8px;bottom:-6px;width:12px;height:12px;background:var(--oliva);transform:rotate(45deg);z-index:-1}
+@keyframes pulsar{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
 
 /* posições dos objetos por seção */
-.o-hero-radio{right:2.5%;top:96px;--r:8deg;--t:10s}
-.o-hero-xicara{left:1.5%;bottom:170px;--r:-10deg;--t:11s;--dl:-3s}
-.o-sobre-planta{left:1.5%;bottom:5%;--r:-4deg;--t:9s}
-.o-dest-env{right:3%;top:70px;--r:-10deg;--t:10s;--dl:-2s}
-.o-trab-xicara{right:4%;top:64px;--r:12deg;--t:12s;--dl:-5s}
-.o-serv-radio{right:3%;top:60px;--r:-6deg;--t:11s;--dl:-4s}
-.o-cont-env{left:2%;bottom:6%;--r:9deg;--t:10s}
-.o-cont-planta{right:2%;top:70px;--r:5deg;--t:9s;--dl:-2s}
-@media (max-width:1100px){.o-hero-xicara,.o-sobre-planta,.o-cont-env{display:none}}
+.o-hero-cel{right:2.5%;top:96px;--r:8deg;--t:10s}
+.o-hero-mic{right:1%;bottom:210px;--r:8deg;--t:11s;--dl:-3s}
+.o-sobre-ring{left:1.5%;bottom:4%;--r:-4deg;--t:9s}
+.o-dest-cla{right:3%;top:70px;--r:-8deg;--t:10s;--dl:-2s}
+.o-trab-cor{right:4%;top:64px;--r:10deg;--t:12s;--dl:-5s}
+.o-serv-mic{right:3%;top:60px;--r:6deg;--t:11s;--dl:-4s}
+.o-cont-cla{left:2%;bottom:6%;--r:9deg;--t:10s}
+.o-cont-cel{right:2%;top:70px;--r:-6deg;--t:9s;--dl:-2s}
+@media (max-width:1100px){.o-hero-mic,.o-sobre-ring,.o-cont-cla{display:none}}
 @media (max-width:700px){
   .obj{--s:.5;opacity:.55}
-  .o-hero-radio{right:-12px;top:78px}
-  .o-dest-env,.o-trab-xicara,.o-serv-radio,.o-cont-planta{top:24px;right:-10px}
+  .o-hero-cel{right:-14px;top:78px}
+  .o-dest-cla,.o-trab-cor,.o-serv-mic,.o-cont-cel{top:24px;right:-10px}
 }
 
 /* ===== BLOCOS DE FOTO E VÍDEO (degradês) ===== */
@@ -369,7 +370,7 @@ a{color:inherit}
 @keyframes surgir{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:none}}
 .kit-in{position:relative;padding:2.2rem 1.8rem 1.9rem;text-align:center}
 .kit-in::before{content:"";position:absolute;inset:10px;border:2px dashed rgba(181,86,58,.4);border-radius:16px;pointer-events:none}
-.kit .envelope{margin:0 auto 1rem;rotate:-5deg}
+.kit .claquete{position:relative;margin:0 auto 1.2rem;rotate:-5deg}
 .kit h2{font-size:clamp(1.8rem,6vw,2.3rem);margin-bottom:.6rem}
 .kit h2 em{color:var(--terracota-esc)}
 .kit-in > p{margin-bottom:1.2rem}
@@ -425,8 +426,8 @@ html:has(dialog[open]){overflow:hidden}
 
 <!-- ============ 1. CAPA ============ -->
 <section class="hero" id="capa" aria-label="Apresentação">
-  <div class="obj radio o-hero-radio" aria-hidden="true"><span class="r-grille"></span><span class="r-dial"></span><span class="r-knob"></span><span class="r-knob k2"></span></div>
-  <div class="obj xicara o-hero-xicara" aria-hidden="true"><span class="x-pires"></span><span class="x-colher"></span><span class="x-copo"></span><span class="x-cafe"></span><span class="x-alca"></span></div>
+  <div class="obj celular o-hero-cel" aria-hidden="true"><span class="c-tela"></span><span class="c-rec"></span><span class="c-barra"></span></div>
+  <div class="obj mic o-hero-mic" aria-hidden="true"><span class="m-u"></span><span class="m-cap"></span><span class="m-anel"></span><span class="m-haste"></span><span class="m-base"></span></div>
 
   <div class="wrap hero-grid">
     <div class="hero-texto">
@@ -461,7 +462,7 @@ html:has(dialog[open]){overflow:hidden}
 
 <!-- ============ 2. SOBRE MIM ============ -->
 <section class="secao" id="sobre" aria-labelledby="t-sobre">
-  <div class="obj planta o-sobre-planta" aria-hidden="true"><span class="p-vaso"></span><span class="p-folha f4"></span><span class="p-folha f5"></span><span class="p-folha f1"></span><span class="p-folha f3"></span><span class="p-folha f2"></span><span class="p-borda"></span></div>
+  <div class="obj ring o-sobre-ring" aria-hidden="true"><span class="rg-aro"></span><span class="rg-cel"></span><span class="rg-haste"></span><span class="rg-pes"></span></div>
   <div class="wrap sobre-grid">
     <div class="sobre-foto reveal">
       <div class="moldura inv">
@@ -491,7 +492,7 @@ html:has(dialog[open]){overflow:hidden}
 
 <!-- ============ 3. CONTEÚDOS DE DESTAQUE ============ -->
 <section class="secao tom-2" id="destaques" aria-labelledby="t-dest">
-  <div class="obj envelope o-dest-env" aria-hidden="true"><span class="e-lacre"></span><span class="e-selo"></span></div>
+  <div class="obj claquete o-dest-cla" aria-hidden="true"><span class="cl-corpo"></span><span class="cl-fixa"></span><span class="cl-abre"></span></div>
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="kicker">vale apertar o play</span>
@@ -507,7 +508,7 @@ html:has(dialog[open]){overflow:hidden}
 
 <!-- ============ 4. TRABALHOS POR NICHO ============ -->
 <section class="secao" id="trabalhos" aria-labelledby="t-trab">
-  <div class="obj xicara o-trab-xicara" aria-hidden="true"><span class="x-pires"></span><span class="x-colher"></span><span class="x-copo"></span><span class="x-cafe"></span><span class="x-alca"></span></div>
+  <div class="obj coracao o-trab-cor" aria-hidden="true"><span class="co-h"></span><span class="co-bolha"></span></div>
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="kicker">para todo gosto</span>
@@ -522,7 +523,7 @@ html:has(dialog[open]){overflow:hidden}
 
 <!-- ============ 5. COMO EU TE AJUDO ============ -->
 <section class="secao tom-2" id="servicos" aria-labelledby="t-serv">
-  <div class="obj radio o-serv-radio" aria-hidden="true"><span class="r-grille"></span><span class="r-dial"></span><span class="r-knob"></span><span class="r-knob k2"></span></div>
+  <div class="obj mic o-serv-mic" aria-hidden="true"><span class="m-u"></span><span class="m-cap"></span><span class="m-anel"></span><span class="m-haste"></span><span class="m-base"></span></div>
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="kicker">meu ofício</span>
@@ -551,8 +552,8 @@ html:has(dialog[open]){overflow:hidden}
 
 <!-- ============ 7. BORA CRIAR JUNTOS ============ -->
 <section class="secao" id="contato" aria-labelledby="t-cont">
-  <div class="obj envelope o-cont-env" aria-hidden="true"><span class="e-lacre"></span><span class="e-selo"></span></div>
-  <div class="obj planta o-cont-planta" aria-hidden="true"><span class="p-vaso"></span><span class="p-folha f4"></span><span class="p-folha f5"></span><span class="p-folha f1"></span><span class="p-folha f3"></span><span class="p-folha f2"></span><span class="p-borda"></span></div>
+  <div class="obj claquete o-cont-cla" aria-hidden="true"><span class="cl-corpo"></span><span class="cl-fixa"></span><span class="cl-abre"></span></div>
+  <div class="obj celular o-cont-cel" aria-hidden="true"><span class="c-tela"></span><span class="c-rec"></span><span class="c-barra"></span></div>
   <div class="wrap contato-grid">
     <div class="reveal">
       <span class="kicker">vamos conversar</span>
@@ -613,7 +614,7 @@ html:has(dialog[open]){overflow:hidden}
 <dialog class="kit" id="kit" aria-labelledby="kit-titulo">
   <div class="kit-in">
     <button class="fechar" type="button" id="kit-fechar" aria-label="Fechar">&times;</button>
-    <div class="envelope" aria-hidden="true"><span class="e-lacre"></span><span class="e-selo"></span></div>
+    <div class="claquete" aria-hidden="true"><span class="cl-corpo"></span><span class="cl-fixa"></span><span class="cl-abre"></span></div>
     <div id="kit-corpo">
       <span class="kicker">um presente para você</span>
       <h2 id="kit-titulo">Quer meu <em>mídia kit</em> completo?</h2>

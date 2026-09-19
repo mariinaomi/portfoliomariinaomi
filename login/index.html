@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entrar | Painel</title>
+<!-- Esta página não deve aparecer no Google -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f2e9dc">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23b5563a'/%3E%3Ctext x='16' y='23' font-size='19' text-anchor='middle' fill='%23f2e9dc' font-family='Georgia,serif'%3EM%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --linho:#f2e9dc; --linho-2:#ebe0cd; --papel:#fffaf1;
+  --terracota:#b5563a; --terracota-esc:#94432c;
+  --oliva-esc:#56623a; --tinta:#3a271f; --tinta-2:#5c463b;
+  --f:'Outfit',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:1.25rem;
+  font-family:var(--f);font-weight:300;font-size:15px;line-height:1.55;color:var(--tinta);background-color:var(--linho);
+  background-image:repeating-linear-gradient(0deg,rgba(109,90,70,.05) 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,rgba(109,90,70,.04) 0 1px,transparent 1px 4px)}
+.cartao{width:min(100%,400px);background:var(--papel);border-radius:22px;padding:2rem 1.75rem 1.75rem;
+  box-shadow:0 1px 2px rgba(58,39,31,.06),0 24px 50px -18px rgba(58,39,31,.35)}
+.marca{display:flex;align-items:center;gap:.6rem;margin-bottom:1.4rem}
+.marca i{width:34px;height:34px;border-radius:50%;background:var(--terracota);color:var(--linho);display:grid;place-items:center;font-style:normal;font-family:Georgia,serif;font-size:17px}
+.marca b{font-weight:500;font-size:15px}
+.marca span{display:block;font-size:12.5px;color:var(--tinta-2)}
+h1{margin:0 0 .25rem;font-size:20px;font-weight:500}
+.sub{margin:0 0 1.25rem;color:var(--tinta-2);font-size:13.5px}
+label{display:block;font-size:13px;font-weight:400;margin-bottom:.3rem}
+input{width:100%;font:300 15px/1.4 var(--f);color:var(--tinta);background:#fff;border:1.5px solid rgba(58,39,31,.3);border-radius:14px;padding:.75rem .9rem;margin-bottom:.9rem}
+input:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid var(--oliva-esc);outline-offset:2px}
+.btn{width:100%;font:400 15px/1 var(--f);padding:.95rem 1rem;border-radius:99px;border:0;background:var(--terracota);color:#fff;cursor:pointer;min-height:46px;transition:background-color .2s}
+.btn:hover{background:var(--terracota-esc)}
+.btn[disabled]{opacity:.6;cursor:wait}
+.link{display:block;margin:1rem auto 0;background:none;border:0;font:400 13.5px var(--f);color:var(--terracota-esc);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.faixa{display:none;margin:0 0 1rem;padding:.7rem .9rem;border-radius:12px;font-size:13.5px;font-weight:400}
+.faixa.on{display:block}
+.faixa.erro{background:#fbe3dc;color:#8a2f1a}
+.faixa.ok{background:#e3e7cf;color:var(--oliva-esc)}
+.voltar{display:block;text-align:center;margin-top:1.2rem;font-size:13px;color:var(--tinta-2)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main class="cartao">
+  <div class="marca">
+    <i aria-hidden="true">M</i>
+    <div><b>Mariana Naomi Ota</b><span>Painel privado</span></div>
+  </div>
+
+  <!-- Faixa de aviso: erros e confirmações aparecem aqui -->
+  <div class="faixa" id="faixa" role="alert"></div>
+
+  <!-- Tela 1: entrar -->
+  <form id="form-entrar" novalidate>
+    <h1>Entrar</h1>
+    <p class="sub">Acesse o painel do seu portfólio.</p>
+    <label for="email">E-mail</label>
+    <input id="email" name="email" type="email" autocomplete="username" required>
+    <label for="senha">Senha</label>
+    <input id="senha" name="senha" type="password" autocomplete="current-password" required>
+    <button class="btn" type="submit" id="btn-entrar">Entrar</button>
+    <button class="link" type="button" id="btn-esqueci">Esqueci minha senha</button>
+  </form>
+
+  <!-- Tela 2: criar nova senha (aparece só quando você chega pelo link do e-mail de recuperação) -->
+  <form id="form-nova" novalidate hidden>
+    <h1>Criar nova senha</h1>
+    <p class="sub">Escolha uma senha nova, com pelo menos 8 caracteres.</p>
+    <label for="nova">Nova senha</label>
+    <input id="nova" type="password" autocomplete="new-password" minlength="8" required>
+    <label for="nova2">Repita a nova senha</label>
+    <input id="nova2" type="password" autocomplete="new-password" minlength="8" required>
+    <button class="btn" type="submit" id="btn-nova">Salvar nova senha</button>
+  </form>
+
+  <a class="voltar" href="../">Voltar para o portfólio</a>
+</main>
+
+<!-- Supabase por CDN (versão fixa, com selo de integridade) e os dados de acesso -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0/dist/umd/supabase.js"
+        integrity="sha384-iLddHTLokph6Omwoyid4XKxHaWa6w41BnoEj0q5oOrzmYPpHIKt1wyjReA7s//pP" crossorigin="anonymous"></script>
+<script src="../js/banco.js"></script>
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var faixa = $('faixa'), formEntrar = $('form-entrar'), formNova = $('form-nova');
+  var ADMIN = '../admin/';
+
+  function aviso(tipo, texto) {
+    faixa.className = 'faixa on ' + tipo;
+    faixa.textContent = texto;
+  }
+  function limparAviso() { faixa.className = 'faixa'; faixa.textContent = ''; }
+
+  /* Traduz qualquer erro do Supabase para português. Nunca mostra inglês. */
+  function traduzir(erro) {
+    var msg = ((erro && (erro.code || '')) + ' ' + (erro && erro.message || '')).toLowerCase();
+    if (/invalid_credentials|invalid login|invalid_grant|credentials/.test(msg)) return 'E-mail ou senha incorretos';
+    if (/email_not_confirmed|not confirmed/.test(msg)) return 'Este e-mail ainda não foi confirmado. Confira a sua caixa de entrada.';
+    if (/rate|too many|over_email_send/.test(msg)) return 'Muitas tentativas seguidas. Espere alguns minutos e tente de novo.';
+    if (/fetch|network|failed/.test(msg)) return 'Não consegui conectar agora. Confira a sua internet e tente de novo.';
+    if (/same_password|different from the old/.test(msg)) return 'A nova senha precisa ser diferente da antiga.';
+    if (/weak_password|at least/.test(msg)) return 'A senha é fraca demais. Use pelo menos 8 caracteres.';
+    return 'Algo não deu certo. Tente de novo em instantes.';
+  }
+
+  if (!window.banco) {
+    aviso('erro', 'Não consegui carregar o sistema de login. Confira a internet e recarregue a página.');
+    formEntrar.querySelectorAll('input,button').forEach(function (e) { e.disabled = true; });
+    return;
+  }
+  var banco = window.banco;
+
+  /* Chegou pelo link do e-mail de recuperação? Então mostra a tela de nova senha. */
+  var hash = location.hash || '';
+  var veioDaRecuperacao = /type=recovery/.test(hash);
+  var linkExpirado = /error_code=otp_expired|error=access_denied/.test(hash);
+
+  function mostrarNovaSenha() {
+    formEntrar.hidden = true; formNova.hidden = false; limparAviso(); $('nova').focus();
+  }
+  banco.auth.onAuthStateChange(function (evento) {
+    if (evento === 'PASSWORD_RECOVERY') mostrarNovaSenha();
+  });
+  if (veioDaRecuperacao) mostrarNovaSenha();
+  if (linkExpirado) aviso('erro', 'Esse link expirou. Peça um novo em "Esqueci minha senha".');
+
+  /* Já tem sessão aberta? Manda direto para o painel. */
+  if (!veioDaRecuperacao) {
+    banco.auth.getSession().then(function (r) {
+      if (r && r.data && r.data.session) location.replace(ADMIN);
+    }).catch(function () { /* sem sessão: segue na tela de login */ });
+  }
+
+  formEntrar.addEventListener('submit', function (e) {
+    e.preventDefault(); limparAviso();
+    var email = $('email').value.trim(), senha = $('senha').value;
+    if (!email || !senha) { aviso('erro', 'Preencha o e-mail e a senha.'); return; }
+    var btn = $('btn-entrar'); btn.disabled = true; btn.textContent = 'Entrando...';
+    banco.auth.signInWithPassword({ email: email, password: senha }).then(function (r) {
+      if (r.error) { aviso('erro', traduzir(r.error)); btn.disabled = false; btn.textContent = 'Entrar'; return; }
+      location.replace(ADMIN);
+    }).catch(function (err) {
+      aviso('erro', traduzir(err)); btn.disabled = false; btn.textContent = 'Entrar';
+    });
+  });
+
+  $('btn-esqueci').addEventListener('click', function () {
+    limparAviso();
+    var email = $('email').value.trim();
+    if (!email) { aviso('erro', 'Digite o seu e-mail acima e clique de novo em "Esqueci minha senha".'); $('email').focus(); return; }
+    var voltarPara = location.origin + location.pathname;
+    banco.auth.resetPasswordForEmail(email, { redirectTo: voltarPara }).then(function (r) {
+      if (r.error) { aviso('erro', traduzir(r.error)); return; }
+      /* A mensagem é a mesma exista o e-mail ou não, para não entregar informação a estranhos. */
+      aviso('ok', 'Se esse e-mail tiver cadastro, enviamos um link para criar uma nova senha. Confira também o spam.');
+    }).catch(function (err) { aviso('erro', traduzir(err)); });
+  });
+
+  formNova.addEventListener('submit', function (e) {
+    e.preventDefault(); limparAviso();
+    var a = $('nova').value, b = $('nova2').value;
+    if (a.length < 8) { aviso('erro', 'A senha precisa ter pelo menos 8 caracteres.'); return; }
+    if (a !== b) { aviso('erro', 'As duas senhas não são iguais.'); return; }
+    var btn = $('btn-nova'); btn.disabled = true;
+    banco.auth.updateUser({ password: a }).then(function (r) {
+      if (r.error) { aviso('erro', traduzir(r.error)); btn.disabled = false; return; }
+      aviso('ok', 'Senha alterada. Levando você para o painel...');
+      setTimeout(function () { location.replace(ADMIN); }, 1200);
+    }).catch(function (err) { aviso('erro', traduzir(err)); btn.disabled = false; });
+  });
+})();
+</script>
+</body>
+</html>

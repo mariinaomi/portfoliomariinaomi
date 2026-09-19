@@ -3,7 +3,7 @@
   ============================================================
   GUIA RÁPIDO DE EDIÇÃO (portfólio Mariana Naomi Ota)
   ============================================================
-  1. DADOS (trabalhos, serviços, métricas, depoimentos, marcas, destaques):
+  1. DADOS (vídeos, fotos, serviços, métricas da capa, marcas, destaques):
      ficam em arrays no começo da tag script, no fim deste arquivo.
   2. FOTOS: procure por "TROCAR FOTO" e siga o comentário.
   3. LINKS DOS VÍDEOS E CAPAS: procure por "DESTAQUES" dentro do script.
@@ -38,7 +38,7 @@
 }
 
 /* legendas em itálico elegante (Cormorant Garamond) */
-.kicker,.stat-rot,.cap,.nichos-rot,.dest-rot,.filtro-status,.trab figcaption span.m,.rot-mao,.dep figcaption span,.rod-sub{font-style:italic;letter-spacing:.01em}
+.kicker,.stat-rot,.cap,.nichos-rot,.dest-rot,.filtro-status,.trab figcaption span.m,.rod-sub{font-style:italic;letter-spacing:.01em}
 
 /* ===== BASE ===== */
 *,*::before,*::after{box-sizing:border-box}
@@ -295,30 +295,14 @@ a{color:inherit}
 .serv h3{font-size:1.6rem;margin-bottom:.5rem}
 .serv p{color:var(--tinta-2)}
 
-/* ===== NÚMEROS E DEPOIMENTOS ===== */
-.rot-mao{font-family:var(--f-mao);font-weight:600;font-size:1.85rem;line-height:1.1;color:#f0c2ae;margin:0 0 1.2rem}
-.metricas{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.5rem;list-style:none;padding:0;margin:0 0 clamp(3rem,7vw,4.5rem)}
-.metricas li{padding-left:1.1rem;border-left:2px dashed rgba(242,233,220,.4)}
-.metricas .num{font-size:clamp(2.6rem,6vw,4.6rem);color:var(--papel)}
-.metricas .stat-rot{color:#ead9b9;font-size:1.6rem}
-.resultados,.depoimentos{display:grid;gap:1.4rem;list-style:none;padding:0;margin:0 0 clamp(3rem,7vw,4.5rem)}
-.resultados{grid-template-columns:repeat(3,minmax(0,1fr))}
-.depoimentos{grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:0}
-.papel{background:var(--papel);color:var(--tinta);border-radius:var(--raio);padding:1.8rem 1.7rem;box-shadow:0 20px 40px -20px rgba(0,0,0,.45)}
-.res-n{font-family:var(--f-titulo);font-size:clamp(2.8rem,5vw,3.8rem);line-height:1;color:var(--terracota-esc);display:block}
-.res-rot{font-family:var(--f-mao);font-weight:600;font-size:1.4rem;color:var(--oliva-esc);display:block;margin:.2rem 0 .7rem;line-height:1.1}
-.res p{color:var(--tinta-2);font-size:.98rem}
-.res p b{font-weight:500;color:var(--tinta)}
-.dep{position:relative}
-.dep:nth-child(odd){rotate:-.6deg}
-.dep:nth-child(even){rotate:.6deg}
-.dep::before{content:"\201C";position:absolute;right:1.2rem;top:.2rem;font-family:var(--f-titulo);font-size:5.5rem;line-height:1;color:var(--terracota-cl);opacity:.5}
-.dep blockquote{font-size:1.1rem;line-height:1.6;margin-bottom:1.2rem;position:relative}
-.dep figcaption{display:flex;flex-direction:column}
-.dep figcaption b{font-weight:500}
-.dep figcaption span{font-family:var(--f-mao);font-weight:600;font-size:1.45rem;color:var(--terracota-esc);line-height:1.1}
-@media (max-width:1000px){.metricas{grid-template-columns:repeat(2,minmax(0,1fr))}.resultados{grid-template-columns:minmax(0,1fr)}}
-@media (max-width:760px){.depoimentos{grid-template-columns:minmax(0,1fr)}}
+/* ===== FOTOS (seção verde) ===== */
+.escuro .sec-head p{color:#ead9b9}
+.escuro .trab{color:var(--tinta)}
+.escuro .trab figure{box-shadow:0 20px 40px -20px rgba(0,0,0,.5)}
+#galeria-fotos{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.4rem;align-items:start}
+#galeria-fotos .trab{margin:0}
+@media (max-width:1000px){#galeria-fotos{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:700px){#galeria-fotos{grid-template-columns:repeat(2,minmax(0,1fr));gap:.9rem}}
 
 /* ===== CONTATO ===== */
 .contato-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(2rem,6vw,4.5rem);align-items:start}
@@ -408,8 +392,8 @@ html:has(dialog[open]){overflow:hidden}
         <li><a href="#sobre">Sobre</a></li>
         <li><a href="#destaques">Destaques</a></li>
         <li><a href="#trabalhos">Trabalhos</a></li>
+        <li><a href="#fotos">Fotos</a></li>
         <li><a href="#servicos">Serviços</a></li>
-        <li><a href="#numeros">Números</a></li>
         <li><a href="#contato">Contato</a></li>
       </ul>
     </nav>
@@ -505,15 +489,28 @@ html:has(dialog[open]){overflow:hidden}
     <div class="sec-head reveal">
       <span class="kicker">para todo gosto</span>
       <h2 id="t-trab">Trabalhos por <em>nicho</em></h2>
-      <p>Escolha um nicho e veja só os trabalhos dele.</p>
+      <p>Escolha um nicho e veja só os vídeos dele.</p>
     </div>
-    <div class="filtros reveal" id="filtros" role="group" aria-label="Filtrar trabalhos por nicho"></div>
+    <div class="filtros reveal" id="filtros" role="group" aria-label="Filtrar vídeos por nicho"></div>
     <p class="filtro-status" id="filtro-status" role="status" aria-live="polite"></p>
     <ul class="galeria" id="galeria"></ul>
   </div>
 </section>
 
-<!-- ============ 5. COMO EU TE AJUDO ============ -->
+<!-- ============ 5. FOTOS (seção verde, logo abaixo dos vídeos) ============ -->
+<section class="secao escuro" id="fotos" aria-labelledby="t-fotos">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker">olhar de perto</span>
+      <h2 id="t-fotos">Fotos de <em>produto</em></h2>
+      <p>Imagens reais, com luz natural e cenário do dia a dia.</p>
+    </div>
+    <!-- As fotos são geradas pelo script a partir da lista FOTOS.
+         Para trocar pela imagem real, preencha o campo "imagem" de cada foto. -->
+    <ul class="galeria" id="galeria-fotos"></ul>
+  </div>
+</section>
+<!-- ============ 6. COMO EU TE AJUDO ============ -->
 <section class="secao tom-2" id="servicos" aria-labelledby="t-serv">
   <div class="obj mic o-serv-mic" aria-hidden="true"><span class="m-u"></span><span class="m-cap"></span><span class="m-anel"></span><span class="m-haste"></span><span class="m-base"></span></div>
   <div class="wrap">
@@ -525,21 +522,6 @@ html:has(dialog[open]){overflow:hidden}
     <ul class="servicos" id="lista-servicos"></ul>
   </div>
   <div class="faixa-terra-wrap" aria-hidden="true"><div class="faixa-terra" id="faixa-servicos"></div></div>
-</section>
-
-<!-- ============ 6. NÚMEROS E DEPOIMENTOS ============ -->
-<section class="secao escuro" id="numeros" aria-labelledby="t-num">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <span class="kicker">prova de que funciona</span>
-      <h2 id="t-num">Números e <em>depoimentos</em></h2>
-    </div>
-    <ul class="metricas" id="lista-metricas" aria-label="Métricas"></ul>
-    <p class="rot-mao reveal">resultados de campanha</p>
-    <ul class="resultados" id="lista-resultados" aria-label="Resultados de campanha"></ul>
-    <p class="rot-mao reveal">o que as marcas dizem</p>
-    <ul class="depoimentos" id="lista-depoimentos" aria-label="Depoimentos"></ul>
-  </div>
 </section>
 
 <!-- ============ 7. BORA CRIAR JUNTOS ============ -->
@@ -639,16 +621,14 @@ const MARCAS = ["Cicatribem", "Prohall", "Always Fit", "Skelt", "Creamy", "Marca
    O texto do campo "nicho" de cada trabalho precisa ser igual a um item desta lista. */
 const NICHOS = ["beleza", "skincare", "moda", "comida", "casa e decoração", "fitness", "pet", "tech"];
 
-/* MÉTRICAS: as 3 primeiras aparecem na capa, as 4 aparecem na seção de números.
+/* MÉTRICAS: os 3 números que aparecem na capa.
    valor numérico (ex.: 90) anima contando. Texto (ex.: "00") aparece parado: é placeholder.
    Para trocar: coloque o número real, sem aspas, e apague a linha "placeholder". */
 const METRICAS = [
   { valor: 90, prefixo: "", sufixo: "", rotulo: "vídeos entregues" },
   { valor: 7,  prefixo: "", sufixo: "", rotulo: "marcas atendidas" },
-  { valor: "00", prefixo: "+", sufixo: "M", rotulo: "views somadas", placeholder: true },
-  { valor: "00", prefixo: "", sufixo: "", rotulo: "SUA MÉTRICA 04", placeholder: true }
+  { valor: "00", prefixo: "+", sufixo: "M", rotulo: "views somadas", placeholder: true }
 ];
-
 /* DESTAQUES: os três vídeos grandes.
    link = endereço do vídeo (reels, YouTube etc.). O card inteiro abre esse link.
    capa = nome da imagem vertical 9:16 (ex.: "capa1.jpg"). Deixe "" para mostrar o degradê.
@@ -662,29 +642,35 @@ const DESTAQUES = [
     titulo: "Título do conteúdo 03", contexto: "Marca 03, moda. Escreva aqui uma linha sobre o que foi feito." }
 ];
 
-/* TRABALHOS: a galeria filtrável.
-   formato: "vídeo 9:16", "foto 4:5" ou "foto 1:1" (a proporção do bloco segue o formato).
-   imagem: nome do arquivo (ex.: "trabalho1.jpg"). Deixe "" para mostrar o degradê.
-   link: opcional. Se preencher, o trabalho vira um link clicável. */
+/* TRABALHOS: só vídeos, com filtro por nicho.
+   formato: "vídeo 9:16" (a proporção do bloco segue o formato).
+   imagem: capa do vídeo (ex.: "trabalho1.jpg"). Deixe "" para mostrar o degradê.
+   link: endereço do vídeo. Se preencher, o trabalho vira um link clicável. */
 const TRABALHOS = [
   { titulo: "Trabalho 01", marca: "Marca 01", nicho: "beleza",            formato: "vídeo 9:16", imagem: "", link: "" },
-  { titulo: "Trabalho 02", marca: "Marca 02", nicho: "skincare",          formato: "foto 4:5",   imagem: "", link: "" },
+  { titulo: "Trabalho 02", marca: "Marca 02", nicho: "skincare",          formato: "vídeo 9:16", imagem: "", link: "" },
   { titulo: "Trabalho 03", marca: "Marca 03", nicho: "moda",              formato: "vídeo 9:16", imagem: "", link: "" },
-  { titulo: "Trabalho 04", marca: "Marca 04", nicho: "comida",            formato: "foto 1:1",   imagem: "", link: "" },
-  { titulo: "Trabalho 05", marca: "Marca 05", nicho: "casa e decoração",  formato: "foto 4:5",   imagem: "", link: "" },
+  { titulo: "Trabalho 04", marca: "Marca 04", nicho: "comida",            formato: "vídeo 9:16", imagem: "", link: "" },
+  { titulo: "Trabalho 05", marca: "Marca 05", nicho: "casa e decoração",  formato: "vídeo 9:16", imagem: "", link: "" },
   { titulo: "Trabalho 06", marca: "Marca 06", nicho: "fitness",           formato: "vídeo 9:16", imagem: "", link: "" },
-  { titulo: "Trabalho 07", marca: "Marca 07", nicho: "pet",               formato: "foto 1:1",   imagem: "", link: "" },
-  { titulo: "Trabalho 08", marca: "Marca 08", nicho: "tech",              formato: "vídeo 9:16", imagem: "", link: "" },
-  { titulo: "Trabalho 09", marca: "Marca 09", nicho: "beleza",            formato: "foto 4:5",   imagem: "", link: "" },
-  { titulo: "Trabalho 10", marca: "Marca 10", nicho: "skincare",          formato: "vídeo 9:16", imagem: "", link: "" },
-  { titulo: "Trabalho 11", marca: "Marca 11", nicho: "moda",              formato: "foto 1:1",   imagem: "", link: "" },
-  { titulo: "Trabalho 12", marca: "Marca 12", nicho: "comida",            formato: "vídeo 9:16", imagem: "", link: "" },
-  { titulo: "Trabalho 13", marca: "Marca 01", nicho: "casa e decoração",  formato: "vídeo 9:16", imagem: "", link: "" },
-  { titulo: "Trabalho 14", marca: "Marca 02", nicho: "fitness",           formato: "foto 4:5",   imagem: "", link: "" },
-  { titulo: "Trabalho 15", marca: "Marca 03", nicho: "pet",               formato: "vídeo 9:16", imagem: "", link: "" },
-  { titulo: "Trabalho 16", marca: "Marca 04", nicho: "tech",              formato: "foto 4:5",   imagem: "", link: "" }
+  { titulo: "Trabalho 07", marca: "Marca 07", nicho: "pet",               formato: "vídeo 9:16", imagem: "", link: "" },
+  { titulo: "Trabalho 08", marca: "Marca 08", nicho: "tech",              formato: "vídeo 9:16", imagem: "", link: "" }
 ];
 
+/* FOTOS: galeria da seção verde, logo abaixo dos vídeos.
+   formato: "foto 4:5" ou "foto 1:1" (a proporção do bloco segue o formato).
+   imagem: nome do arquivo (ex.: "foto1.jpg"). Deixe "" para mostrar o degradê.
+   link: opcional. Se preencher, a foto vira um link clicável. */
+const FOTOS = [
+  { titulo: "Foto 01", marca: "Marca 01", nicho: "skincare",          formato: "foto 4:5", imagem: "", link: "" },
+  { titulo: "Foto 02", marca: "Marca 02", nicho: "comida",            formato: "foto 1:1", imagem: "", link: "" },
+  { titulo: "Foto 03", marca: "Marca 03", nicho: "casa e decoração",  formato: "foto 4:5", imagem: "", link: "" },
+  { titulo: "Foto 04", marca: "Marca 04", nicho: "pet",               formato: "foto 1:1", imagem: "", link: "" },
+  { titulo: "Foto 05", marca: "Marca 05", nicho: "beleza",            formato: "foto 4:5", imagem: "", link: "" },
+  { titulo: "Foto 06", marca: "Marca 06", nicho: "moda",              formato: "foto 1:1", imagem: "", link: "" },
+  { titulo: "Foto 07", marca: "Marca 07", nicho: "fitness",           formato: "foto 4:5", imagem: "", link: "" },
+  { titulo: "Foto 08", marca: "Marca 08", nicho: "tech",              formato: "foto 4:5", imagem: "", link: "" }
+];
 /* SERVIÇOS: o número (01 a 06) é automático, pela ordem da lista. */
 const SERVICOS = [
   { titulo: "Vídeo UGC", texto: "Vídeo gravado com jeito de gente de verdade, com roteiro aprovado por você antes de eu ligar a câmera." },
@@ -693,21 +679,6 @@ const SERVICOS = [
   { titulo: "Unboxing", texto: "Abertura filmada com calma e curiosidade, mostrando embalagem, textura e primeira impressão." },
   { titulo: "Publicação no meu perfil", texto: "Divulgo o produto no meu Instagram, com marcação e detalhes combinados com a marca." },
   { titulo: "Pacote mensal", texto: "Vídeos e fotos todo mês, com calendário combinado e um único contato para tudo." }
-];
-
-/* RESULTADOS DE CAMPANHA: três cartões. Tudo aqui é placeholder para você preencher. */
-const RESULTADOS = [
-  { numero: "+00%", rotulo: "SEU RESULTADO 01", marca: "Marca 01", texto: "Descreva aqui o que a campanha alcançou e o que você fez nela." },
-  { numero: "+00%", rotulo: "SEU RESULTADO 02", marca: "Marca 02", texto: "Descreva aqui o que a campanha alcançou e o que você fez nela." },
-  { numero: "+00%", rotulo: "SEU RESULTADO 03", marca: "Marca 03", texto: "Descreva aqui o que a campanha alcançou e o que você fez nela." }
-];
-
-/* DEPOIMENTOS: quatro, com nome e empresa. */
-const DEPOIMENTOS = [
-  { texto: "Depoimento 01: escreva aqui o que o cliente disse sobre trabalhar com você.", nome: "Cliente 01", empresa: "Marca 01" },
-  { texto: "Depoimento 02: escreva aqui o que o cliente disse sobre trabalhar com você.", nome: "Cliente 02", empresa: "Marca 02" },
-  { texto: "Depoimento 03: escreva aqui o que o cliente disse sobre trabalhar com você.", nome: "Cliente 03", empresa: "Marca 03" },
-  { texto: "Depoimento 04: escreva aqui o que o cliente disse sobre trabalhar com você.", nome: "Cliente 04", empresa: "Marca 04" }
 ];
 
 /* FORM_ENDPOINT / KIT_ENDPOINT: para receber as mensagens de verdade.
@@ -760,7 +731,6 @@ const KIT_ENDPOINT = "";
     return '<li class="reveal" style="--d:' + i + '">' + numeroHTML(m) + '<span class="stat-rot">' + esc(m.rotulo) + '</span></li>';
   }
   $('#stats-capa').innerHTML = METRICAS.slice(0, 3).map(itemMetrica).join('');
-  $('#lista-metricas').innerHTML = METRICAS.map(itemMetrica).join('');
 
   function contar(el) {
     var alvo = +el.getAttribute('data-alvo'), pref = el.getAttribute('data-pref'), suf = el.getAttribute('data-suf');
@@ -793,17 +763,18 @@ const KIT_ENDPOINT = "";
 
   /* ---------- trabalhos e filtros ---------- */
   var galeria = $('#galeria'), status = $('#filtro-status'), filtrosEl = $('#filtros');
-  galeria.innerHTML = TRABALHOS.map(function (t, i) {
+  function cardTrabalho(t, i) {
     var m = /(\d+):(\d+)/.exec(t.formato);
     var ar = m ? m[1] + '/' + m[2] : '4/5';
-    /* TROCAR FOTO: preencha "imagem" em TRABALHOS. Ela é cortada para a proporção do formato. */
+    /* TROCAR FOTO: preencha "imagem" em TRABALHOS ou FOTOS. Ela é cortada para a proporção do formato. */
     var bloco = '<div class="ph ' + grad(i) + '" style="aspect-ratio:' + ar + '">' +
       (t.imagem ? '<img src="' + esc(t.imagem) + '" alt="' + esc(t.titulo + ', ' + t.marca) + '" loading="lazy">' : '<span class="cap">' + esc(t.formato) + '</span>') + '</div>';
     var fig = '<figure>' + bloco + '<figcaption><b>' + esc(t.titulo) + '</b><span class="m">' + esc(t.marca) + '</span><span class="chip">' + esc(cap(t.nicho)) + '</span></figcaption></figure>';
     if (t.link) fig = '<a href="' + esc(t.link) + '" target="_blank" rel="noopener noreferrer">' + fig + '</a>';
     return '<li class="trab reveal" data-nicho="' + esc(t.nicho) + '" style="--d:' + (i % 4) + '">' + fig + '</li>';
-  }).join('');
-
+  }
+  galeria.innerHTML = TRABALHOS.map(function (t, i) { return cardTrabalho(t, i); }).join('');
+  $('#galeria-fotos').innerHTML = FOTOS.map(function (t, i) { return cardTrabalho(t, i + 3); }).join('');
   filtrosEl.innerHTML = ['todos'].concat(NICHOS).map(function (n, i) {
     return '<button type="button" class="filtro" data-nicho="' + esc(n) + '" aria-pressed="' + (i === 0) + '">' + esc(cap(n)) + '</button>';
   }).join('');
@@ -819,8 +790,8 @@ const KIT_ENDPOINT = "";
       }
     });
     status.textContent = nicho === 'todos'
-      ? 'Mostrando todos os ' + n + ' trabalhos.'
-      : 'Mostrando ' + n + (n === 1 ? ' trabalho' : ' trabalhos') + ' de ' + nicho + '.';
+      ? 'Mostrando todos os ' + n + ' vídeos.'
+      : 'Mostrando ' + n + (n === 1 ? ' vídeo' : ' vídeos') + ' de ' + nicho + '.';
   }
   filtrosEl.addEventListener('click', function (e) {
     var b = e.target.closest('.filtro');
@@ -830,18 +801,10 @@ const KIT_ENDPOINT = "";
   });
   filtrar('todos', false);
 
-  /* ---------- serviços, resultados, depoimentos ---------- */
+  /* ---------- serviços ---------- */
   $('#lista-servicos').innerHTML = SERVICOS.map(function (s, i) {
     return '<li class="serv reveal" style="--d:' + (i % 3) + '"><span class="serv-n" aria-hidden="true">' + String(i + 1).padStart(2, '0') + '</span>' +
       '<h3>' + esc(s.titulo) + '</h3><p>' + esc(s.texto) + '</p></li>';
-  }).join('');
-  $('#lista-resultados').innerHTML = RESULTADOS.map(function (r, i) {
-    return '<li class="papel res reveal" style="--d:' + i + '"><span class="res-n">' + esc(r.numero) + '</span><span class="res-rot">' + esc(r.rotulo) + '</span>' +
-      '<p><b>' + esc(r.marca) + '.</b> ' + esc(r.texto) + '</p></li>';
-  }).join('');
-  $('#lista-depoimentos').innerHTML = DEPOIMENTOS.map(function (d, i) {
-    return '<li class="papel dep reveal" style="--d:' + (i % 2) + '"><figure><blockquote>' + esc(d.texto) + '</blockquote>' +
-      '<figcaption><b>' + esc(d.nome) + '</b><span>' + esc(d.empresa) + '</span></figcaption></figure></li>';
   }).join('');
 
   /* ---------- entrada ao rolar e contadores ---------- */

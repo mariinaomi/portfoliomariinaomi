@@ -69,6 +69,18 @@ window.Painel = (function () {
     }).join('');
   }
 
+  /* Várias tabelas faltando viram UM aviso só, em vez de um cartão para cada tabela. */
+  var tabelasFaltando = {};
+  function avisarErro(tabela, info) {
+    if (info.tipo === 'tabela') {
+      tabelasFaltando[tabela] = true;
+      var nomes = Object.keys(tabelasFaltando);
+      avisar('tabelas-faltando',
+        nomes.length === 1 ? 'Falta a tabela "' + nomes[0] + '" no banco.' : 'Faltam ' + nomes.length + ' tabelas no banco: ' + nomes.join(', ') + '.',
+        'Abra o Supabase, vá em SQL Editor e rode o arquivo banco.sql inteiro. Depois recarregue esta página. O resto do painel continua funcionando.');
+    } else avisar(tabela + ':' + info.tipo, info.t, info.d);
+  }
+
   /* Transforma o erro do Supabase em uma frase clara e diz o que fazer. */
   function entenderErro(e, tabela) {
     var cod = String((e && e.code) || ''), msg = String((e && e.message) || '');
@@ -120,17 +132,17 @@ window.Painel = (function () {
           if (info.tipo === 'coluna' && (opc.ordem || []).length) {
             /* Falta a coluna usada para ordenar: tenta de novo sem ordenar. */
             return buscar(false).then(function (r2) {
-              if (r2.error) { avisar(tabela + ':' + info.tipo, info.t, info.d); return { dados: [], ok: false }; }
+              if (r2.error) { avisarErro(tabela, info); return { dados: [], ok: false }; }
               avisar(tabela + ':coluna', info.t, info.d);
               return { dados: r2.data || [], ok: true };
             });
           }
-          avisar(tabela + ':' + info.tipo, info.t, info.d);
+          avisarErro(tabela, info);
           return { dados: [], ok: false };
         }
         return { dados: r.data || [], ok: true };
       }).catch(function (e) {
-        var info = entenderErro(e, tabela); avisar(tabela + ':' + info.tipo, info.t, info.d);
+        var info = entenderErro(e, tabela); avisarErro(tabela, info);
         return { dados: [], ok: false };
       });
     },
@@ -146,7 +158,7 @@ window.Painel = (function () {
     _escrever: function (tabela, fazer) {
       if (!window.banco) return Promise.resolve({ ok: false, texto: 'Sem conexão com o banco.' });
       return Promise.resolve(fazer()).then(function (r) {
-        if (r.error) { var i = entenderErro(r.error, tabela); if (i.tipo !== 'outro') avisar(tabela + ':' + i.tipo, i.t, i.d); return { ok: false, texto: i.t + ' ' + i.d }; }
+        if (r.error) { var i = entenderErro(r.error, tabela); if (i.tipo !== 'outro') avisarErro(tabela, i); return { ok: false, texto: i.t + ' ' + i.d }; }
         return { ok: true, dados: r.data || [] };
       }).catch(function (e) { var i = entenderErro(e, tabela); return { ok: false, texto: i.t + ' ' + i.d }; });
     }
@@ -259,19 +271,30 @@ window.Painel = (function () {
     var tabelas = ['videos', 'marcas', 'calendario', 'campanhas', 'marcados', 'visitas'];
     Promise.all(tabelas.map(function (t) {
       return Promise.resolve(anon.from(t).select('*').limit(1)).then(function (r) {
-        if (r.error) return { t: t, ok: true, txt: 'trancada (o banco recusou a leitura)' };
-        if (!r.data || !r.data.length) return { t: t, ok: true, txt: 'trancada (nenhuma linha voltou)' };
-        return { t: t, ok: false, txt: 'ABERTA: um visitante conseguiu ler. Rode o banco.sql de novo.' };
-      }).catch(function () { return { t: t, ok: true, txt: 'trancada' }; });
+        if (r.error) {
+          var cod = String(r.error.code || '');
+          /* Tabela inexistente NÃO conta como trancada: ainda não há o que proteger. */
+          if (cod === 'PGRST205' || cod === '42P01') return { t: t, estado: 'falta', txt: 'esta tabela ainda não existe no banco. Rode o banco.sql.' };
+          return { t: t, estado: 'ok', txt: 'trancada (o banco recusou a leitura)' };
+        }
+        if (!r.data || !r.data.length) return { t: t, estado: 'ok', txt: 'trancada (nenhuma linha voltou)' };
+        return { t: t, estado: 'aberta', txt: 'ABERTA: um visitante conseguiu ler. Rode o banco.sql de novo.' };
+      }).catch(function () { return { t: t, estado: 'falta', txt: 'não consegui testar (sem conexão?)' }; });
     })).then(function (rs) {
-      var tudoOk = rs.every(function (r) { return r.ok; });
-      $('#tr-corpo').outerHTML = '<p style="margin-bottom:.7rem;font-weight:400">' + (tudoOk ? 'Tudo certo: nenhuma tabela pode ser lida por quem está de fora.' : 'Atenção: alguma tabela está aberta.') + '</p>' +
-        '<ul class="dia-lista">' + rs.map(function (r) { return '<li><span class="tx"><b style="font-weight:500">' + r.t + '</b>: ' + esc(r.txt) + '</span><span class="pil ' + (r.ok ? 'p-cliente' : 'et-vermelha') + '">' + (r.ok ? 'ok' : 'aberta') + '</span></li>'; }).join('') + '</ul>' +
+      var abertas = rs.filter(function (r) { return r.estado === 'aberta'; }).length;
+      var faltam = rs.filter(function (r) { return r.estado === 'falta'; }).length;
+      var resumo = abertas ? 'Atenção: alguma tabela está aberta.'
+        : faltam ? 'Ainda não dá para garantir a tranca: faltam tabelas no banco. Rode o banco.sql e teste de novo.'
+        : 'Tudo certo: nenhuma tabela pode ser lida por quem está de fora.';
+      var pilula = { ok: ['p-cliente', 'ok'], aberta: ['et-vermelha', 'aberta'], falta: ['s2', 'falta'] };
+      $('#tr-corpo').outerHTML = '<p style="margin-bottom:.7rem;font-weight:400">' + resumo + '</p>' +
+        '<ul class="dia-lista">' + rs.map(function (r) {
+          return '<li><span class="tx"><b style="font-weight:500">' + r.t + '</b>: ' + esc(r.txt) + '</span><span class="pil ' + pilula[r.estado][0] + '">' + pilula[r.estado][1] + '</span></li>';
+        }).join('') + '</ul>' +
         '<p class="vazio">Só as marcas e as visitas aceitam ENVIO de quem está de fora (formulário e contagem de visitas). Ler, só você.</p>' +
         '<div class="modal-pe"><button class="btn" data-fechar>Fechar</button></div>';
     });
   }
-
   /* ---------- abas e menu ---------- */
   var abas = {}, ordemAbas = ['portfolio', 'marcas', 'calendario', 'campanhas', 'checklist'], atual = null;
   function registrar(id, def) { abas[id] = def; def._montada = false; }
@@ -312,6 +335,16 @@ window.Painel = (function () {
   }
   function fecharGaveta() { abrirGaveta(false); }
 
+  /* Confere logo ao abrir se as 6 tabelas existem, para o aviso aparecer completo e uma vez só. */
+  function verificarTabelas() {
+    if (!window.banco) return;
+    ['videos', 'marcas', 'calendario', 'campanhas', 'marcados', 'visitas'].forEach(function (t) {
+      Promise.resolve(window.banco.from(t).select('*').limit(1)).then(function (r) {
+        if (r && r.error) { var info = entenderErro(r.error, t); if (info.tipo === 'tabela') avisarErro(t, info); }
+      }).catch(function () { /* sem conexão: os avisos normais cuidam disso */ });
+    });
+  }
+
   function iniciar() {
     $$('[data-i]').forEach(function (el) { el.innerHTML = icone(el.getAttribute('data-i')); });
     document.addEventListener('click', function (e) {
@@ -330,6 +363,7 @@ window.Painel = (function () {
     window.PRONTO.then(function (sessao) {
       if (window.SEM_BANCO) avisar('sem-banco', 'Não consegui carregar o Supabase.', 'Confira a sua internet e recarregue a página.');
       $('#meu-email').textContent = (sessao && sessao.user && sessao.user.email) || '';
+      verificarTabelas();
       ativar((location.hash || '').slice(1) || 'portfolio');
     });
   }

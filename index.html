@@ -1,0 +1,971 @@
+<!doctype html>
+<!--
+  ============================================================
+  GUIA RÁPIDO DE EDIÇÃO (portfólio Mariana Naomi Ota)
+  ============================================================
+  1. DADOS (trabalhos, serviços, métricas, depoimentos, marcas, destaques):
+     ficam em arrays no começo da tag script, no fim deste arquivo.
+  2. FOTOS: procure por "TROCAR FOTO" e siga o comentário.
+  3. LINKS DOS VÍDEOS E CAPAS: procure por "DESTAQUES" dentro do script.
+  4. FORMULÁRIOS: procure por "FORM_ENDPOINT" para receber as mensagens de verdade.
+  5. Tudo que estiver como "SEU ...", "00" ou "Marca 06" é placeholder para trocar.
+  ============================================================
+-->
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mariana Naomi Ota | Portfólio UGC</title>
+<meta name="description" content="Portfólio de Mariana Naomi Ota, UGC Creator em São Paulo: vídeos, fotos e conteúdo com jeito de gente de verdade para marcas.">
+<meta name="theme-color" content="#f2e9dc">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23b5563a'/%3E%3Ctext x='16' y='23' font-size='19' text-anchor='middle' fill='%23f2e9dc' font-family='Georgia,serif'%3EM%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ===== VARIÁVEIS ===== */
+:root{
+  --linho:#f2e9dc; --linho-2:#ebe0cd; --linho-3:#e0d1b9; --papel:#fffaf1;
+  --terracota:#b5563a; --terracota-esc:#94432c; --terracota-cl:#d98b6c;
+  --oliva:#6d7a4c; --oliva-esc:#56623a; --oliva-cl:#a3ad7c;
+  --tinta:#3a271f; --tinta-2:#5c463b;
+  --sombra:0 1px 2px rgba(58,39,31,.06),0 10px 30px -10px rgba(58,39,31,.22);
+  --sombra-g:0 2px 4px rgba(58,39,31,.06),0 24px 50px -18px rgba(58,39,31,.35);
+  --f-titulo:'DM Serif Display',Georgia,'Times New Roman',serif;
+  --f-corpo:'Outfit',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --f-mao:'Caveat','Segoe Print','Bradley Hand',cursive;
+  --raio:22px; --topo:68px;
+}
+
+/* ===== BASE ===== */
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--topo) + 12px);-webkit-text-size-adjust:100%}
+body{
+  margin:0;font-family:var(--f-corpo);font-weight:300;font-size:1.0625rem;line-height:1.65;
+  color:var(--tinta);overflow-x:hidden;background-color:var(--linho);
+  /* textura de linho: fios finos cruzados + ruído de fibra */
+  background-image:
+    repeating-linear-gradient(0deg,rgba(109,90,70,.05) 0 1px,transparent 1px 3px),
+    repeating-linear-gradient(90deg,rgba(109,90,70,.04) 0 1px,transparent 1px 4px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9 .6' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .33 0 0 0 0 .25 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E");
+}
+img{max-width:100%;display:block}
+h1,h2,h3,p,ul,figure,blockquote{margin:0}
+h1,h2,h3{font-family:var(--f-titulo);font-weight:400;line-height:1.05}
+em{font-style:italic}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--oliva-esc);outline-offset:3px;border-radius:4px}
+.escuro :focus-visible,.rodape :focus-visible{outline-color:var(--linho)}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.pular{position:absolute;left:1rem;top:-4rem;z-index:100;background:var(--tinta);color:var(--linho);padding:.6rem 1rem;border-radius:10px;text-decoration:none}
+.pular:focus{top:.6rem}
+.wrap{width:min(1180px,calc(100% - 2.5rem));margin-inline:auto;position:relative;z-index:1}
+.secao{position:relative;overflow:hidden;padding-block:clamp(4.5rem,10vw,8rem)}
+.sec-head{max-width:42rem;margin-bottom:clamp(2rem,5vw,3.4rem)}
+.kicker{font-family:var(--f-mao);font-weight:600;font-size:1.55rem;line-height:1.1;color:var(--terracota-esc);display:block;margin-bottom:.4rem}
+.sec-head h2{font-size:clamp(2.3rem,5.4vw,3.8rem)}
+.sec-head h2 em{color:var(--terracota-esc)}
+.sec-head p{margin-top:1rem;color:var(--tinta-2);font-size:1.1rem}
+.escuro{background-color:var(--oliva-esc);color:var(--linho);
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0 1px,transparent 1px 4px)}
+.escuro .kicker{color:#f0c2ae}
+.escuro .sec-head h2 em{color:#f3bda6}
+.tom-2{background-color:rgba(235,224,205,.55)}
+
+/* ===== BOTÕES ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font:400 1rem/1 var(--f-corpo);text-decoration:none;
+  padding:1rem 1.6rem;border-radius:99px;border:1.5px solid transparent;cursor:pointer;min-height:48px;
+  transition:transform .25s ease,background-color .25s ease,box-shadow .25s ease,color .25s ease}
+.btn-pri{background:var(--terracota);color:#fff;box-shadow:0 10px 20px -10px rgba(181,86,58,.8)}
+.btn-pri:hover{background:var(--terracota-esc);transform:translateY(-2px)}
+.btn-sec{border-color:var(--tinta);color:var(--tinta);background:transparent}
+.btn-sec:hover{background:var(--tinta);color:var(--linho);transform:translateY(-2px)}
+
+/* ===== TOPO / MENU ===== */
+.topo{position:fixed;inset:0 0 auto 0;z-index:50;height:var(--topo);background:rgba(242,233,220,.88);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid rgba(58,39,31,.1);transition:box-shadow .3s}
+.topo.rolou{box-shadow:0 8px 24px -14px rgba(58,39,31,.4)}
+.topo-in{height:100%;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.marca{font-family:var(--f-titulo);font-size:1.45rem;text-decoration:none;white-space:nowrap;line-height:1}
+.marca em{color:var(--terracota-esc)}
+.menu ul{display:flex;gap:2rem;list-style:none;margin:0;padding:0}
+.menu a{position:relative;text-decoration:none;font-weight:400;font-size:.98rem;padding:.4rem 0}
+.menu a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--terracota);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.menu a:hover::after,.menu a[aria-current="true"]::after{transform:scaleX(1)}
+.burger{display:none;width:46px;height:46px;border:0;background:transparent;cursor:pointer;padding:0;flex-direction:column;align-items:center;justify-content:center;gap:6px;border-radius:12px}
+.burger span{display:block;width:24px;height:2px;background:var(--tinta);border-radius:2px;transition:transform .3s,opacity .3s}
+.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+@media (max-width:900px){
+  .burger{display:flex}
+  .menu{position:absolute;top:100%;left:0;right:0;background:var(--linho);padding:.6rem 1.25rem 1.4rem;border-bottom:1px solid rgba(58,39,31,.12);
+    box-shadow:0 20px 30px -18px rgba(58,39,31,.4);opacity:0;visibility:hidden;transform:translateY(-10px);transition:opacity .3s,transform .3s,visibility .3s}
+  .menu.aberto{opacity:1;visibility:visible;transform:none}
+  .menu ul{flex-direction:column;gap:0}
+  .menu a{display:block;padding:.95rem .2rem;font-size:1.2rem;border-bottom:1px dashed rgba(58,39,31,.2)}
+  .menu a::after{display:none}
+  .menu a[aria-current="true"]{color:var(--terracota-esc)}
+}
+
+/* ===== OBJETOS FLUTUANTES (CSS puro) ===== */
+.obj{position:absolute;z-index:0;pointer-events:none;filter:drop-shadow(0 12px 10px rgba(58,39,31,.2));
+  animation:flutuar var(--t,9s) ease-in-out infinite;animation-delay:var(--dl,0s)}
+@keyframes flutuar{
+  0%,100%{transform:translateY(0) rotate(var(--r,0deg)) scale(var(--s,1))}
+  50%{transform:translateY(-14px) rotate(calc(var(--r,0deg) + 3deg)) scale(var(--s,1))}
+}
+/* rádio vintage */
+.radio{width:128px;height:88px;border-radius:16px;background:linear-gradient(#cf6f50,#b5563a);
+  box-shadow:inset 0 -6px 0 rgba(0,0,0,.14),inset 0 3px 0 rgba(255,255,255,.25)}
+.radio::before{content:"";position:absolute;right:26px;top:-46px;width:3px;height:46px;background:var(--tinta-2);border-radius:2px;transform-origin:50% 100%;transform:rotate(22deg)}
+.radio::after{content:"";position:absolute;left:14px;right:14px;bottom:-5px;height:6px;border-radius:0 0 4px 4px;background:var(--tinta)}
+.r-grille{position:absolute;left:10px;top:12px;width:56px;height:64px;border-radius:10px;
+  background:radial-gradient(#7a5a3f 1.5px,transparent 1.7px) 0 0/7px 7px,#ecd9b3;box-shadow:inset 0 0 0 2px var(--tinta)}
+.r-dial{position:absolute;right:10px;top:12px;width:46px;height:22px;border-radius:6px;background:
+  repeating-linear-gradient(90deg,var(--tinta) 0 1px,transparent 1px 6px) bottom/100% 8px no-repeat,#f6ebd2;box-shadow:inset 0 0 0 2px var(--tinta)}
+.r-dial::after{content:"";position:absolute;left:40%;top:3px;width:2px;height:14px;background:var(--terracota-esc)}
+.r-knob{position:absolute;right:38px;bottom:12px;width:20px;height:20px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#f6ebd2,#c9b08f);box-shadow:0 0 0 2px var(--tinta)}
+.r-knob.k2{right:12px}
+/* plantinha no vaso */
+.planta{width:96px;height:132px}
+.p-vaso{position:absolute;left:20px;bottom:0;width:56px;height:46px;background:linear-gradient(90deg,#c9694a,#b5563a 55%,#9a4630);clip-path:polygon(0 0,100% 0,84% 100%,16% 100%)}
+.p-borda{position:absolute;left:14px;bottom:40px;width:68px;height:12px;border-radius:4px;background:#c9694a;box-shadow:inset 0 -3px 0 rgba(0,0,0,.14)}
+.p-folha{position:absolute;left:50%;bottom:50px;width:30px;height:62px;margin-left:-15px;transform-origin:50% 100%;
+  border-radius:0 100% 0 100%;background:linear-gradient(135deg,#8a9862,#56623a);
+  transform:rotate(var(--a));animation:brisa 5s ease-in-out infinite alternate}
+.p-folha.f1{--a:-38deg}
+.p-folha.f2{--a:-3deg;height:76px;animation-delay:-1s}
+.p-folha.f3{--a:36deg;animation-delay:-2s}
+.p-folha.f4{--a:-72deg;height:40px;width:22px;margin-left:-11px;animation-delay:-3s}
+.p-folha.f5{--a:68deg;height:42px;width:22px;margin-left:-11px;animation-delay:-4s}
+@keyframes brisa{to{transform:rotate(calc(var(--a) + 5deg))}}
+/* xícara de café, vista de cima */
+.xicara{width:104px;height:104px}
+.x-pires{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fffaf1,#e9dcc4);box-shadow:inset 0 0 0 3px rgba(58,39,31,.08)}
+.x-pires::after{content:"";position:absolute;inset:8px;border-radius:50%;border:1px solid rgba(58,39,31,.12)}
+.x-copo{position:absolute;left:18px;top:18px;width:62px;height:62px;border-radius:50%;background:#fffaf1;box-shadow:0 3px 0 rgba(58,39,31,.12),inset 0 0 0 2px rgba(58,39,31,.1)}
+.x-cafe{position:absolute;left:24px;top:24px;width:50px;height:50px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#a5714d 0,#6b4130 45%,#3d2419 100%)}
+.x-cafe::after{content:"";position:absolute;left:12px;top:9px;width:16px;height:8px;border-radius:50%;background:rgba(255,255,255,.22);transform:rotate(-30deg)}
+.x-alca{position:absolute;right:3px;top:38px;width:24px;height:26px;border-radius:0 14px 14px 0;border:6px solid #fffaf1;border-left:0;filter:drop-shadow(1px 2px 0 rgba(58,39,31,.12))}
+.x-colher{position:absolute;left:6px;top:82px;width:46px;height:5px;border-radius:3px;background:#c9c3b6;transform:rotate(-14deg)}
+/* envelope */
+.envelope{position:relative;width:112px;height:76px;background:#f6ecda;border-radius:6px;box-shadow:inset 0 0 0 1px rgba(58,39,31,.1)}
+.envelope::before{content:"";position:absolute;inset:0;background:#e9dbc0;border-radius:6px 6px 0 0;clip-path:polygon(0 0,100% 0,50% 60%)}
+.envelope::after{content:"";position:absolute;inset:0;background:#efe2c8;border-radius:0 0 6px 6px;clip-path:polygon(0 100%,0 20%,46% 62%,54% 62%,100% 20%,100% 100%)}
+.e-lacre{position:absolute;left:50%;top:44%;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;z-index:2;
+  background:radial-gradient(circle at 35% 30%,#d9765a,#b5563a 60%,#8c3f29);box-shadow:0 2px 3px rgba(58,39,31,.35)}
+.e-selo{position:absolute;right:8px;top:8px;width:16px;height:20px;border:2px dashed var(--oliva);border-radius:2px;z-index:2}
+
+/* posições dos objetos por seção */
+.o-hero-radio{right:2.5%;top:96px;--r:8deg;--t:10s}
+.o-hero-xicara{left:1.5%;bottom:170px;--r:-10deg;--t:11s;--dl:-3s}
+.o-sobre-planta{left:1.5%;bottom:5%;--r:-4deg;--t:9s}
+.o-dest-env{right:3%;top:70px;--r:-10deg;--t:10s;--dl:-2s}
+.o-trab-xicara{right:4%;top:64px;--r:12deg;--t:12s;--dl:-5s}
+.o-serv-radio{right:3%;top:60px;--r:-6deg;--t:11s;--dl:-4s}
+.o-cont-env{left:2%;bottom:6%;--r:9deg;--t:10s}
+.o-cont-planta{right:2%;top:70px;--r:5deg;--t:9s;--dl:-2s}
+@media (max-width:1100px){.o-hero-xicara,.o-sobre-planta,.o-cont-env{display:none}}
+@media (max-width:700px){
+  .obj{--s:.5;opacity:.55}
+  .o-hero-radio{right:-12px;top:78px}
+  .o-dest-env,.o-trab-xicara,.o-serv-radio,.o-cont-planta{top:24px;right:-10px}
+}
+
+/* ===== BLOCOS DE FOTO E VÍDEO (degradês) ===== */
+.ph{position:relative;display:grid;place-items:end center;padding:1rem;overflow:hidden;background:linear-gradient(150deg,var(--terracota-cl),var(--terracota))}
+.ph > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cap{position:relative;font-family:var(--f-mao);font-weight:600;font-size:1.25rem;line-height:1;background:rgba(255,250,241,.9);color:var(--tinta);padding:.3rem .9rem;border-radius:99px}
+.g1{background:linear-gradient(150deg,#d98b6c,#b5563a)}
+.g2{background:linear-gradient(150deg,#a3ad7c,#6d7a4c)}
+.g3{background:linear-gradient(150deg,#e8c9a0,#c98d62)}
+.g4{background:linear-gradient(150deg,#c9b08f,#8a6a55)}
+.g5{background:linear-gradient(150deg,#e6b8a8,#c47a68)}
+.g6{background:linear-gradient(150deg,#8f9a6a,#4f5a37)}
+.ph-pessoa::before,.ph-pessoa::after{content:"";position:absolute;left:50%;transform:translateX(-50%);background:rgba(255,250,241,.35)}
+.ph-pessoa::before{top:24%;width:26%;aspect-ratio:1;border-radius:50%}
+.ph-pessoa::after{top:47%;width:60%;height:60%;border-radius:50% 50% 0 0}
+.moldura{position:relative;width:min(100%,420px);background:#fff;padding:14px;border-radius:8px;box-shadow:var(--sombra-g);rotate:2.2deg}
+.moldura::before{content:"";position:absolute;top:-16px;left:50%;width:110px;height:32px;margin-left:-55px;background:rgba(109,122,76,.6);transform:rotate(-4deg);z-index:2}
+.moldura .ph{aspect-ratio:4/5;border-radius:3px}
+.moldura.inv{rotate:-2deg}
+.carimbo{position:absolute;left:-30px;bottom:-28px;z-index:3;width:120px;height:120px;border-radius:50%;display:grid;place-items:center;
+  color:var(--terracota-esc);background:rgba(242,233,220,.94);border:2.5px dashed var(--terracota);transform:rotate(-14deg);box-shadow:0 0 0 6px rgba(242,233,220,.94)}
+.carimbo::before{content:"";position:absolute;inset:8px;border-radius:50%;border:1.5px solid var(--terracota)}
+.carimbo span{font-family:var(--f-mao);font-weight:600;font-size:1.55rem;line-height:.95;text-align:center}
+
+/* ===== CAPA ===== */
+.hero{position:relative;overflow:hidden;padding-top:calc(var(--topo) + clamp(2rem,6vw,4rem))}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);grid-template-areas:"texto foto" "numeros numeros";gap:2.4rem 3rem;align-items:center;padding-bottom:clamp(2.5rem,6vw,4.5rem)}
+.hero-texto{grid-area:texto}
+.hero-foto{grid-area:foto;position:relative;justify-self:center;width:100%;display:flex;justify-content:center;padding:1rem 0}
+.hero h1{font-size:clamp(3.8rem,12vw,8rem);line-height:.92;letter-spacing:-.01em;margin:.3rem 0 1.4rem}
+.hero h1 span{display:block}
+.hero h1 em{color:var(--terracota)}
+.lead{font-size:clamp(1.15rem,2.2vw,1.45rem);max-width:30ch;line-height:1.5;margin-bottom:2rem}
+.botoes{display:flex;flex-wrap:wrap;gap:.9rem}
+.stats{grid-area:numeros;display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;list-style:none;margin:.6rem 0 0;padding:1.6rem 0 0;border-top:2px dashed rgba(58,39,31,.25)}
+.num{display:block;font-family:var(--f-titulo);font-size:clamp(2.2rem,5vw,3.6rem);line-height:1}
+.stat-rot{display:block;font-family:var(--f-mao);font-weight:600;font-size:1.35rem;line-height:1.1;color:var(--tinta-2);margin-top:.3rem}
+.rise{animation:subir .9s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--d,0) * 110ms)}
+@keyframes subir{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@media (max-width:860px){
+  .hero-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"texto" "foto" "numeros"}
+  .hero-foto{padding:1.4rem 0 2rem}
+  .carimbo{left:-8px;bottom:-16px;width:98px;height:98px}
+  .carimbo span{font-size:1.3rem}
+  .moldura{width:min(100%,340px)}
+}
+
+/* faixas que rolam */
+.faixa-marcas{position:relative;z-index:1;border-block:1.5px solid rgba(58,39,31,.18);background:rgba(235,224,205,.8);overflow:hidden;padding:.85rem 0}
+.mq-track{display:flex;width:max-content;animation:rolar 55s linear infinite}
+.faixa-marcas:hover .mq-track{animation-play-state:paused}
+.mq-grupo{display:flex;flex:none;align-items:center;list-style:none;margin:0;padding:0}
+.mq-grupo li{display:flex;align-items:center;gap:2.4rem;padding-right:2.4rem;white-space:nowrap;font-family:var(--f-titulo);font-style:italic;font-size:1.25rem}
+.mq-grupo li::after{content:"";width:7px;height:7px;border-radius:50%;background:var(--terracota)}
+@keyframes rolar{to{transform:translateX(-50%)}}
+.faixa-terra-wrap{overflow:hidden;padding:2rem 0 .5rem;margin-top:3rem}
+.faixa-terra{background:var(--terracota);color:var(--papel);padding:1rem 0;transform:rotate(-1.2deg);width:104%;margin-left:-2%;box-shadow:0 12px 24px -12px rgba(58,39,31,.5);overflow:hidden}
+.faixa-terra .mq-track{animation-duration:60s}
+.faixa-terra .mq-grupo li{font-size:1.7rem}
+.faixa-terra .mq-grupo li::after{width:10px;height:10px;border-radius:0;transform:rotate(45deg);background:var(--linho)}
+
+/* ===== SOBRE ===== */
+.sobre-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(2rem,6vw,5rem);align-items:center}
+.sobre-foto{position:relative;display:flex;justify-content:center;padding:1rem 0}
+.sobre-txt h2{font-size:clamp(2.3rem,5.4vw,3.8rem);margin-bottom:1.2rem}
+.sobre-txt h2 em{color:var(--terracota-esc)}
+.sobre-txt p{margin-bottom:1rem;max-width:56ch}
+.nichos-rot{font-family:var(--f-mao);font-weight:600;font-size:1.4rem;color:var(--terracota-esc);margin:1.4rem 0 .4rem}
+.nichos{display:flex;flex-wrap:wrap;gap:.5rem;list-style:none;padding:0;margin:0 0 1.6rem}
+.chip{display:inline-block;align-self:flex-start;font-size:.75rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:.25rem .7rem;border-radius:99px;background:#e3e7cf;color:var(--oliva-esc)}
+.promessas{list-style:none;padding:0;margin:0 0 1.6rem;display:grid;gap:.7rem}
+.promessas li{display:flex;align-items:center;gap:.8rem;font-weight:400;background:var(--papel);padding:.85rem 1.1rem;border-radius:14px;box-shadow:var(--sombra)}
+.promessas li::before{content:"";flex:none;width:26px;height:26px;border-radius:50%;background:var(--oliva) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fffaf1' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12.5 4 4 8-9'/%3E%3C/svg%3E") center/16px no-repeat}
+.assinatura{display:flex;align-items:baseline;flex-wrap:wrap;gap:.7rem;margin-top:.6rem}
+.assinatura span{font-family:var(--f-mao);font-size:1.4rem;color:var(--tinta-2)}
+.assinatura b{font-family:var(--f-mao);font-weight:600;font-size:clamp(2.2rem,5vw,3rem);line-height:1;color:var(--terracota-esc);rotate:-3deg;border-bottom:3px wavy rgba(181,86,58,.5);text-underline-offset:6px}
+@media (max-width:860px){.sobre-grid{grid-template-columns:minmax(0,1fr)}}
+
+/* ===== DESTAQUES ===== */
+.destaques{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(1.2rem,3vw,2.2rem)}
+.dest{background:var(--papel);border-radius:var(--raio);padding:12px 12px 1.5rem;box-shadow:var(--sombra)}
+.dest:hover{translate:0 -6px;box-shadow:var(--sombra-g)}
+.dest-link{display:block;color:inherit;text-decoration:none;border-radius:var(--raio)}
+.capa-v{position:relative;aspect-ratio:9/16;border-radius:14px;overflow:hidden;display:grid;place-items:end center;padding:1rem}
+.capa-v > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.play{position:absolute;left:50%;top:50%;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:50%;background:var(--terracota);
+  box-shadow:0 0 0 8px rgba(255,250,241,.35),0 12px 24px -6px rgba(58,39,31,.5);transition:transform .3s}
+.play::after{content:"";position:absolute;left:50%;top:50%;margin:-11px 0 0 -7px;border-style:solid;border-width:11px 0 11px 19px;border-color:transparent transparent transparent #fffaf1}
+.dest:hover .play{transform:scale(1.1)}
+.dest-corpo{padding:1.1rem .7rem 0}
+.dest-num{display:block;font-family:var(--f-titulo);font-size:clamp(2.6rem,4.5vw,3.6rem);line-height:1;color:var(--terracota-esc)}
+.dest-rot{display:block;font-family:var(--f-mao);font-weight:600;font-size:1.35rem;color:var(--tinta-2);margin-bottom:.7rem}
+.dest h3{font-size:1.5rem;margin-bottom:.4rem}
+.dest p{font-size:.98rem;color:var(--tinta-2)}
+@media (max-width:820px){.destaques{grid-template-columns:minmax(0,1fr);max-width:400px;margin-inline:auto}}
+
+/* ===== TRABALHOS ===== */
+.filtros{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:.8rem}
+.filtro{font:400 .95rem/1 var(--f-corpo);padding:.75rem 1.15rem;min-height:44px;border-radius:99px;border:1.5px solid rgba(58,39,31,.4);background:transparent;color:var(--tinta);cursor:pointer;transition:background-color .25s,color .25s,border-color .25s}
+.filtro:hover{background:var(--papel)}
+.filtro[aria-pressed="true"]{background:var(--terracota);border-color:var(--terracota);color:#fff}
+.filtro-status{font-family:var(--f-mao);font-weight:600;font-size:1.3rem;color:var(--tinta-2);margin-bottom:1.6rem}
+.galeria{list-style:none;margin:0;padding:0;column-count:4;column-gap:1.4rem}
+.trab{break-inside:avoid;margin:0 0 1.4rem;display:block}
+.trab[hidden]{display:none}
+.trab:nth-child(3n+1){rotate:-1deg}
+.trab:nth-child(3n){rotate:1.2deg}
+.trab figure{background:#fff;padding:10px 10px 0;border-radius:6px;box-shadow:var(--sombra);transition:translate .3s,box-shadow .3s}
+.trab a{display:block;text-decoration:none;color:inherit}
+.trab:hover figure{translate:0 -5px;box-shadow:var(--sombra-g)}
+.trab .ph{border-radius:3px}
+.trab figcaption{display:flex;flex-direction:column;gap:.15rem;padding:.8rem .3rem 1rem}
+.trab figcaption b{font-weight:400;font-size:1rem}
+.trab figcaption span.m{font-family:var(--f-mao);font-weight:600;font-size:1.25rem;color:var(--tinta-2);line-height:1.1}
+.trab.pop{animation:pop .5s ease both}
+@keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+@media (max-width:1000px){.galeria{column-count:3}}
+@media (max-width:700px){.galeria{column-count:2;column-gap:.9rem}.trab{margin-bottom:.9rem}.trab figure{padding:7px 7px 0}.trab .cap{font-size:1.05rem;padding:.25rem .6rem}}
+
+/* ===== SERVIÇOS ===== */
+.servicos{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:1.4rem;list-style:none;padding:0}
+.serv{background:var(--papel);border-radius:20px;padding:1.9rem 1.7rem;box-shadow:var(--sombra)}
+.serv:hover{translate:0 -6px;box-shadow:var(--sombra-g)}
+.serv:nth-child(3n+2){background:#eef0df}
+.serv-n{font-family:var(--f-titulo);font-style:italic;font-size:3.2rem;line-height:1;color:var(--terracota-cl);display:block;margin-bottom:.6rem}
+.serv h3{font-size:1.6rem;margin-bottom:.5rem}
+.serv p{color:var(--tinta-2)}
+
+/* ===== NÚMEROS E DEPOIMENTOS ===== */
+.rot-mao{font-family:var(--f-mao);font-weight:600;font-size:1.7rem;line-height:1.1;color:#f0c2ae;margin:0 0 1.2rem}
+.metricas{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.5rem;list-style:none;padding:0;margin:0 0 clamp(3rem,7vw,4.5rem)}
+.metricas li{padding-left:1.1rem;border-left:2px dashed rgba(242,233,220,.4)}
+.metricas .num{font-size:clamp(2.6rem,6vw,4.6rem);color:var(--papel)}
+.metricas .stat-rot{color:#ead9b9;font-size:1.45rem}
+.resultados,.depoimentos{display:grid;gap:1.4rem;list-style:none;padding:0;margin:0 0 clamp(3rem,7vw,4.5rem)}
+.resultados{grid-template-columns:repeat(3,minmax(0,1fr))}
+.depoimentos{grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:0}
+.papel{background:var(--papel);color:var(--tinta);border-radius:var(--raio);padding:1.8rem 1.7rem;box-shadow:0 20px 40px -20px rgba(0,0,0,.45)}
+.res-n{font-family:var(--f-titulo);font-size:clamp(2.8rem,5vw,3.8rem);line-height:1;color:var(--terracota-esc);display:block}
+.res-rot{font-family:var(--f-mao);font-weight:600;font-size:1.4rem;color:var(--oliva-esc);display:block;margin:.2rem 0 .7rem;line-height:1.1}
+.res p{color:var(--tinta-2);font-size:.98rem}
+.res p b{font-weight:500;color:var(--tinta)}
+.dep{position:relative}
+.dep:nth-child(odd){rotate:-.6deg}
+.dep:nth-child(even){rotate:.6deg}
+.dep::before{content:"\201C";position:absolute;right:1.2rem;top:.2rem;font-family:var(--f-titulo);font-size:5.5rem;line-height:1;color:var(--terracota-cl);opacity:.5}
+.dep blockquote{font-size:1.1rem;line-height:1.6;margin-bottom:1.2rem;position:relative}
+.dep figcaption{display:flex;flex-direction:column}
+.dep figcaption b{font-weight:500}
+.dep figcaption span{font-family:var(--f-mao);font-weight:600;font-size:1.3rem;color:var(--terracota-esc);line-height:1.1}
+@media (max-width:1000px){.metricas{grid-template-columns:repeat(2,minmax(0,1fr))}.resultados{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:760px){.depoimentos{grid-template-columns:minmax(0,1fr)}}
+
+/* ===== CONTATO ===== */
+.contato-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(2rem,6vw,4.5rem);align-items:start}
+.canais{display:grid;gap:.9rem;list-style:none;padding:0;margin:1.6rem 0 0}
+.canal{display:flex;align-items:center;gap:1rem;padding:1rem 1.2rem;background:var(--papel);border-radius:16px;box-shadow:var(--sombra);text-decoration:none;transition:translate .3s,box-shadow .3s;min-width:0}
+.canal:hover{translate:0 -3px;box-shadow:var(--sombra-g)}
+.canal i{flex:none;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:var(--terracota);color:#fff}
+.canal:nth-child(2) i{background:var(--oliva-esc)}
+.canal:nth-child(3) i{background:var(--tinta)}
+.canal svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.canal b{display:block;font-weight:500;line-height:1.2}
+.canal small{display:block;font-size:.95rem;color:var(--tinta-2);overflow-wrap:anywhere}
+.form-card{background:var(--papel);padding:clamp(1.5rem,4vw,2.4rem);border-radius:var(--raio);box-shadow:var(--sombra-g);border:2px dashed rgba(181,86,58,.4);min-width:0}
+.campo{margin-bottom:1.1rem}
+.campo label{display:block;font-weight:400;font-size:.95rem;margin-bottom:.35rem}
+.campo input,.campo textarea,.kit input{width:100%;font:300 1rem/1.4 var(--f-corpo);color:var(--tinta);background:#fff;border:1.5px solid rgba(58,39,31,.35);border-radius:14px;padding:.85rem 1rem}
+.campo textarea{resize:vertical;min-height:130px}
+.campo input:focus-visible,.campo textarea:focus-visible,.kit input:focus-visible{outline:3px solid var(--oliva-esc);outline-offset:2px;border-color:var(--oliva-esc)}
+.form-card .btn{width:100%}
+.form-erro{color:var(--terracota-esc);font-weight:400;margin-top:.8rem}
+.form-ok{text-align:center;padding:1rem .5rem}
+.form-ok:focus{outline:none}
+.form-ok .selo{width:64px;height:64px;border-radius:50%;margin:0 auto 1rem;background:var(--oliva) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fffaf1' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12.5 4 4 8-9'/%3E%3C/svg%3E") center/34px no-repeat}
+.form-ok-tit{font-family:var(--f-titulo);font-size:2rem;line-height:1.1;margin-bottom:.5rem}
+.form-ok p{margin-bottom:1.2rem}
+@media (max-width:860px){.contato-grid{grid-template-columns:minmax(0,1fr)}}
+
+/* ===== RODAPÉ ===== */
+.rodape{background:var(--tinta);color:var(--linho);padding:3.5rem 0 2rem}
+.rod-topo{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:1.6rem;padding-bottom:2rem;border-bottom:1px dashed rgba(242,233,220,.3)}
+.rod-nome{font-family:var(--f-titulo);font-size:clamp(2rem,5vw,3.2rem);line-height:1}
+.rod-nome em{color:var(--terracota-cl)}
+.rod-sub{font-family:var(--f-mao);font-weight:600;font-size:1.4rem;color:#e6d5b5;margin-top:.3rem}
+.rod-redes{display:flex;flex-wrap:wrap;gap:.6rem 1.6rem;list-style:none;padding:0;margin:0}
+.rod-redes a{font-weight:400;text-decoration:none;border-bottom:1.5px solid var(--terracota-cl);padding-bottom:2px}
+.rod-redes a:hover{color:var(--terracota-cl)}
+.rod-fim{padding-top:1.4rem;font-size:.92rem;color:#e0d2b8}
+
+/* ===== CARD DE CAPTURA ===== */
+.kit{width:min(92vw,440px);max-height:calc(100dvh - 2rem);overflow:auto;border:0;padding:0;border-radius:24px;background:var(--papel);color:var(--tinta);box-shadow:0 40px 80px -20px rgba(0,0,0,.6)}
+.kit::backdrop{background:rgba(58,39,31,.68)}
+.kit[open]{animation:surgir .45s cubic-bezier(.2,.7,.2,1)}
+@keyframes surgir{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:none}}
+.kit-in{position:relative;padding:2.2rem 1.8rem 1.9rem;text-align:center}
+.kit-in::before{content:"";position:absolute;inset:10px;border:2px dashed rgba(181,86,58,.4);border-radius:16px;pointer-events:none}
+.kit .envelope{margin:0 auto 1rem;rotate:-5deg}
+.kit h2{font-size:clamp(1.8rem,6vw,2.3rem);margin-bottom:.6rem}
+.kit h2 em{color:var(--terracota-esc)}
+.kit-in > p{margin-bottom:1.2rem}
+.kit .campo{text-align:left;margin-bottom:.9rem}
+.kit .btn{width:100%}
+.kit .fechar{position:absolute;right:16px;top:16px;z-index:2;width:44px;height:44px;border:0;border-radius:50%;background:transparent;color:var(--tinta);font-size:1.7rem;line-height:1;cursor:pointer}
+.kit .fechar:hover{background:var(--linho-2)}
+html:has(dialog[open]){overflow:hidden}
+
+/* ===== ENTRADA AO ROLAR ===== */
+.js .reveal{opacity:0;transform:translateY(26px);
+  transition:opacity .9s ease calc(var(--d,0) * 90ms),transform .9s cubic-bezier(.2,.7,.2,1) calc(var(--d,0) * 90ms),translate .3s ease,box-shadow .3s ease}
+.js .reveal.visto{opacity:1;transform:none}
+
+/* ===== MOVIMENTO REDUZIDO ===== */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;transition-delay:0s!important}
+  .obj{animation:none;transform:rotate(var(--r,0deg)) scale(var(--s,1))}
+  .js .reveal{opacity:1;transform:none}
+  .mq-track{width:auto;flex-wrap:wrap;justify-content:center;animation:none}
+  .mq-grupo{flex-wrap:wrap;justify-content:center}
+  .mq-grupo:nth-child(2),.mq-grupo li.rep{display:none}
+  .faixa-terra{transform:none;width:100%;margin-left:0}
+}
+</style>
+</head>
+<body>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+<noscript><p style="padding:5rem 1.5rem 1rem">Este portfólio usa JavaScript para mostrar os trabalhos e os números. Ative o JavaScript no navegador para ver tudo.</p></noscript>
+
+<!-- ============ MENU FIXO ============ -->
+<header class="topo" id="topo">
+  <div class="wrap topo-in">
+    <a class="marca" href="#capa" aria-label="Mariana Naomi Ota, voltar ao início">Mariana <em>Naomi</em> Ota</a>
+    <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="menu" id="menu" aria-label="Principal">
+      <ul>
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#destaques">Destaques</a></li>
+        <li><a href="#trabalhos">Trabalhos</a></li>
+        <li><a href="#servicos">Serviços</a></li>
+        <li><a href="#numeros">Números</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="conteudo">
+
+<!-- ============ 1. CAPA ============ -->
+<section class="hero" id="capa" aria-label="Apresentação">
+  <div class="obj radio o-hero-radio" aria-hidden="true"><span class="r-grille"></span><span class="r-dial"></span><span class="r-knob"></span><span class="r-knob k2"></span></div>
+  <div class="obj xicara o-hero-xicara" aria-hidden="true"><span class="x-pires"></span><span class="x-colher"></span><span class="x-copo"></span><span class="x-cafe"></span><span class="x-alca"></span></div>
+
+  <div class="wrap hero-grid">
+    <div class="hero-texto">
+      <span class="kicker rise" style="--d:0">UGC Creator em São Paulo</span>
+      <h1 class="rise" style="--d:1"><span>Mariana</span> <span><em>Naomi</em></span> <span>Ota</span></h1>
+      <p class="lead rise" style="--d:2">Eu crio vídeos e fotos com jeito de recomendação de amiga, para marcas que querem ser vistas e lembradas.</p>
+      <div class="botoes rise" style="--d:3">
+        <a class="btn btn-pri" href="#contato">Falar comigo</a>
+        <a class="btn btn-sec" href="#trabalhos">Ver os trabalhos</a>
+      </div>
+    </div>
+
+    <div class="hero-foto rise" style="--d:2">
+      <div class="moldura">
+        <!-- TROCAR FOTO: apague o div "ph ph-pessoa" abaixo e coloque no lugar:
+             <img src="minha-foto.jpg" alt="Mariana Naomi Ota gravando um conteúdo" width="800" height="1000">
+             Use uma imagem leve (até 200 KB) em proporção 4:5. O recorte é automático. -->
+        <div class="ph ph-pessoa g1" role="img" aria-label="Espaço reservado para a foto principal da creator">
+          <span class="cap">foto da creator 4:5</span>
+        </div>
+      </div>
+      <div class="carimbo" aria-hidden="true"><span>feito<br>à mão</span></div>
+    </div>
+
+    <!-- 3 números da capa: vêm da lista METRICAS (script), as três primeiras -->
+    <ul class="stats" id="stats-capa" aria-label="Números em resumo"></ul>
+  </div>
+
+  <!-- faixa fina com as marcas (vem da lista MARCAS) -->
+  <div class="faixa-marcas" id="faixa-marcas"></div>
+</section>
+
+<!-- ============ 2. SOBRE MIM ============ -->
+<section class="secao" id="sobre" aria-labelledby="t-sobre">
+  <div class="obj planta o-sobre-planta" aria-hidden="true"><span class="p-vaso"></span><span class="p-folha f4"></span><span class="p-folha f5"></span><span class="p-folha f1"></span><span class="p-folha f3"></span><span class="p-folha f2"></span><span class="p-borda"></span></div>
+  <div class="wrap sobre-grid">
+    <div class="sobre-foto reveal">
+      <div class="moldura inv">
+        <!-- TROCAR FOTO: mesma regra da capa. Troque o div "ph" por
+             <img src="foto-sobre.jpg" alt="Retrato de Mariana Naomi Ota sorrindo" width="800" height="1000"> -->
+        <div class="ph ph-pessoa g2" role="img" aria-label="Espaço reservado para a foto da seção sobre mim">
+          <span class="cap">foto da creator 4:5</span>
+        </div>
+      </div>
+    </div>
+    <div class="sobre-txt reveal" style="--d:1">
+      <span class="kicker">um pouco de mim</span>
+      <h2 id="t-sobre">Prazer, eu sou a <em>Mariana</em></h2>
+      <p>Sou criadora de conteúdo em São Paulo e presto atenção nas coisas pequenas: a luz da janela, a textura do produto, o detalhe que faz alguém querer experimentar.</p>
+      <p>Gosto de mostrar o produto sendo usado de verdade e de contar tudo do meu jeito, sem pose e sem pressa. Antes de ligar a câmera, a gente conversa e alinha o roteiro, para o resultado ter a cara da sua marca e a minha voz.</p>
+      <p class="nichos-rot">nichos que eu atendo</p>
+      <ul class="nichos" id="lista-nichos"></ul>
+      <ul class="promessas">
+        <li>Roteiro aprovado antes de gravar</li>
+        <li>Uma rodada de ajuste inclusa</li>
+        <li>Entrega em até 72 horas úteis</li>
+      </ul>
+      <p class="assinatura"><span>com carinho,</span> <b>Mariana Naomi Ota</b></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. CONTEÚDOS DE DESTAQUE ============ -->
+<section class="secao tom-2" id="destaques" aria-labelledby="t-dest">
+  <div class="obj envelope o-dest-env" aria-hidden="true"><span class="e-lacre"></span><span class="e-selo"></span></div>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker">vale apertar o play</span>
+      <h2 id="t-dest">Conteúdos de <em>destaque</em></h2>
+      <p>Três trabalhos que mostram como eu transformo um produto em vídeo.</p>
+    </div>
+    <!-- Os três cards são gerados pelo script a partir da lista DESTAQUES.
+         LINK DO VÍDEO: campo "link" de cada destaque (abre em nova aba).
+         CAPA: campo "capa" (imagem vertical 9:16). Sem capa, aparece o degradê com legenda. -->
+    <div class="destaques" id="lista-destaques"></div>
+  </div>
+</section>
+
+<!-- ============ 4. TRABALHOS POR NICHO ============ -->
+<section class="secao" id="trabalhos" aria-labelledby="t-trab">
+  <div class="obj xicara o-trab-xicara" aria-hidden="true"><span class="x-pires"></span><span class="x-colher"></span><span class="x-copo"></span><span class="x-cafe"></span><span class="x-alca"></span></div>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker">para todo gosto</span>
+      <h2 id="t-trab">Trabalhos por <em>nicho</em></h2>
+      <p>Escolha um nicho e veja só os trabalhos dele.</p>
+    </div>
+    <div class="filtros reveal" id="filtros" role="group" aria-label="Filtrar trabalhos por nicho"></div>
+    <p class="filtro-status" id="filtro-status" role="status" aria-live="polite"></p>
+    <ul class="galeria" id="galeria"></ul>
+  </div>
+</section>
+
+<!-- ============ 5. COMO EU TE AJUDO ============ -->
+<section class="secao tom-2" id="servicos" aria-labelledby="t-serv">
+  <div class="obj radio o-serv-radio" aria-hidden="true"><span class="r-grille"></span><span class="r-dial"></span><span class="r-knob"></span><span class="r-knob k2"></span></div>
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker">meu ofício</span>
+      <h2 id="t-serv">Como eu <em>te ajudo</em></h2>
+      <p>Seis jeitos de levar o seu produto para perto de quem vai comprar.</p>
+    </div>
+    <ul class="servicos" id="lista-servicos"></ul>
+  </div>
+  <div class="faixa-terra-wrap" aria-hidden="true"><div class="faixa-terra" id="faixa-servicos"></div></div>
+</section>
+
+<!-- ============ 6. NÚMEROS E DEPOIMENTOS ============ -->
+<section class="secao escuro" id="numeros" aria-labelledby="t-num">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker">prova de que funciona</span>
+      <h2 id="t-num">Números e <em>depoimentos</em></h2>
+    </div>
+    <ul class="metricas" id="lista-metricas" aria-label="Métricas"></ul>
+    <p class="rot-mao reveal">resultados de campanha</p>
+    <ul class="resultados" id="lista-resultados" aria-label="Resultados de campanha"></ul>
+    <p class="rot-mao reveal">o que as marcas dizem</p>
+    <ul class="depoimentos" id="lista-depoimentos" aria-label="Depoimentos"></ul>
+  </div>
+</section>
+
+<!-- ============ 7. BORA CRIAR JUNTOS ============ -->
+<section class="secao" id="contato" aria-labelledby="t-cont">
+  <div class="obj envelope o-cont-env" aria-hidden="true"><span class="e-lacre"></span><span class="e-selo"></span></div>
+  <div class="obj planta o-cont-planta" aria-hidden="true"><span class="p-vaso"></span><span class="p-folha f4"></span><span class="p-folha f5"></span><span class="p-folha f1"></span><span class="p-folha f3"></span><span class="p-folha f2"></span><span class="p-borda"></span></div>
+  <div class="wrap contato-grid">
+    <div class="reveal">
+      <span class="kicker">vamos conversar</span>
+      <h2 id="t-cont" style="font-size:clamp(2.3rem,5.4vw,3.8rem)">Bora criar <em style="color:var(--terracota-esc)">juntos</em></h2>
+      <p style="margin-top:1rem;max-width:44ch">Conta o que você tem em mente. A gente combina roteiro, prazo e formato, e eu cuido do resto com carinho.</p>
+      <ul class="canais">
+        <li><a class="canal" href="https://wa.me/5511971320520?text=Oi%2C%20Mariana!%20Vi%20o%20seu%20portf%C3%B3lio%20e%20quero%20conversar." target="_blank" rel="noopener noreferrer">
+          <i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.4-4.2A8 8 0 1 1 8.2 18.6L4 20z"/><path d="M9 9.5c.3 2.3 2.2 4.2 4.5 4.6l1.2-1.2-1.8-.9-.7.6a3.5 3.5 0 0 1-1.6-1.6l.6-.7-.9-1.8L9 9.5z"/></svg></i>
+          <span><b>WhatsApp</b><small>(11) 97132-0520 <span class="sr-only">(abre em nova aba)</span></small></span></a></li>
+        <li><a class="canal" href="mailto:otamariana.0295@gmail.com">
+          <i><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7.5 8.5 6 8.5-6"/></svg></i>
+          <span><b>E-mail</b><small>otamariana.0295@gmail.com</small></span></a></li>
+        <li><a class="canal" href="https://instagram.com/littlethings_bymarii" target="_blank" rel="noopener noreferrer">
+          <i><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".9" fill="currentColor"/></svg></i>
+          <span><b>Instagram</b><small>@littlethings_bymarii <span class="sr-only">(abre em nova aba)</span></small></span></a></li>
+      </ul>
+    </div>
+
+    <div class="form-card reveal" style="--d:1">
+      <form id="form-contato" novalidate>
+        <div class="campo"><label for="c-nome">Seu nome</label><input id="c-nome" name="nome" type="text" autocomplete="name" required></div>
+        <div class="campo"><label for="c-email">Seu e-mail</label><input id="c-email" name="email" type="email" autocomplete="email" required></div>
+        <div class="campo"><label for="c-msg">Mensagem</label><textarea id="c-msg" name="mensagem" rows="5" required></textarea></div>
+        <button class="btn btn-pri" type="submit">Enviar mensagem</button>
+        <p class="form-erro" id="form-erro" role="alert" hidden></p>
+      </form>
+      <div class="form-ok" id="form-ok" role="status" tabindex="-1" hidden>
+        <div class="selo" aria-hidden="true"></div>
+        <p class="form-ok-tit">Mensagem enviada!</p>
+        <p>Obrigada, <span id="ok-nome"></span>! Sua mensagem foi enviada e eu volto a falar com você em breve.</p>
+        <button class="btn btn-sec" type="button" id="outra-msg">Enviar outra mensagem</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ 8. RODAPÉ ============ -->
+<footer class="rodape">
+  <div class="wrap">
+    <div class="rod-topo">
+      <div>
+        <p class="rod-nome">Mariana <em>Naomi</em> Ota</p>
+        <p class="rod-sub">UGC Creator em São Paulo</p>
+      </div>
+      <ul class="rod-redes" aria-label="Minhas redes">
+        <li><a href="https://instagram.com/littlethings_bymarii" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+        <li><a href="mailto:otamariana.0295@gmail.com">E-mail</a></li>
+        <li><a href="https://wa.me/5511971320520" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
+      </ul>
+    </div>
+    <p class="rod-fim">© <span id="ano">2026</span> Mariana Naomi Ota. Feito à mão, com carinho.</p>
+  </div>
+</footer>
+
+<!-- ============ CARD DE CAPTURA (aparece após 7 segundos, uma vez por visita) ============ -->
+<dialog class="kit" id="kit" aria-labelledby="kit-titulo">
+  <div class="kit-in">
+    <button class="fechar" type="button" id="kit-fechar" aria-label="Fechar">&times;</button>
+    <div class="envelope" aria-hidden="true"><span class="e-lacre"></span><span class="e-selo"></span></div>
+    <div id="kit-corpo">
+      <span class="kicker">um presente para você</span>
+      <h2 id="kit-titulo">Quer meu <em>mídia kit</em> completo?</h2>
+      <p>Deixe seu nome e seu e-mail que eu envio o material para você.</p>
+      <form id="form-kit" novalidate>
+        <div class="campo"><label for="k-nome">Seu nome</label><input id="k-nome" name="nome" type="text" autocomplete="name" required></div>
+        <div class="campo"><label for="k-email">Seu e-mail</label><input id="k-email" name="email" type="email" autocomplete="email" required></div>
+        <button class="btn btn-pri" type="submit">Quero receber</button>
+        <p class="form-erro" id="kit-erro" role="alert" hidden></p>
+      </form>
+    </div>
+    <div id="kit-ok" role="status" tabindex="-1" hidden>
+      <p class="form-ok-tit">Anotado, <span id="kit-nome"></span>!</p>
+      <p style="margin:.6rem 0 1.2rem">Seu pedido do mídia kit foi enviado. Obrigada pelo interesse.</p>
+      <button class="btn btn-sec" type="button" id="kit-ok-fechar">Fechar</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+/* =====================================================================
+   DADOS PARA EDITAR (não precisa mexer no HTML)
+   ===================================================================== */
+
+/* MARCAS: nomes que rolam na faixa da capa.
+   Troque "Marca 06" e "Marca 07" pelas marcas que faltam. */
+const MARCAS = ["Cicatribem", "Prohall", "Always Fit", "Skelt", "Creamy", "Marca 06", "Marca 07"];
+
+/* NICHOS: viram os botões de filtro e a lista da seção sobre.
+   O texto do campo "nicho" de cada trabalho precisa ser igual a um item desta lista. */
+const NICHOS = ["beleza", "skincare", "moda", "comida", "casa e decoração", "fitness", "pet", "tech"];
+
+/* MÉTRICAS: as 3 primeiras aparecem na capa, as 4 aparecem na seção de números.
+   valor numérico (ex.: 90) anima contando. Texto (ex.: "00") aparece parado: é placeholder.
+   Para trocar: coloque o número real, sem aspas, e apague a linha "placeholder". */
+const METRICAS = [
+  { valor: 90, prefixo: "", sufixo: "", rotulo: "vídeos entregues" },
+  { valor: 7,  prefixo: "", sufixo: "", rotulo: "marcas atendidas" },
+  { valor: "00", prefixo: "+", sufixo: "M", rotulo: "views somadas", placeholder: true },
+  { valor: "00", prefixo: "", sufixo: "", rotulo: "SUA MÉTRICA 04", placeholder: true }
+];
+
+/* DESTAQUES: os três vídeos grandes.
+   link = endereço do vídeo (reels, YouTube etc.). O card inteiro abre esse link.
+   capa = nome da imagem vertical 9:16 (ex.: "capa1.jpg"). Deixe "" para mostrar o degradê.
+   numero e rotulo = o número forte e o que ele mede. */
+const DESTAQUES = [
+  { link: "https://instagram.com/littlethings_bymarii", capa: "", numero: "+0,0M", rotulo: "views no reels",
+    titulo: "Título do conteúdo 01", contexto: "Marca 01, beleza. Escreva aqui uma linha sobre o que foi feito." },
+  { link: "https://instagram.com/littlethings_bymarii", capa: "", numero: "+00K", rotulo: "curtidas no reels",
+    titulo: "Título do conteúdo 02", contexto: "Marca 02, skincare. Escreva aqui uma linha sobre o que foi feito." },
+  { link: "https://instagram.com/littlethings_bymarii", capa: "", numero: "+0,0M", rotulo: "views no reels",
+    titulo: "Título do conteúdo 03", contexto: "Marca 03, moda. Escreva aqui uma linha sobre o que foi feito." }
+];
+
+/* TRABALHOS: a galeria filtrável.
+   formato: "vídeo 9:16", "foto 4:5" ou "foto 1:1" (a proporção do bloco segue o formato).
+   imagem: nome do arquivo (ex.: "trabalho1.jpg"). Deixe "" para mostrar o degradê.
+   link: opcional. Se preencher, o trabalho vira um link clicável. */
+const TRABALHOS = [
+  { titulo: "Trabalho 01", marca: "Marca 01", nicho: "beleza",            formato: "vídeo 9:16", imagem: "", link: "" },
+  { titulo: "Trabalho 02", marca: "Marca 02", nicho: "skincare",          formato: "foto 4:5",   imagem: "", link: "" },
+  { titulo: "Trabalho 03", marca: "Marca 03", nicho: "moda",              formato: "vídeo 9:16", imagem: "", link: "" },
+  { titulo: "Trabalho 04", marca: "Marca 04", nicho: "comida",            formato: "foto 1:1",   imagem: "", link: "" },
+  { titulo: "Trabalho 05", marca: "Marca 05", nicho: "casa e decoração",  formato: "foto 4:5",   imagem: "", link: "" },
+  { titulo: "Trabalho 06", marca: "Marca 06", nicho: "fitness",           formato: "vídeo 9:16", imagem: "", link: "" },
+  { titulo: "Trabalho 07", marca: "Marca 07", nicho: "pet",               formato: "foto 1:1",   imagem: "", link: "" },
+  { titulo: "Trabalho 08", marca: "Marca 08", nicho: "tech",              formato: "vídeo 9:16", imagem: "", link: "" },
+  { titulo: "Trabalho 09", marca: "Marca 09", nicho: "beleza",            formato: "foto 4:5",   imagem: "", link: "" },
+  { titulo: "Trabalho 10", marca: "Marca 10", nicho: "skincare",          formato: "vídeo 9:16", imagem: "", link: "" },
+  { titulo: "Trabalho 11", marca: "Marca 11", nicho: "moda",              formato: "foto 1:1",   imagem: "", link: "" },
+  { titulo: "Trabalho 12", marca: "Marca 12", nicho: "comida",            formato: "vídeo 9:16", imagem: "", link: "" },
+  { titulo: "Trabalho 13", marca: "Marca 01", nicho: "casa e decoração",  formato: "vídeo 9:16", imagem: "", link: "" },
+  { titulo: "Trabalho 14", marca: "Marca 02", nicho: "fitness",           formato: "foto 4:5",   imagem: "", link: "" },
+  { titulo: "Trabalho 15", marca: "Marca 03", nicho: "pet",               formato: "vídeo 9:16", imagem: "", link: "" },
+  { titulo: "Trabalho 16", marca: "Marca 04", nicho: "tech",              formato: "foto 4:5",   imagem: "", link: "" }
+];
+
+/* SERVIÇOS: o número (01 a 06) é automático, pela ordem da lista. */
+const SERVICOS = [
+  { titulo: "Vídeo UGC", texto: "Vídeo gravado com jeito de gente de verdade, com roteiro aprovado por você antes de eu ligar a câmera." },
+  { titulo: "Corte para anúncio", texto: "Versões curtas e prontas para tráfego pago, com gancho nos primeiros segundos e legenda na tela." },
+  { titulo: "Fotos do produto", texto: "Fotos reais, com luz natural e cenário do dia a dia, para vitrine, feed e página de venda." },
+  { titulo: "Unboxing", texto: "Abertura filmada com calma e curiosidade, mostrando embalagem, textura e primeira impressão." },
+  { titulo: "Publicação no meu perfil", texto: "Divulgo o produto no meu Instagram, com marcação e detalhes combinados com a marca." },
+  { titulo: "Pacote mensal", texto: "Vídeos e fotos todo mês, com calendário combinado e um único contato para tudo." }
+];
+
+/* RESULTADOS DE CAMPANHA: três cartões. Tudo aqui é placeholder para você preencher. */
+const RESULTADOS = [
+  { numero: "+00%", rotulo: "SEU RESULTADO 01", marca: "Marca 01", texto: "Descreva aqui o que a campanha alcançou e o que você fez nela." },
+  { numero: "+00%", rotulo: "SEU RESULTADO 02", marca: "Marca 02", texto: "Descreva aqui o que a campanha alcançou e o que você fez nela." },
+  { numero: "+00%", rotulo: "SEU RESULTADO 03", marca: "Marca 03", texto: "Descreva aqui o que a campanha alcançou e o que você fez nela." }
+];
+
+/* DEPOIMENTOS: quatro, com nome e empresa. */
+const DEPOIMENTOS = [
+  { texto: "Depoimento 01: escreva aqui o que o cliente disse sobre trabalhar com você.", nome: "Cliente 01", empresa: "Marca 01" },
+  { texto: "Depoimento 02: escreva aqui o que o cliente disse sobre trabalhar com você.", nome: "Cliente 02", empresa: "Marca 02" },
+  { texto: "Depoimento 03: escreva aqui o que o cliente disse sobre trabalhar com você.", nome: "Cliente 03", empresa: "Marca 03" },
+  { texto: "Depoimento 04: escreva aqui o que o cliente disse sobre trabalhar com você.", nome: "Cliente 04", empresa: "Marca 04" }
+];
+
+/* FORM_ENDPOINT / KIT_ENDPOINT: para receber as mensagens de verdade.
+   Crie um formulário gratuito (ex.: Formspree) e cole o endereço entre as aspas.
+   Vazio = só mostra a confirmação na tela e não envia nada para lugar nenhum. */
+const FORM_ENDPOINT = "";
+const KIT_ENDPOINT = "";
+
+/* =====================================================================
+   A PARTIR DAQUI É O FUNCIONAMENTO DA PÁGINA (não precisa editar)
+   ===================================================================== */
+(function () {
+  'use strict';
+  document.documentElement.classList.add('js');
+
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var reduz = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var esc = function (t) {
+    return String(t).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  };
+  var cap = function (s) { return s.charAt(0).toUpperCase() + s.slice(1); };
+  var fmt = function (n) { return n.toLocaleString('pt-BR'); };
+  var grad = function (i) { return 'g' + ((i % 6) + 1); };
+
+  /* ---------- faixas que rolam (marcas e serviços) ---------- */
+  function montarFaixa(el, itens) {
+    var lis = [];
+    for (var v = 0; v < 3; v++) {
+      itens.forEach(function (t) { lis.push('<li' + (v > 0 ? ' class="rep"' : '') + '>' + esc(t) + '</li>'); });
+    }
+    var grupo = lis.join('');
+    el.innerHTML = '<div class="mq-track" aria-hidden="true"><ul class="mq-grupo">' + grupo + '</ul><ul class="mq-grupo">' + grupo + '</ul></div>';
+  }
+  montarFaixa($('#faixa-marcas'), MARCAS);
+  $('#faixa-marcas').insertAdjacentHTML('beforeend', '<p class="sr-only">Marcas atendidas: ' + esc(MARCAS.join(', ')) + '.</p>');
+  montarFaixa($('#faixa-servicos'), SERVICOS.map(function (s) { return s.titulo; }));
+
+  /* ---------- números com contador ---------- */
+  function numeroHTML(m) {
+    var animavel = typeof m.valor === 'number';
+    var pref = esc(m.prefixo || ''), suf = esc(m.sufixo || '');
+    var inicial = animavel ? (reduz ? fmt(m.valor) : '0') : esc(m.valor);
+    return '<span class="num"' + (animavel ? ' data-alvo="' + m.valor + '"' : '') +
+      ' data-pref="' + pref + '" data-suf="' + suf + '">' + pref + inicial + suf + '</span>';
+  }
+  function itemMetrica(m, i) {
+    return '<li class="reveal" style="--d:' + i + '">' + numeroHTML(m) + '<span class="stat-rot">' + esc(m.rotulo) + '</span></li>';
+  }
+  $('#stats-capa').innerHTML = METRICAS.slice(0, 3).map(itemMetrica).join('');
+  $('#lista-metricas').innerHTML = METRICAS.map(itemMetrica).join('');
+
+  function contar(el) {
+    var alvo = +el.getAttribute('data-alvo'), pref = el.getAttribute('data-pref'), suf = el.getAttribute('data-suf');
+    var dur = 1600, ini = performance.now();
+    (function passo(t) {
+      var p = Math.min(1, (t - ini) / dur);
+      var v = Math.round(alvo * (1 - Math.pow(1 - p, 3)));
+      el.textContent = pref + fmt(v) + suf;
+      if (p < 1) requestAnimationFrame(passo);
+    })(ini);
+  }
+
+  /* ---------- nichos na seção sobre ---------- */
+  $('#lista-nichos').innerHTML = NICHOS.map(function (n) { return '<li><span class="chip">' + esc(cap(n)) + '</span></li>'; }).join('');
+
+  /* ---------- destaques ---------- */
+  $('#lista-destaques').innerHTML = DESTAQUES.map(function (d, i) {
+    /* CAPA entra aqui: se "capa" tiver um arquivo, vira <img>. Se não, fica o degradê. */
+    var capa = d.capa
+      ? '<img src="' + esc(d.capa) + '" alt="Capa do vídeo: ' + esc(d.titulo) + '" width="360" height="640" loading="lazy">'
+      : '<span class="cap">capa do vídeo 9:16</span>';
+    /* LINK DO VÍDEO entra aqui: o href abaixo vem do campo "link" de DESTAQUES. */
+    return '<article class="dest reveal" style="--d:' + i + '">' +
+      '<a class="dest-link" href="' + esc(d.link) + '" target="_blank" rel="noopener noreferrer">' +
+      '<div class="capa-v ' + grad(i * 2) + '">' + capa + '<span class="play" aria-hidden="true"></span></div>' +
+      '<div class="dest-corpo"><span class="dest-num">' + esc(d.numero) + '</span><span class="dest-rot">' + esc(d.rotulo) + '</span>' +
+      '<h3>' + esc(d.titulo) + '</h3><p>' + esc(d.contexto) + '</p>' +
+      '<span class="sr-only">Abre o vídeo em uma nova aba.</span></div></a></article>';
+  }).join('');
+
+  /* ---------- trabalhos e filtros ---------- */
+  var galeria = $('#galeria'), status = $('#filtro-status'), filtrosEl = $('#filtros');
+  galeria.innerHTML = TRABALHOS.map(function (t, i) {
+    var m = /(\d+):(\d+)/.exec(t.formato);
+    var ar = m ? m[1] + '/' + m[2] : '4/5';
+    /* TROCAR FOTO: preencha "imagem" em TRABALHOS. Ela é cortada para a proporção do formato. */
+    var bloco = '<div class="ph ' + grad(i) + '" style="aspect-ratio:' + ar + '">' +
+      (t.imagem ? '<img src="' + esc(t.imagem) + '" alt="' + esc(t.titulo + ', ' + t.marca) + '" loading="lazy">' : '<span class="cap">' + esc(t.formato) + '</span>') + '</div>';
+    var fig = '<figure>' + bloco + '<figcaption><b>' + esc(t.titulo) + '</b><span class="m">' + esc(t.marca) + '</span><span class="chip">' + esc(cap(t.nicho)) + '</span></figcaption></figure>';
+    if (t.link) fig = '<a href="' + esc(t.link) + '" target="_blank" rel="noopener noreferrer">' + fig + '</a>';
+    return '<li class="trab reveal" data-nicho="' + esc(t.nicho) + '" style="--d:' + (i % 4) + '">' + fig + '</li>';
+  }).join('');
+
+  filtrosEl.innerHTML = ['todos'].concat(NICHOS).map(function (n, i) {
+    return '<button type="button" class="filtro" data-nicho="' + esc(n) + '" aria-pressed="' + (i === 0) + '">' + esc(cap(n)) + '</button>';
+  }).join('');
+
+  function filtrar(nicho, animar) {
+    var n = 0;
+    $$('.trab', galeria).forEach(function (el) {
+      var ok = nicho === 'todos' || el.getAttribute('data-nicho') === nicho;
+      el.hidden = !ok;
+      if (ok) {
+        n++;
+        if (animar && !reduz) { el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); }
+      }
+    });
+    status.textContent = nicho === 'todos'
+      ? 'Mostrando todos os ' + n + ' trabalhos.'
+      : 'Mostrando ' + n + (n === 1 ? ' trabalho' : ' trabalhos') + ' de ' + nicho + '.';
+  }
+  filtrosEl.addEventListener('click', function (e) {
+    var b = e.target.closest('.filtro');
+    if (!b) return;
+    $$('.filtro', filtrosEl).forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+    filtrar(b.getAttribute('data-nicho'), true);
+  });
+  filtrar('todos', false);
+
+  /* ---------- serviços, resultados, depoimentos ---------- */
+  $('#lista-servicos').innerHTML = SERVICOS.map(function (s, i) {
+    return '<li class="serv reveal" style="--d:' + (i % 3) + '"><span class="serv-n" aria-hidden="true">' + String(i + 1).padStart(2, '0') + '</span>' +
+      '<h3>' + esc(s.titulo) + '</h3><p>' + esc(s.texto) + '</p></li>';
+  }).join('');
+  $('#lista-resultados').innerHTML = RESULTADOS.map(function (r, i) {
+    return '<li class="papel res reveal" style="--d:' + i + '"><span class="res-n">' + esc(r.numero) + '</span><span class="res-rot">' + esc(r.rotulo) + '</span>' +
+      '<p><b>' + esc(r.marca) + '.</b> ' + esc(r.texto) + '</p></li>';
+  }).join('');
+  $('#lista-depoimentos').innerHTML = DEPOIMENTOS.map(function (d, i) {
+    return '<li class="papel dep reveal" style="--d:' + (i % 2) + '"><figure><blockquote>' + esc(d.texto) + '</blockquote>' +
+      '<figcaption><b>' + esc(d.nome) + '</b><span>' + esc(d.empresa) + '</span></figcaption></figure></li>';
+  }).join('');
+
+  /* ---------- entrada ao rolar e contadores ---------- */
+  var reveals = $$('.reveal'), contadores = $$('.num[data-alvo]');
+  if ('IntersectionObserver' in window) {
+    var ioR = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('visto'); ioR.unobserve(e.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    reveals.forEach(function (el) { ioR.observe(el); });
+    if (!reduz) {
+      var ioC = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) { contar(e.target); ioC.unobserve(e.target); } });
+      }, { threshold: 0.5 });
+      contadores.forEach(function (el) { ioC.observe(el); });
+    }
+  } else {
+    reveals.forEach(function (el) { el.classList.add('visto'); });
+    contadores.forEach(function (el) { el.textContent = el.getAttribute('data-pref') + fmt(+el.getAttribute('data-alvo')) + el.getAttribute('data-suf'); });
+  }
+
+  /* ---------- menu, sanduíche e seção ativa ---------- */
+  var topo = $('#topo'), burger = $('.burger'), menu = $('#menu');
+  function menuAbrir(abrir) {
+    menu.classList.toggle('aberto', abrir);
+    burger.setAttribute('aria-expanded', abrir ? 'true' : 'false');
+    burger.setAttribute('aria-label', abrir ? 'Fechar menu' : 'Abrir menu');
+  }
+  burger.addEventListener('click', function () { menuAbrir(!menu.classList.contains('aberto')); });
+  menu.addEventListener('click', function (e) { if (e.target.closest('a')) menuAbrir(false); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && menu.classList.contains('aberto')) { menuAbrir(false); burger.focus(); }
+  });
+  window.addEventListener('scroll', function () { topo.classList.toggle('rolou', window.scrollY > 10); }, { passive: true });
+  if ('IntersectionObserver' in window) {
+    var links = $$('.menu a');
+    var ioN = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        links.forEach(function (l) {
+          if (l.getAttribute('href') === '#' + e.target.id) l.setAttribute('aria-current', 'true'); else l.removeAttribute('aria-current');
+        });
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    links.forEach(function (l) { var s = document.getElementById(l.getAttribute('href').slice(1)); if (s) ioN.observe(s); });
+  }
+
+  /* ---------- envio dos formulários ---------- */
+  /* Sem endereço configurado, só confirma na tela. Com endereço, envia por POST (JSON). */
+  function enviar(endpoint, dados) {
+    if (!endpoint) return Promise.resolve(true);
+    return fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(dados) })
+      .then(function (r) { return r.ok; }).catch(function () { return false; });
+  }
+  function dadosDe(form) {
+    var o = {};
+    $$('input,textarea', form).forEach(function (c) { o[c.name] = c.value.trim(); });
+    return o;
+  }
+  function validar(form) {
+    var ok = true, primeiro = null;
+    $$('input,textarea', form).forEach(function (c) {
+      var bom = c.checkValidity() && c.value.trim() !== '';
+      c.setAttribute('aria-invalid', bom ? 'false' : 'true');
+      if (!bom && ok) { ok = false; primeiro = c; }
+    });
+    if (primeiro) primeiro.focus();
+    return ok;
+  }
+
+  var formC = $('#form-contato'), okC = $('#form-ok'), erroC = $('#form-erro');
+  formC.addEventListener('submit', function (e) {
+    e.preventDefault();
+    erroC.hidden = true;
+    if (!validar(formC)) { erroC.textContent = 'Preencha nome, um e-mail válido e a mensagem.'; erroC.hidden = false; return; }
+    var btn = $('button[type=submit]', formC), dados = dadosDe(formC);
+    btn.disabled = true;
+    enviar(FORM_ENDPOINT, dados).then(function (ok) {
+      btn.disabled = false;
+      if (!ok) { erroC.textContent = 'Não consegui enviar agora. Tente pelo WhatsApp ou pelo e-mail.'; erroC.hidden = false; return; }
+      $('#ok-nome').textContent = dados.nome.split(' ')[0];
+      formC.hidden = true; okC.hidden = false; okC.focus();
+    });
+  });
+  $('#outra-msg').addEventListener('click', function () {
+    formC.reset(); formC.hidden = false; okC.hidden = true; $('#c-nome').focus();
+  });
+
+  /* ---------- card de captura: 7 segundos, uma vez por visita ---------- */
+  var kit = $('#kit'), formK = $('#form-kit'), erroK = $('#kit-erro');
+  function fecharKit() { if (kit.open) kit.close(); }
+  $('#kit-fechar').addEventListener('click', fecharKit);
+  $('#kit-ok-fechar').addEventListener('click', fecharKit);
+  kit.addEventListener('click', function (e) { if (e.target === kit) fecharKit(); }); /* clique no fundo escuro */
+  /* a tecla Esc já fecha o card (comportamento nativo do dialog) */
+  formK.addEventListener('submit', function (e) {
+    e.preventDefault();
+    erroK.hidden = true;
+    if (!validar(formK)) { erroK.textContent = 'Preencha seu nome e um e-mail válido.'; erroK.hidden = false; return; }
+    var btn = $('button[type=submit]', formK), dados = dadosDe(formK);
+    btn.disabled = true;
+    enviar(KIT_ENDPOINT, dados).then(function (ok) {
+      btn.disabled = false;
+      if (!ok) { erroK.textContent = 'Não consegui enviar agora. Tente de novo em instantes.'; erroK.hidden = false; return; }
+      $('#kit-nome').textContent = dados.nome.split(' ')[0];
+      $('#kit-corpo').hidden = true; $('#kit-ok').hidden = false; $('#kit-ok').focus();
+    });
+  });
+  setTimeout(function () {
+    if (typeof kit.showModal !== 'function' || kit.open) return;
+    try { if (sessionStorage.getItem('kitVisto') === '1') return; } catch (err) { /* sem storage: segue */ }
+    try { sessionStorage.setItem('kitVisto', '1'); } catch (err) { /* ignora */ }
+    kit.showModal();
+  }, 7000);
+
+  /* ---------- ano do rodapé ---------- */
+  $('#ano').textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>

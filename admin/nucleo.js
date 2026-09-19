@@ -31,6 +31,7 @@ window.Painel = (function () {
   /* ---------- ícones de traço ---------- */
   var ICONES = {
     portfolio: '<rect x="3" y="4" width="18" height="16" rx="3"/><path d="m10 9.5 5 2.5-5 2.5z"/>',
+    fotos: '<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="m21 16-5-5-9 9"/>',
     marcas: '<path d="M4 20V8l8-4 8 4v12"/><path d="M9 20v-5h6v5"/><path d="M4 20h16"/>',
     calendario: '<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/>',
     campanhas: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/>',
@@ -77,7 +78,7 @@ window.Painel = (function () {
       var nomes = Object.keys(tabelasFaltando);
       avisar('tabelas-faltando',
         nomes.length === 1 ? 'Falta a tabela "' + nomes[0] + '" no banco.' : 'Faltam ' + nomes.length + ' tabelas no banco: ' + nomes.join(', ') + '.',
-        'Abra o Supabase, vá em SQL Editor e rode o arquivo banco.sql inteiro. Depois recarregue esta página. O resto do painel continua funcionando.');
+        (nomes.length === 1 && nomes[0] === 'fotos' ? 'Abra o Supabase, vá em SQL Editor e rode o arquivo fotos.sql. ' : 'Abra o Supabase, vá em SQL Editor e rode o arquivo banco.sql inteiro. ') + 'Depois recarregue esta página. O resto do painel continua funcionando.');
     } else avisar(tabela + ':' + info.tipo, info.t, info.d);
   }
 
@@ -202,6 +203,8 @@ window.Painel = (function () {
         campo = '<textarea id="' + id + '" name="' + c.nome + '">' + esc(val) + '</textarea>';
       } else if (c.tipo === 'checkbox') {
         campo = '<label style="display:flex;gap:.5rem;align-items:center;font-size:13.5px"><input type="checkbox" id="' + id + '" name="' + c.nome + '" style="width:18px;height:18px"' + (val ? ' checked' : '') + '> ' + esc(c.rotulo) + '</label>';
+      } else if (c.tipo === 'file') {
+        campo = '<input id="' + id + '" name="' + c.nome + '" type="file" accept="image/jpeg,image/png,image/webp,image/*">' + (c.dica ? '<p class="vazio" style="padding:.3rem 0 0">' + esc(c.dica) + '</p>' : '') + '<div class="previa" id="prev-' + c.nome + '" hidden></div>';
       } else {
         campo = '<input id="' + id + '" name="' + c.nome + '" type="' + (c.tipo || 'text') + '" value="' + esc(val) + '"' + (c.tipo === 'number' ? ' step="' + (c.passo || '1') + '" min="0" inputmode="decimal"' : '') + (c.dica ? ' placeholder="' + esc(c.dica) + '"' : '') + '>';
       }
@@ -219,20 +222,21 @@ window.Painel = (function () {
     var form = $('#form-modal', d), msg = $('#msg-modal', d);
     function erro(t) { msg.textContent = t; msg.hidden = !t; }
     var primeiro = form.querySelector('input,select,textarea'); if (primeiro) primeiro.focus();
+    if (cfg.aoAbrir) cfg.aoAbrir(d);
 
     form.addEventListener('submit', function (e) {
       e.preventDefault(); erro('');
       var out = {}, falta = null;
       cfg.campos.forEach(function (c) {
         var el = form.elements[c.nome]; if (!el) return;
-        var x = c.tipo === 'checkbox' ? el.checked : (c.tipo === 'number' ? (el.value === '' ? 0 : num(el.value)) : el.value.trim());
+        var x = c.tipo === 'file' ? ((el.files && el.files[0]) || null) : c.tipo === 'checkbox' ? el.checked : (c.tipo === 'number' ? (el.value === '' ? 0 : num(el.value)) : el.value.trim());
         out[c.nome] = x;
         if (c.obrigatorio && (x === '' || x == null) && !falta) falta = c;
       });
       if (falta) { erro('Preencha: ' + falta.rotulo + '.'); form.elements[falta.nome].focus(); return; }
-      var bt = $('#bt-salvar', d); bt.disabled = true;
+      var bt = $('#bt-salvar', d), rotuloAntes = bt.textContent; bt.disabled = true; bt.textContent = cfg.rotuloSalvando || 'Salvando...';
       Promise.resolve(cfg.salvar(out)).then(function (r) {
-        bt.disabled = false;
+        bt.disabled = false; bt.textContent = rotuloAntes;
         if (r && r.ok === false) { erro(r.texto || 'Não consegui salvar.'); return; }
         fecharModal(); toast(cfg.msgOk || 'Salvo.'); if (cfg.aoSalvar) cfg.aoSalvar();
       });
@@ -268,7 +272,7 @@ window.Painel = (function () {
     abrirModal(cabecalhoModal('Testar a tranca de segurança') + '<p class="vazio" id="tr-corpo">Testando como se eu fosse um visitante sem login...</p>');
     if (!window.supabase || !window.BANCO_URL) { $('#tr-corpo').textContent = 'Não consegui carregar o Supabase para testar.'; return; }
     var anon = window.supabase.createClient(window.BANCO_URL, window.BANCO_CHAVE, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false, storageKey: 'teste-visitante' } });
-    var tabelas = ['videos', 'marcas', 'calendario', 'campanhas', 'marcados', 'visitas'];
+    var tabelas = ['videos', 'fotos', 'marcas', 'calendario', 'campanhas', 'marcados', 'visitas'];
     Promise.all(tabelas.map(function (t) {
       return Promise.resolve(anon.from(t).select('*').limit(1)).then(function (r) {
         if (r.error) {
@@ -296,7 +300,7 @@ window.Painel = (function () {
     });
   }
   /* ---------- abas e menu ---------- */
-  var abas = {}, ordemAbas = ['portfolio', 'marcas', 'calendario', 'campanhas', 'checklist'], atual = null;
+  var abas = {}, ordemAbas = ['portfolio', 'fotos', 'marcas', 'calendario', 'campanhas', 'checklist'], atual = null;
   function registrar(id, def) { abas[id] = def; def._montada = false; }
 
   function ativar(id) {
@@ -338,7 +342,7 @@ window.Painel = (function () {
   /* Confere logo ao abrir se as 6 tabelas existem, para o aviso aparecer completo e uma vez só. */
   function verificarTabelas() {
     if (!window.banco) return;
-    ['videos', 'marcas', 'calendario', 'campanhas', 'marcados', 'visitas'].forEach(function (t) {
+    ['videos', 'fotos', 'marcas', 'calendario', 'campanhas', 'marcados', 'visitas'].forEach(function (t) {
       Promise.resolve(window.banco.from(t).select('*').limit(1)).then(function (r) {
         if (r && r.error) { var info = entenderErro(r.error, t); if (info.tipo === 'tabela') avisarErro(t, info); }
       }).catch(function () { /* sem conexão: os avisos normais cuidam disso */ });

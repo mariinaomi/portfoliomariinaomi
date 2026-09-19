@@ -296,6 +296,7 @@ a{color:inherit}
 .trab a{display:block;text-decoration:none;color:inherit}
 .trab:hover figure{translate:0 -5px;box-shadow:var(--sombra-g)}
 .trab .ph{border-radius:3px}
+.trab figure:not(:has(figcaption)){padding-bottom:10px}
 .trab figcaption{display:flex;flex-direction:column;gap:.15rem;padding:.8rem .3rem 1rem}
 .trab figcaption b{font-weight:400;font-size:1rem}
 .trab figcaption span.m{font-family:var(--f-mao);font-weight:600;font-size:1.35rem;color:var(--tinta-2);line-height:1.1}
@@ -858,13 +859,15 @@ const SERVICOS = [
     var ar = m ? m[1] + '/' + m[2] : '4/5';
     /* TROCAR FOTO: preencha "imagem" em TRABALHOS ou FOTOS. Ela é cortada para a proporção do formato. */
     var bloco = '<div class="ph ' + grad(i) + '" style="aspect-ratio:' + ar + '">' +
-      (t.imagem ? tagImg(t.imagem, t.titulo + ', ' + t.marca, t.imagemFb) : '<span class="cap">' + esc(t.formato) + '</span>') +
-      (t.link ? '<span class="play mini" aria-hidden="true"></span>' : '') + '</div>';
-    var fig = '<figure>' + bloco + '<figcaption><b>' + esc(t.titulo) + '</b><span class="m">' + esc(t.marca) + '</span>' + (t.nicho ? '<span class="chip">' + esc(cap(t.nicho)) + '</span>' : '') + '</figcaption></figure>';
+      (t.imagem ? tagImg(t.imagem, [t.titulo, t.marca].filter(Boolean).join(', ') || 'Foto do portfólio', t.imagemFb) : '<span class="cap">' + esc(t.formato) + '</span>') +
+      (t.link && /^v[ií]deo/i.test(t.formato || '') ? '<span class="play mini" aria-hidden="true"></span>' : '') + '</div>';
+    var legenda = (t.titulo || t.marca || t.nicho)
+      ? '<figcaption>' + (t.titulo ? '<b>' + esc(t.titulo) + '</b>' : '') + (t.marca ? '<span class="m">' + esc(t.marca) + '</span>' : '') + (t.nicho ? '<span class="chip">' + esc(cap(t.nicho)) + '</span>' : '') + '</figcaption>' : '';
+    var fig = '<figure>' + bloco + legenda + '</figure>';
     if (t.link) fig = '<a href="' + esc(t.link) + '" target="_blank" rel="noopener noreferrer"' + atributosPlayer(t.link, t.formato) + '>' + fig + '</a>';
     return '<li class="trab reveal" data-nicho="' + esc(t.nicho) + '" style="--d:' + (i % 4) + '">' + fig + '</li>';
   }
-  $('#galeria-fotos').innerHTML = FOTOS.map(function (t, i) { return cardTrabalho(t, i + 3); }).join('');
+  function renderFotos(lista) { $('#galeria-fotos').innerHTML = lista.map(function (t, i) { return cardTrabalho(t, i + 3); }).join(''); }
 
   function filtrar(nicho, animar) {
     var n = 0;
@@ -922,11 +925,19 @@ const SERVICOS = [
   /* Sem painel ou sem nenhum vídeo visível ainda: usa as listas do começo do arquivo. */
   function usarListasFixas() { renderDestaques(DESTAQUES); renderTrabalhos(TRABALHOS); }
 
-  function buscarVideos() {
+  /* Pergunta ao painel (função "janelinha" do banco). Devolve a lista, ou nulo se falhar ou vier vazia. */
+  function buscarLista(funcao) {
     return bancoP.then(function (b) {
       if (!b) return null;
-      return Promise.resolve(b.rpc('videos_do_site')).then(function (r) { return (r && !r.error && r.data && r.data.length) ? r.data : null; });
+      return Promise.resolve(b.rpc(funcao)).then(function (r) { return (r && !r.error && r.data && r.data.length) ? r.data : null; });
     }).catch(function () { return null; });
+  }
+  function buscarVideos() { return buscarLista('videos_do_site'); }
+  /* Fotos que vieram do painel (tabela fotos, só as visíveis, na ordem escolhida). */
+  function usarFotosDoPainel(lista) {
+    renderFotos(lista.map(function (f) {
+      return { titulo: f.titulo || '', marca: f.marca || '', nicho: String(f.nicho || '').toLowerCase(), formato: f.formato || 'foto 4:5', imagem: f.imagem, link: f.link || '' };
+    }));
   }
   /* ---------- serviços ---------- */
   $('#lista-servicos').innerHTML = SERVICOS.map(function (s, i) {
@@ -967,6 +978,14 @@ const SERVICOS = [
     if (lista) { usouPainel = true; usarVideosDoPainel(lista); } else usarListasFixas();
     observar();
     painelP.then(function (l) { if (l && !usouPainel) { usouPainel = true; usarVideosDoPainel(l); observar(); } });
+  });
+
+  /* Fotos: mesma regra. Sem fotos no painel (ou sem internet), mostra os espaços de exemplo. */
+  var fotosP = buscarLista('fotos_do_site'), usouFotos = false;
+  Promise.race([fotosP, new Promise(function (r) { setTimeout(function () { r(null); }, 5000); })]).then(function (lista) {
+    if (lista) { usouFotos = true; usarFotosDoPainel(lista); } else renderFotos(FOTOS);
+    observar();
+    fotosP.then(function (l) { if (l && !usouFotos) { usouFotos = true; usarFotosDoPainel(l); observar(); } });
   });
   /* ---------- menu, sanduíche e seção ativa ---------- */
   var topo = $('#topo'), burger = $('.burger'), menu = $('#menu');

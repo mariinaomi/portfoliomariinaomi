@@ -173,6 +173,12 @@ tr.arrastando td{background:var(--suave)}
 .dia-lista li{display:flex;align-items:center;gap:.6rem;padding:.55rem .7rem;background:var(--linho-2);border-radius:12px}
 .dia-lista li .tx{flex:1;min-width:0;overflow-wrap:anywhere}
 
+/* ---------- fotos ---------- */
+.mini{display:block;height:58px;max-width:78px;width:auto;object-fit:cover;border-radius:8px;background:var(--linho-2)}
+.mini.vaz{display:grid;place-items:center;width:58px;font-size:10.5px;color:var(--tinta-2);text-align:center;line-height:1.2;padding:.2rem}
+.previa{margin-top:.5rem}
+.previa img{display:block;max-width:100%;max-height:220px;border-radius:12px;box-shadow:var(--sombra)}
+
 /* ---------- janela (modal) ---------- */
 dialog.modal{width:min(94vw,520px);max-height:calc(100dvh - 2rem);border:0;border-radius:var(--raio-g);padding:0;background:var(--papel);color:var(--tinta);box-shadow:0 40px 80px -20px rgba(0,0,0,.55)}
 dialog.modal.largo{width:min(94vw,760px)}

@@ -309,15 +309,14 @@ window.Painel = (function () {
     });
   }
   /* ---------- abas e menu ---------- */
-  var abas = {}, ordemAbas = ['portfolio', 'fotos', 'marcas', 'calendario', 'campanhas', 'propostas', 'checklist'], atual = null;
+  var abas = {}, atual = null;
   function registrar(id, def) { abas[id] = def; def._montada = false; }
 
   function ativar(id) {
     if (!abas[id]) id = 'portfolio';
     atual = id;
-    ordemAbas.forEach(function (a) {
-      var sec = $('#aba-' + a); if (sec) sec.classList.toggle('ativa', a === id);
-    });
+    /* Todas as seções da página, sem lista fixa: uma aba nova nunca fica escondida por esquecimento. */
+    $$('.aba').forEach(function (sec) { sec.classList.toggle('ativa', sec.id === 'aba-' + id); });
     $$('.lat-nav a').forEach(function (a) {
       if (a.getAttribute('data-aba') === id) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });

@@ -72,11 +72,26 @@
       return '<a href="' + u + '" style="color:#b5563a;text-decoration:underline;">' + u + '</a>' + fim;
     });
   }
-  function paragrafos(texto) {
-    var blocos = String(texto || '').replace(/\r\n?/g, '\n').trim().split(/\n{2,}/);
-    return blocos.filter(function (b) { return b.trim(); }).map(function (b) {
+  function paragrafos(blocos) {
+    return blocos.map(function (b) {
       return '<p style="margin:0 0 16px 0;">' + linkificar(esc(b)).replace(/\n/g, '<br>') + '</p>';
     }).join('\n');
+  }
+  /* Onde o botão entra no texto: {{botao}} escolhe o lugar exato; sem ele, o botão fica ANTES da despedida
+     (Att, Um abraço, Atenciosamente...) e, se não houver despedida, no fim. Devolve o que vem antes e depois dele. */
+  var RE_MARCADOR_BOTAO = /\{\{\s*bot[aã]o\s*\}\}/i;
+  var RE_DESPEDIDA = /^\s*(att\.?|atenciosamente|abra[cç]os?|um abra[cç]o|cordialmente|obrigad[oa]s?|beijos?|grat[oa]|at[eé] (mais|breve|logo))(?![a-zà-ú])/i;
+  function repartirTexto(texto) {
+    var blocos = String(texto || '').replace(/\r\n?/g, '\n').trim().split(/\n{2,}/).filter(function (b) { return b.trim(); });
+    for (var k = 0; k < blocos.length; k++) {
+      if (!RE_MARCADOR_BOTAO.test(blocos[k])) continue;
+      var partes = blocos[k].split(new RegExp(RE_MARCADOR_BOTAO.source, 'ig')), antes = blocos.slice(0, k), depois = [];
+      if (partes[0].trim()) antes.push(partes[0].trim());
+      var resto = partes.slice(1).join('').trim(); if (resto) depois.push(resto);
+      return { antes: antes, depois: depois.concat(blocos.slice(k + 1)) };
+    }
+    if (blocos.length >= 2 && RE_DESPEDIDA.test(blocos[blocos.length - 1])) return { antes: blocos.slice(0, -1), depois: blocos.slice(-1) };
+    return { antes: blocos, depois: [] };
   }
   function botaoHtml(txt, link) {
     var l = linkSeguro(link); txt = String(txt || '').trim();
@@ -86,11 +101,12 @@
   }
   /* O e-mail limpo do modo "texto fácil": fundo branco, letra escura, no máximo 560 px, rodapé do SAIR. */
   function htmlSimples(texto, btnTxt, btnLink) {
+    var partes = repartirTexto(texto);
     return '<!doctype html>\n<html lang="pt-BR">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title></title>\n</head>\n' +
       '<body style="margin:0;padding:0;background:#ffffff;">\n' +
       '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;"><tr><td align="center" style="padding:24px 16px;">\n' +
       '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;"><tr><td style="font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#2b2b2b;text-align:left;">\n' +
-      paragrafos(texto) + '\n' + botaoHtml(btnTxt, btnLink) + '\n' +
+      paragrafos(partes.antes) + '\n' + botaoHtml(btnTxt, btnLink) + '\n' + paragrafos(partes.depois) + '\n' +
       '<p style="margin:32px 0 0 0;font-size:12px;line-height:1.5;color:#8a8a8a;">' + esc(RODAPE_SAIR) + '</p>\n' +
       '</td></tr></table>\n</td></tr></table>\n</body>\n</html>';
   }
@@ -109,10 +125,10 @@
   /* O texto puro que vai para o Gmail (modo rascunho) ou para copiar. */
   function textoParaMarca(nome, marca) {
     if (est.modo === 'html') return htmlParaTexto(trocarChaves(est.html, nome, marca, true));
-    var corpo = trocarChaves(est.texto, nome, marca, false).trim();
+    var partes = repartirTexto(trocarChaves(est.texto, nome, marca, false));
     var l = linkSeguro(est.btnLink), bt = est.btnTxt.trim();
-    if (bt && l) corpo += '\n\n' + bt + ': ' + l;
-    return corpo + '\n\n' + RODAPE_SAIR;
+    var bloco = (bt && l) ? [bt + ': ' + l] : [];   /* o botão vira uma linha com o link, no mesmo lugar do e-mail */
+    return partes.antes.concat(bloco, partes.depois).join('\n\n') + '\n\n' + RODAPE_SAIR;
   }
 
   /* ---------- quem vai receber ---------- */
@@ -215,9 +231,9 @@
             '<div class="campo"><label class="c" for="pr-assunto">Assunto</label><input id="pr-assunto" type="text" maxlength="200" autocomplete="off" placeholder="Ex.: Parceria de conteúdo UGC com a {{marca}}"></div>' +
             '<div id="pr-modo-texto">' +
               '<div class="campo"><label class="c" for="pr-texto">Mensagem</label>' +
-                '<div class="chips-var" role="group" aria-label="Inserir campo no texto"><span>Inserir:</span><button type="button" data-ins="nome" title="O primeiro nome da marca">{{nome}}</button><button type="button" data-ins="marca" title="O nome completo da marca">{{marca}}</button></div>' +
+                '<div class="chips-var" role="group" aria-label="Inserir campo no texto"><span>Inserir:</span><button type="button" data-ins="nome" title="O primeiro nome da marca">{{nome}}</button><button type="button" data-ins="marca" title="O nome completo da marca">{{marca}}</button><button type="button" data-ins="botao" title="O lugar onde o botão aparece no e-mail">{{botao}}</button></div>' +
                 '<textarea id="pr-texto" class="corpo-grande" placeholder="Escreva o e-mail do jeito que você escreve normalmente."></textarea>' +
-                '<p class="vazio" style="padding:.3rem 0 0">Use {{nome}} e {{marca}} onde o nome da marca deve entrar. Links que você escrever no meio do texto viram clicáveis sozinhos. Linha em branco separa os parágrafos.</p></div>' +
+                '<p class="vazio" style="padding:.3rem 0 0">Use {{nome}} e {{marca}} onde o nome da marca deve entrar. Links que você escrever no meio do texto viram clicáveis sozinhos. Linha em branco separa os parágrafos. O botão (se preenchido) entra sozinho antes da despedida, como "Att," ou "Um abraço". Para escolher outro lugar, escreva {{botao}} onde quiser.</p></div>' +
               '<div class="grade2"><div class="campo"><label class="c" for="pr-btn-txt">Texto do botão (opcional)</label><input id="pr-btn-txt" type="text" maxlength="60" placeholder="Ver meu portfólio"></div>' +
               '<div class="campo"><label class="c" for="pr-btn-link">Link do botão</label><input id="pr-btn-link" type="url" placeholder="https://..."></div></div>' +
             '</div>' +

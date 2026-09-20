@@ -244,13 +244,13 @@ a{color:inherit}
 .mq-logos li::after{display:none}
 .logo-marca{width:98px;height:98px;border-radius:50%;display:grid;place-items:center;padding:.7rem;overflow:hidden;background:linear-gradient(#f8f4ea,#ebe4d4);border:1px solid rgba(58,39,31,.13);box-shadow:0 2px 6px rgba(58,39,31,.08),inset 0 1px 0 rgba(255,255,255,.8);transition:transform .3s ease,box-shadow .3s ease}
 .logo-marca:hover{transform:translateY(-4px);box-shadow:0 12px 20px -8px rgba(58,39,31,.3),inset 0 1px 0 rgba(255,255,255,.8)}
-.logo-marca img{display:block;max-width:66px;max-height:46px;width:auto;height:auto;object-fit:contain}
+.logo-marca img{display:block;max-width:72px;max-height:48px;width:auto;height:auto;object-fit:contain}
 .logo-marca span{font-family:var(--f-titulo);font-style:italic;font-size:.95rem;line-height:1.1;text-align:center;color:var(--tinta);overflow-wrap:anywhere}
 @media (max-width:700px){
   .marcas-titulo{font-size:.7rem;letter-spacing:.2em;gap:.7rem}
   .marcas-titulo::before,.marcas-titulo::after{flex-basis:28px}
   .logo-marca{width:84px;height:84px;padding:.55rem}
-  .logo-marca img{max-width:56px;max-height:38px}
+  .logo-marca img{max-width:60px;max-height:40px}
   .logo-marca span{font-size:.85rem}
 }
 
@@ -703,15 +703,17 @@ html:has(dialog[open]){overflow:hidden}
 /* MARCAS: os círculos que rolam na faixa da capa ("Marcas que confiam no meu trabalho").
    nome = nome da marca.
    logo = caminho da imagem da logo (ex.: "img/marcas/cicatribem.png"). Deixe "" e o círculo mostra o nome.
-   Use logos em PNG ou SVG com fundo transparente. Troque "Marca 06" e "Marca 07" pelas marcas que faltam. */
+   As imagens ficam na pasta img/marcas (PNG com fundo transparente, uns 240 pixels de largura). */
 const MARCAS = [
-  { nome: "Cicatribem", logo: "" },
-  { nome: "Prohall", logo: "" },
-  { nome: "Always Fit", logo: "" },
-  { nome: "Skelt", logo: "" },
-  { nome: "Creamy", logo: "" },
-  { nome: "Marca 06", logo: "" },
-  { nome: "Marca 07", logo: "" }
+  { nome: "Cicatribem", logo: "img/marcas/cicatribem.png" },
+  { nome: "Always Fit", logo: "img/marcas/always-fit.png" },
+  { nome: "Bubbles", logo: "img/marcas/bubbles.png" },
+  { nome: "Creamy", logo: "img/marcas/creamy.png" },
+  { nome: "Soufit", logo: "img/marcas/soufit.png" },
+  { nome: "+Mu", logo: "img/marcas/mais-mu.png" },
+  { nome: "Skelt", logo: "img/marcas/skelt.png" },
+  { nome: "Garnier", logo: "img/marcas/garnier.png" },
+  { nome: "Prohall", logo: "img/marcas/prohall.png" }
 ];
 
 /* NICHOS: viram os botões de filtro e a lista da seção sobre.
@@ -1004,7 +1006,7 @@ const TEXTOS_EN = {
     var lis = [];
     for (var v = 0; v < voltas; v++) {
       marcas.forEach(function (m) {
-        var miolo = m.logo ? '<img src="' + esc(m.logo) + '" alt="" width="66" height="46" loading="lazy" decoding="async">' : '<span>' + esc(m.nome) + '</span>';
+        var miolo = m.logo ? '<img src="' + esc(m.logo) + '" alt="" decoding="async">' : '<span>' + esc(m.nome) + '</span>';
         lis.push('<li' + (v > 0 ? ' class="rep"' : '') + '><div class="logo-marca" title="' + esc(m.nome) + '">' + miolo + '</div></li>');
       });
     }

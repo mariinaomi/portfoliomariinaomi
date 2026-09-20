@@ -52,7 +52,11 @@ window.Painel = (function () {
     esq: '<path d="m15 5-7 7 7 7"/>',
     dir: '<path d="m9 5 7 7-7 7"/>',
     x: '<path d="M6 6l12 12M18 6 6 18"/>',
-    play: '<path d="m8 5 11 7-11 7z"/>'
+    play: '<path d="m8 5 11 7-11 7z"/>',
+    propostas: '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/>',
+    email: '<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/>',
+    copiar: '<rect x="8" y="8" width="12" height="12" rx="3"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',
+    duplicar: '<path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/>'
   };
   function icone(n) { return '<svg class="i" viewBox="0 0 24 24" aria-hidden="true">' + (ICONES[n] || '') + '</svg>'; }
 
@@ -70,15 +74,20 @@ window.Painel = (function () {
     }).join('');
   }
 
+  /* Cada tabela nasce de um arquivo .sql: as mais novas têm o seu próprio arquivo. */
+  var ARQUIVO_SQL = { fotos: 'fotos.sql', propostas: 'propostas.sql' };
+  function arquivoSql(tabela) { return ARQUIVO_SQL[tabela] || 'banco.sql'; }
+
   /* Várias tabelas faltando viram UM aviso só, em vez de um cartão para cada tabela. */
   var tabelasFaltando = {};
   function avisarErro(tabela, info) {
     if (info.tipo === 'tabela') {
       tabelasFaltando[tabela] = true;
-      var nomes = Object.keys(tabelasFaltando);
+      var nomes = Object.keys(tabelasFaltando), arquivos = [];
+      nomes.forEach(function (n) { var a = arquivoSql(n); if (arquivos.indexOf(a) < 0) arquivos.push(a); });
       avisar('tabelas-faltando',
         nomes.length === 1 ? 'Falta a tabela "' + nomes[0] + '" no banco.' : 'Faltam ' + nomes.length + ' tabelas no banco: ' + nomes.join(', ') + '.',
-        (nomes.length === 1 && nomes[0] === 'fotos' ? 'Abra o Supabase, vá em SQL Editor e rode o arquivo fotos.sql. ' : 'Abra o Supabase, vá em SQL Editor e rode o arquivo banco.sql inteiro. ') + 'Depois recarregue esta página. O resto do painel continua funcionando.');
+        'Abra o Supabase, vá em SQL Editor e rode ' + (arquivos.length === 1 ? 'o arquivo ' + arquivos[0] + (arquivos[0] === 'banco.sql' ? ' inteiro' : '') : 'estes arquivos, um de cada vez: ' + arquivos.join(', ')) + '. Depois recarregue esta página. O resto do painel continua funcionando.');
     } else avisar(tabela + ':' + info.tipo, info.t, info.d);
   }
 
@@ -87,7 +96,7 @@ window.Painel = (function () {
     var cod = String((e && e.code) || ''), msg = String((e && e.message) || '');
     var baixa = msg.toLowerCase();
     if (cod === '42P01' || cod === 'PGRST205' || /could not find the table|relation .* does not exist/.test(baixa)) {
-      return { tipo: 'tabela', t: 'Não encontrei a tabela "' + tabela + '" no banco.', d: 'Abra o Supabase, vá em SQL Editor e rode o arquivo banco.sql. O resto do painel continua funcionando.' };
+      return { tipo: 'tabela', t: 'Não encontrei a tabela "' + tabela + '" no banco.', d: 'Abra o Supabase, vá em SQL Editor e rode o arquivo ' + arquivoSql(tabela) + '. O resto do painel continua funcionando.' };
     }
     if (cod === '42703' || cod === 'PGRST204' || /column .* does not exist|could not find the .* column/.test(baixa)) {
       return { tipo: 'coluna', t: 'Falta um campo na tabela "' + tabela + '".', d: 'Rode o banco.sql de novo no Supabase para criar o que falta. Detalhe: ' + msg };
@@ -272,13 +281,13 @@ window.Painel = (function () {
     abrirModal(cabecalhoModal('Testar a tranca de segurança') + '<p class="vazio" id="tr-corpo">Testando como se eu fosse um visitante sem login...</p>');
     if (!window.supabase || !window.BANCO_URL) { $('#tr-corpo').textContent = 'Não consegui carregar o Supabase para testar.'; return; }
     var anon = window.supabase.createClient(window.BANCO_URL, window.BANCO_CHAVE, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false, storageKey: 'teste-visitante' } });
-    var tabelas = ['videos', 'fotos', 'marcas', 'calendario', 'campanhas', 'marcados', 'visitas'];
+    var tabelas = ['videos', 'fotos', 'marcas', 'calendario', 'campanhas', 'marcados', 'visitas', 'propostas'];
     Promise.all(tabelas.map(function (t) {
       return Promise.resolve(anon.from(t).select('*').limit(1)).then(function (r) {
         if (r.error) {
           var cod = String(r.error.code || '');
           /* Tabela inexistente NÃO conta como trancada: ainda não há o que proteger. */
-          if (cod === 'PGRST205' || cod === '42P01') return { t: t, estado: 'falta', txt: 'esta tabela ainda não existe no banco. Rode o banco.sql.' };
+          if (cod === 'PGRST205' || cod === '42P01') return { t: t, estado: 'falta', txt: 'esta tabela ainda não existe no banco. Rode o ' + arquivoSql(t) + '.' };
           return { t: t, estado: 'ok', txt: 'trancada (o banco recusou a leitura)' };
         }
         if (!r.data || !r.data.length) return { t: t, estado: 'ok', txt: 'trancada (nenhuma linha voltou)' };
@@ -300,7 +309,7 @@ window.Painel = (function () {
     });
   }
   /* ---------- abas e menu ---------- */
-  var abas = {}, ordemAbas = ['portfolio', 'fotos', 'marcas', 'calendario', 'campanhas', 'checklist'], atual = null;
+  var abas = {}, ordemAbas = ['portfolio', 'fotos', 'marcas', 'calendario', 'campanhas', 'propostas', 'checklist'], atual = null;
   function registrar(id, def) { abas[id] = def; def._montada = false; }
 
   function ativar(id) {
@@ -342,7 +351,7 @@ window.Painel = (function () {
   /* Confere logo ao abrir se as 6 tabelas existem, para o aviso aparecer completo e uma vez só. */
   function verificarTabelas() {
     if (!window.banco) return;
-    ['videos', 'fotos', 'marcas', 'calendario', 'campanhas', 'marcados', 'visitas'].forEach(function (t) {
+    ['videos', 'fotos', 'marcas', 'calendario', 'campanhas', 'marcados', 'visitas', 'propostas'].forEach(function (t) {
       Promise.resolve(window.banco.from(t).select('*').limit(1)).then(function (r) {
         if (r && r.error) { var info = entenderErro(r.error, t); if (info.tipo === 'tabela') avisarErro(t, info); }
       }).catch(function () { /* sem conexão: os avisos normais cuidam disso */ });

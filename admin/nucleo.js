@@ -56,7 +56,11 @@ window.Painel = (function () {
     propostas: '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/>',
     email: '<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/>',
     copiar: '<rect x="8" y="8" width="12" height="12" rx="3"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',
-    duplicar: '<path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/>'
+    duplicar: '<path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/>',
+    prospeccao: '<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/>',
+    enviar: '<path d="M21 3 3 10.5l7 2.5 2.5 7z"/><path d="m21 3-10.5 10"/>',
+    tela: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',
+    check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>'
   };
   function icone(n) { return '<svg class="i" viewBox="0 0 24 24" aria-hidden="true">' + (ICONES[n] || '') + '</svg>'; }
 
@@ -75,7 +79,7 @@ window.Painel = (function () {
   }
 
   /* Cada tabela nasce de um arquivo .sql: as mais novas têm o seu próprio arquivo. */
-  var ARQUIVO_SQL = { fotos: 'fotos.sql', propostas: 'propostas.sql' };
+  var ARQUIVO_SQL = { fotos: 'fotos.sql', propostas: 'propostas.sql', email_envios: 'disparo.sql', email_optout: 'disparo.sql' };
   function arquivoSql(tabela) { return ARQUIVO_SQL[tabela] || 'banco.sql'; }
 
   /* Várias tabelas faltando viram UM aviso só, em vez de um cartão para cada tabela. */
@@ -99,7 +103,8 @@ window.Painel = (function () {
       return { tipo: 'tabela', t: 'Não encontrei a tabela "' + tabela + '" no banco.', d: 'Abra o Supabase, vá em SQL Editor e rode o arquivo ' + arquivoSql(tabela) + '. O resto do painel continua funcionando.' };
     }
     if (cod === '42703' || cod === 'PGRST204' || /column .* does not exist|could not find the .* column/.test(baixa)) {
-      return { tipo: 'coluna', t: 'Falta um campo na tabela "' + tabela + '".', d: 'Rode o banco.sql de novo no Supabase para criar o que falta. Detalhe: ' + msg };
+      var arq = /selecionada|email_enviado_em/.test(baixa) ? 'disparo.sql' : 'banco.sql';
+      return { tipo: 'coluna', t: 'Falta um campo na tabela "' + tabela + '".', d: 'Rode o ' + arq + (arq === 'banco.sql' ? ' de novo' : '') + ' no Supabase para criar o que falta. Detalhe: ' + msg };
     }
     if (cod === '42501' || /permission denied|row-level security|violates row/.test(baixa)) {
       return { tipo: 'permissao', t: 'O banco não deixou acessar "' + tabela + '".', d: 'Confira se você entrou com o e-mail certo e se o banco.sql foi rodado por inteiro.' };
@@ -164,6 +169,22 @@ window.Painel = (function () {
     },
     apagar: function (tabela, id) {
       return Dados._escrever(tabela, function () { return window.banco.from(tabela).delete().eq('id', id).select(); });
+    },
+    /* Muda o mesmo campo em várias linhas de uma vez (de 200 em 200, para o pedido não ficar gigante). */
+    atualizarVarios: function (tabela, ids, obj) {
+      var partes = [];
+      for (var i = 0; i < ids.length; i += 200) partes.push(ids.slice(i, i + 200));
+      if (!partes.length) return Promise.resolve({ ok: true, dados: [] });
+      return partes.reduce(function (cadeia, parte) {
+        return cadeia.then(function (r) {
+          if (!r.ok) return r;
+          return Dados._escrever(tabela, function () { return window.banco.from(tabela).update(obj).in('id', parte).select('id'); });
+        });
+      }, Promise.resolve({ ok: true, dados: [] }));
+    },
+    /* Apaga uma linha pela chave dela (usado na lista de descadastro, onde a chave é o e-mail). */
+    apagarPor: function (tabela, coluna, valor) {
+      return Dados._escrever(tabela, function () { return window.banco.from(tabela).delete().eq(coluna, valor).select(); });
     },
     _escrever: function (tabela, fazer) {
       if (!window.banco) return Promise.resolve({ ok: false, texto: 'Sem conexão com o banco.' });
@@ -267,6 +288,24 @@ window.Painel = (function () {
     return d;
   }
 
+  /* ---------- copiar para a área de transferência (com plano B para navegadores mais antigos) ---------- */
+  function copiarTexto(t) {
+    t = String(t == null ? '' : t);
+    function plano() {
+      var a = document.createElement('textarea'); a.value = t; a.setAttribute('readonly', '');
+      a.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+      var m = document.getElementById('modal');
+      (m && m.open ? m : document.body).appendChild(a);
+      a.select(); a.setSelectionRange(0, t.length);
+      var ok = false; try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      a.remove(); return ok;
+    }
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(t).then(function () { return true; }, function () { return plano(); });
+    }
+    return Promise.resolve(plano());
+  }
+
   /* ---------- CSV que abre certinho no Excel (com acento) ---------- */
   function baixarCSV(nome, cabecalho, linhas) {
     function cel(x) { var s = String(x == null ? '' : x); return /[;"\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }
@@ -281,7 +320,7 @@ window.Painel = (function () {
     abrirModal(cabecalhoModal('Testar a tranca de segurança') + '<p class="vazio" id="tr-corpo">Testando como se eu fosse um visitante sem login...</p>');
     if (!window.supabase || !window.BANCO_URL) { $('#tr-corpo').textContent = 'Não consegui carregar o Supabase para testar.'; return; }
     var anon = window.supabase.createClient(window.BANCO_URL, window.BANCO_CHAVE, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false, storageKey: 'teste-visitante' } });
-    var tabelas = ['videos', 'fotos', 'marcas', 'calendario', 'campanhas', 'marcados', 'visitas', 'propostas'];
+    var tabelas = ['videos', 'fotos', 'marcas', 'calendario', 'campanhas', 'marcados', 'visitas', 'propostas', 'email_envios', 'email_optout'];
     Promise.all(tabelas.map(function (t) {
       return Promise.resolve(anon.from(t).select('*').limit(1)).then(function (r) {
         if (r.error) {
@@ -350,7 +389,7 @@ window.Painel = (function () {
   /* Confere logo ao abrir se as 6 tabelas existem, para o aviso aparecer completo e uma vez só. */
   function verificarTabelas() {
     if (!window.banco) return;
-    ['videos', 'fotos', 'marcas', 'calendario', 'campanhas', 'marcados', 'visitas', 'propostas'].forEach(function (t) {
+    ['videos', 'fotos', 'marcas', 'calendario', 'campanhas', 'marcados', 'visitas', 'propostas', 'email_envios', 'email_optout'].forEach(function (t) {
       Promise.resolve(window.banco.from(t).select('*').limit(1)).then(function (r) {
         if (r && r.error) { var info = entenderErro(r.error, t); if (info.tipo === 'tabela') avisarErro(t, info); }
       }).catch(function () { /* sem conexão: os avisos normais cuidam disso */ });
@@ -385,6 +424,6 @@ window.Painel = (function () {
     hojeISO: hojeISO, dataBR: dataBR, deISO: deISO, paraISO: paraISO, somarDias: somarDias, diasEntre: diasEntre,
     icone: icone, avisar: avisar, Dados: Dados, toast: toast,
     abrirModal: abrirModal, fecharModal: fecharModal, cabecalhoModal: cabecalhoModal, formulario: formulario,
-    baixarCSV: baixarCSV, registrar: registrar, recarregar: recarregar, iniciar: iniciar
+    baixarCSV: baixarCSV, copiarTexto: copiarTexto, registrar: registrar, recarregar: recarregar, iniciar: iniciar
   };
 })();

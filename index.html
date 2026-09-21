@@ -212,12 +212,13 @@ a{color:inherit}
 .hero-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);grid-template-areas:"texto foto" "numeros numeros";gap:2.4rem 3rem;align-items:center;padding-bottom:clamp(2.5rem,6vw,4.5rem)}
 .hero-texto{grid-area:texto}
 .hero-foto{grid-area:foto;position:relative;justify-self:center;width:100%;display:flex;justify-content:center;padding:1rem 0}
-.hero h1{font-size:clamp(3.8rem,12vw,8rem);line-height:.92;letter-spacing:-.01em;margin:.3rem 0 1.4rem}
+.hero h1{font-size:clamp(3.1rem,8.4vw,6.4rem);line-height:.98;letter-spacing:-.01em;margin:.3rem 0 1.4rem}
 .hero h1 span{display:block}
 .hero h1 em{color:var(--terracota)}
-.lead{font-size:clamp(1.15rem,2.2vw,1.45rem);max-width:30ch;line-height:1.5;margin-bottom:2rem}
+.lead{font-size:clamp(1.15rem,2.2vw,1.45rem);max-width:30ch;line-height:1.5;margin-bottom:2rem;text-wrap:balance}
 .botoes{display:flex;flex-wrap:wrap;gap:.9rem}
-.stats{grid-area:numeros;display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;list-style:none;margin:.6rem 0 0;padding:1.6rem 0 0;border-top:2px dashed rgba(58,39,31,.25)}
+.stats{grid-area:numeros;display:flex;flex-wrap:wrap;align-items:flex-start;gap:1.2rem clamp(2.5rem,8vw,6rem);list-style:none;margin:.6rem 0 0;padding:1.6rem 0 0;border-top:2px dashed rgba(58,39,31,.25)}
+.stats li+li{padding-left:clamp(2.5rem,8vw,6rem);border-left:2px dashed rgba(58,39,31,.25)}
 .num{display:block;font-family:var(--f-titulo);font-size:clamp(2.2rem,5vw,3.6rem);line-height:1}
 .stat-rot{display:block;font-family:var(--f-mao);font-weight:600;font-size:1.45rem;line-height:1.1;color:var(--tinta-2);margin-top:.3rem}
 .rise{animation:subir .9s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--d,0) * 110ms)}
@@ -226,6 +227,11 @@ a{color:inherit}
   .hero-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"texto" "foto" "numeros"}
   .hero-foto{padding:1.4rem 0 2rem}
   .moldura{width:min(100%,340px)}
+}
+@media (max-width:560px){
+  .stats{gap:0 1.3rem}
+  .stats li+li{padding-left:1.3rem}
+  .stat-rot{font-size:1.15rem}
 }
 
 /* faixas que rolam */
@@ -478,8 +484,8 @@ html:has(dialog[open]){overflow:hidden}
   <div class="wrap hero-grid">
     <div class="hero-texto">
       <span class="kicker rise" style="--d:0">UGC Creator</span>
-      <h1 class="rise" style="--d:1"><span>Mariana</span> <span><em>Naomi</em></span></h1>
-      <p class="lead rise" style="--d:2">Eu crio vídeos e fotos com jeito de recomendação de amiga, para marcas que querem ser vistas e lembradas.</p>
+      <h1 class="rise" style="--d:1"><span>Conteúdos</span> <span>que geram</span> <span><em>conexão</em></span></h1>
+      <p class="lead rise" style="--d:2">Cada vídeo pensado pra unir o público com a marca.</p>
       <div class="botoes rise" style="--d:3">
         <a class="btn btn-pri" href="#contato">Falar comigo</a>
         <a class="btn btn-sec" href="#trabalhos">Ver os trabalhos</a>
@@ -720,13 +726,12 @@ const MARCAS = [
    O texto do campo "nicho" de cada trabalho precisa ser igual a um item desta lista. */
 const NICHOS = ["beleza", "skincare", "moda", "comida", "casa e decoração", "fitness", "pet", "tech"];
 
-/* MÉTRICAS: os 3 números que aparecem na capa.
-   valor numérico (ex.: 90) anima contando. Texto (ex.: "00") aparece parado: é placeholder.
-   Para trocar: coloque o número real, sem aspas, e apague a linha "placeholder". */
+/* MÉTRICAS: os números que aparecem na capa (hoje são 2).
+   valor numérico (ex.: 90) anima contando; o sufixo "+" aparece depois do número (90+).
+   Para trocar: mude o valor (sem aspas) ou o texto do rotulo. */
 const METRICAS = [
-  { valor: 90, prefixo: "", sufixo: "", rotulo: "vídeos entregues" },
-  { valor: 7,  prefixo: "", sufixo: "", rotulo: "marcas atendidas" },
-  { valor: "00", prefixo: "+", sufixo: "M", rotulo: "views somadas", placeholder: true }
+  { valor: 90, prefixo: "", sufixo: "+", rotulo: "vídeos entregues" },
+  { valor: 10, prefixo: "", sufixo: "+", rotulo: "marcas trabalhadas" }
 ];
 /* DESTAQUES: os três vídeos grandes.
    link = endereço do vídeo (reels, YouTube etc.). O card inteiro abre esse link.
@@ -800,14 +805,15 @@ const TEXTOS_EN = {
   "Mariana Naomi, voltar ao início": "Mariana Naomi, back to top",
   "Abrir menu": "Open menu", "Fechar menu": "Close menu", "Principal": "Main", "Apresentação": "Introduction",
   /* capa */
-  "Eu crio vídeos e fotos com jeito de recomendação de amiga, para marcas que querem ser vistas e lembradas.": "I create videos and photos that feel like a friend's recommendation, for brands that want to be seen and remembered.",
+  "Conteúdos": "Content", "que geram": "that builds", "conexão": "connection",
+  "Cada vídeo pensado pra unir o público com a marca.": "Every video designed to bring the audience and the brand together.",
   "Falar comigo": "Talk to me", "Ver os trabalhos": "See my work",
   "Espaço reservado para a foto principal da creator": "Placeholder for the creator's main photo",
   "foto da creator 4:5": "creator photo 4:5",
   "Mariana Naomi de camisa branca, sentada e apoiando a cabeça no braço": "Mariana Naomi in a white shirt, sitting with head resting on arm",
   "Retrato de Mariana Naomi sorrindo, com a cabeça apoiada nos braços": "Portrait of Mariana Naomi smiling, head resting on folded arms",
   "Números em resumo": "Numbers at a glance",
-  "Marcas que confiam no meu trabalho": "Brands that trust my work", "marcas atendidas": "brands served", "views somadas": "total views",
+  "Marcas que confiam no meu trabalho": "Brands that trust my work", "vídeos entregues": "videos delivered", "marcas trabalhadas": "brands worked with",
   /* sobre */
   "um pouco de mim": "a little about me",
   "Oii, eu sou a": "Hi, I'm",

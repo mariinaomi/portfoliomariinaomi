@@ -60,7 +60,8 @@ window.Painel = (function () {
     prospeccao: '<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/>',
     enviar: '<path d="M21 3 3 10.5l7 2.5 2.5 7z"/><path d="m21 3-10.5 10"/>',
     tela: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',
-    check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>'
+    check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+    nichos: '<path d="M4 4h8l8 8-8 8-8-8z"/><circle cx="8.5" cy="8.5" r="1.4"/>'
   };
   function icone(n) { return '<svg class="i" viewBox="0 0 24 24" aria-hidden="true">' + (ICONES[n] || '') + '</svg>'; }
 
@@ -79,7 +80,7 @@ window.Painel = (function () {
   }
 
   /* Cada tabela nasce de um arquivo .sql: as mais novas têm o seu próprio arquivo. */
-  var ARQUIVO_SQL = { fotos: 'fotos.sql', propostas: 'propostas.sql', email_envios: 'disparo.sql', email_optout: 'disparo.sql' };
+  var ARQUIVO_SQL = { fotos: 'fotos.sql', propostas: 'propostas.sql', email_envios: 'disparo.sql', email_optout: 'disparo.sql', nichos: 'nichos.sql' };
   function arquivoSql(tabela) { return ARQUIVO_SQL[tabela] || 'banco.sql'; }
 
   /* Várias tabelas faltando viram UM aviso só, em vez de um cartão para cada tabela. */
@@ -288,6 +289,17 @@ window.Painel = (function () {
     return d;
   }
 
+  /* ---------- nichos (compartilhado entre as abas Portfólio, Fotos e Nichos) ----------
+     Enquanto a tabela "nichos" não existir ou estiver vazia, usa esta lista padrão,
+     a mesma que o site usa como reserva. Assim os campos de "Nicho" nunca ficam vazios. */
+  var NICHOS_PADRAO = ['beleza', 'skincare', 'moda', 'comida', 'casa e decoração', 'fitness', 'pet', 'tech'];
+  function listarNichos() {
+    return Dados.listar('nichos', { filtros: [['eq', 'visivel', true]], ordem: [['ordem', true], ['id', true]] }).then(function (r) {
+      var nomes = (r.dados || []).map(function (n) { return String(n.nome || '').trim(); }).filter(Boolean);
+      return nomes.length ? nomes : NICHOS_PADRAO.slice();
+    });
+  }
+
   /* ---------- copiar para a área de transferência (com plano B para navegadores mais antigos) ---------- */
   function copiarTexto(t) {
     t = String(t == null ? '' : t);
@@ -320,7 +332,7 @@ window.Painel = (function () {
     abrirModal(cabecalhoModal('Testar a tranca de segurança') + '<p class="vazio" id="tr-corpo">Testando como se eu fosse um visitante sem login...</p>');
     if (!window.supabase || !window.BANCO_URL) { $('#tr-corpo').textContent = 'Não consegui carregar o Supabase para testar.'; return; }
     var anon = window.supabase.createClient(window.BANCO_URL, window.BANCO_CHAVE, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false, storageKey: 'teste-visitante' } });
-    var tabelas = ['videos', 'fotos', 'marcas', 'calendario', 'campanhas', 'marcados', 'visitas', 'propostas', 'email_envios', 'email_optout'];
+    var tabelas = ['videos', 'fotos', 'marcas', 'calendario', 'campanhas', 'marcados', 'visitas', 'propostas', 'email_envios', 'email_optout', 'nichos'];
     Promise.all(tabelas.map(function (t) {
       return Promise.resolve(anon.from(t).select('*').limit(1)).then(function (r) {
         if (r.error) {
@@ -389,7 +401,7 @@ window.Painel = (function () {
   /* Confere logo ao abrir se as 6 tabelas existem, para o aviso aparecer completo e uma vez só. */
   function verificarTabelas() {
     if (!window.banco) return;
-    ['videos', 'fotos', 'marcas', 'calendario', 'campanhas', 'marcados', 'visitas', 'propostas', 'email_envios', 'email_optout'].forEach(function (t) {
+    ['videos', 'fotos', 'marcas', 'calendario', 'campanhas', 'marcados', 'visitas', 'propostas', 'email_envios', 'email_optout', 'nichos'].forEach(function (t) {
       Promise.resolve(window.banco.from(t).select('*').limit(1)).then(function (r) {
         if (r && r.error) { var info = entenderErro(r.error, t); if (info.tipo === 'tabela') avisarErro(t, info); }
       }).catch(function () { /* sem conexão: os avisos normais cuidam disso */ });
@@ -424,6 +436,6 @@ window.Painel = (function () {
     hojeISO: hojeISO, dataBR: dataBR, deISO: deISO, paraISO: paraISO, somarDias: somarDias, diasEntre: diasEntre,
     icone: icone, avisar: avisar, Dados: Dados, toast: toast,
     abrirModal: abrirModal, fecharModal: fecharModal, cabecalhoModal: cabecalhoModal, formulario: formulario,
-    baixarCSV: baixarCSV, copiarTexto: copiarTexto, registrar: registrar, recarregar: recarregar, iniciar: iniciar
+    baixarCSV: baixarCSV, copiarTexto: copiarTexto, listarNichos: listarNichos, registrar: registrar, recarregar: recarregar, iniciar: iniciar
   };
 })();

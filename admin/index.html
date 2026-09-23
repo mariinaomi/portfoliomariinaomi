@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="admin.css?v=20260920d">
+<link rel="stylesheet" href="admin.css?v=20260920e">
 </head>
 <body>
 
@@ -23,6 +23,7 @@
     <a href="#portfolio" data-aba="portfolio"><span data-i="portfolio"></span>Portfólio</a>
     <a href="#fotos" data-aba="fotos"><span data-i="fotos"></span>Fotos</a>
     <a href="#marcas" data-aba="marcas"><span data-i="marcas"></span>Marcas</a>
+    <a href="#nichos" data-aba="nichos"><span data-i="nichos"></span>Nichos</a>
     <div class="lat-titulo">Minha rotina</div>
     <a href="#calendario" data-aba="calendario"><span data-i="calendario"></span>Calendário</a>
     <a href="#campanhas" data-aba="campanhas"><span data-i="campanhas"></span>Campanhas</a>
@@ -54,6 +55,7 @@
     <section class="aba" id="aba-portfolio" aria-labelledby="titulo-aba"></section>
     <section class="aba" id="aba-fotos" aria-labelledby="titulo-aba"></section>
     <section class="aba" id="aba-marcas" aria-labelledby="titulo-aba"></section>
+    <section class="aba" id="aba-nichos" aria-labelledby="titulo-aba"></section>
     <section class="aba" id="aba-calendario" aria-labelledby="titulo-aba"></section>
     <section class="aba" id="aba-campanhas" aria-labelledby="titulo-aba"></section>
     <section class="aba" id="aba-propostas" aria-labelledby="titulo-aba"></section>
@@ -68,7 +70,7 @@
 <!-- Supabase por CDN (versão fixa, com selo de integridade) e os dados de acesso -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0/dist/umd/supabase.js"
         integrity="sha384-iLddHTLokph6Omwoyid4XKxHaWa6w41BnoEj0q5oOrzmYPpHIKt1wyjReA7s//pP" crossorigin="anonymous"></script>
-<script src="../js/banco.js?v=20260920d"></script>
+<script src="../js/banco.js?v=20260920e"></script>
 
 <!-- PRIMEIRA COISA DO SCRIPT: conferir a sessão. Sem sessão, vai para o login.
      A página só aparece (tira o "oculto") depois dessa conferência. -->
@@ -102,16 +104,17 @@
 })();
 </script>
 
-<script src="nucleo.js?v=20260920d"></script>
-<script src="portfolio.js?v=20260920d"></script>
-<script src="fotos.js?v=20260920d"></script>
-<script src="marcas.js?v=20260920d"></script>
-<script src="calendario.js?v=20260920d"></script>
-<script src="campanhas.js?v=20260920d"></script>
-<script src="propostas.js?v=20260920d"></script>
-<script src="prospeccao.js?v=20260920d"></script>
-<script src="../js/biblioteca.js?v=20260920d"></script>
-<script src="checklist.js?v=20260920d"></script>
+<script src="nucleo.js?v=20260920e"></script>
+<script src="portfolio.js?v=20260920e"></script>
+<script src="fotos.js?v=20260920e"></script>
+<script src="marcas.js?v=20260920e"></script>
+<script src="nichos.js?v=20260920e"></script>
+<script src="calendario.js?v=20260920e"></script>
+<script src="campanhas.js?v=20260920e"></script>
+<script src="propostas.js?v=20260920e"></script>
+<script src="prospeccao.js?v=20260920e"></script>
+<script src="../js/biblioteca.js?v=20260920e"></script>
+<script src="checklist.js?v=20260920e"></script>
 <script>if (window.Painel) window.Painel.iniciar();</script>
 </body>
 </html>

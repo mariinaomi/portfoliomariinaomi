@@ -6,6 +6,7 @@
   var P = window.Painel; if (!P) return;
   var esc = P.esc, $ = P.$;
 
+  /* Lista provisória até a aba carregar a de verdade (ver entrar()), para o formulário nunca abrir sem opções. */
   var NICHOS = ['beleza', 'skincare', 'moda', 'comida', 'casa e decoração', 'fitness', 'pet', 'tech'];
   var FORMATOS = ['vídeo 9:16', 'vídeo 4:5', 'vídeo 1:1', 'vídeo 16:9'];
   var videos = [];
@@ -36,9 +37,11 @@
     var hoje = P.hojeISO(), inicio = P.somarDias(hoje, -13);
     return Promise.all([
       P.Dados.listar('videos', { ordem: [['ordem', true], ['id', true]] }),
-      P.Dados.listar('visitas', { filtros: [['gte', 'data', inicio]], todas: true, ordem: [['id', true]] })
+      P.Dados.listar('visitas', { filtros: [['gte', 'data', inicio]], todas: true, ordem: [['id', true]] }),
+      P.listarNichos()
     ]).then(function (r) {
       videos = r[0].dados;
+      NICHOS = r[2];
       desenharMetricas(r[1].dados, hoje);
       desenharVideos();
     });

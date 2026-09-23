@@ -723,8 +723,9 @@ const MARCAS = [
 ];
 
 /* NICHOS: viram os botões de filtro e a lista da seção sobre.
-   O texto do campo "nicho" de cada trabalho precisa ser igual a um item desta lista. */
-const NICHOS = ["beleza", "skincare", "moda", "comida", "casa e decoração", "fitness", "pet", "tech"];
+   O texto do campo "nicho" de cada trabalho precisa ser igual a um item desta lista.
+   Esta lista é só a reserva: se o painel estiver no ar, a aba Nichos manda. */
+let NICHOS = ["beleza", "skincare", "moda", "comida", "casa e decoração", "fitness", "pet", "tech"];
 
 /* MÉTRICAS: os números que aparecem na capa (hoje são 2).
    valor numérico (ex.: 90) anima contando; o sufixo "+" aparece depois do número (90+).
@@ -1048,7 +1049,8 @@ const TEXTOS_EN = {
   }
 
   /* ---------- nichos na seção sobre ---------- */
-  $('#lista-nichos').innerHTML = NICHOS.map(function (n) { return '<li><span class="chip">' + esc(cap(n)) + '</span></li>'; }).join('');
+  function renderNichos() { $('#lista-nichos').innerHTML = NICHOS.map(function (n) { return '<li><span class="chip">' + esc(cap(n)) + '</span></li>'; }).join(''); }
+  renderNichos();
 
   /* ---------- conexão com o painel (Supabase) ---------- */
   var bancoP = new Promise(function (resolve) {
@@ -1133,7 +1135,9 @@ const TEXTOS_EN = {
       ? (n === 1 ? 'Mostrando o vídeo.' : 'Mostrando todos os ' + n + ' vídeos.')
       : 'Mostrando ' + n + (n === 1 ? ' vídeo' : ' vídeos') + ' de ' + nicho + '.';
   }
+  var ultimaListaTrabalhos = null;   /* guardada para refazer os botões de filtro se os nichos chegarem depois */
   function renderTrabalhos(lista) {
+    ultimaListaTrabalhos = lista;
     galeria.innerHTML = lista.map(function (t, i) { return cardTrabalho(t, i); }).join('');
     /* só mostra botões de nichos que têm vídeo */
     var presentes = [];
@@ -1183,6 +1187,15 @@ const TEXTOS_EN = {
     }).catch(function () { return null; });
   }
   function buscarVideos() { return buscarLista('videos_do_site'); }
+  /* Nichos que vieram do painel (tabela nichos, só os visíveis, na ordem escolhida). Atualiza a lista da
+     seção "sobre" e, se os vídeos já tiverem chegado, refaz os botões de filtro na ordem certa. */
+  function usarNichosDoPainel(lista) {
+    var nomes = lista.map(function (n) { return String(n.nome || '').trim().toLowerCase(); }).filter(Boolean);
+    if (!nomes.length) return;
+    NICHOS = nomes;
+    renderNichos();
+    if (ultimaListaTrabalhos) renderTrabalhos(ultimaListaTrabalhos);
+  }
   /* Fotos que vieram do painel (tabela fotos, só as visíveis, na ordem escolhida). */
   function usarFotosDoPainel(lista) {
     renderFotos(lista.map(function (f) {
@@ -1236,6 +1249,13 @@ const TEXTOS_EN = {
     if (lista) { usouFotos = true; usarFotosDoPainel(lista); } else renderFotos(FOTOS);
     observar();
     fotosP.then(function (l) { if (l && !usouFotos) { usouFotos = true; usarFotosDoPainel(l); observar(); } });
+  });
+
+  /* Nichos: mesma regra. Sem o painel, a lista fixa lá de cima continua valendo. */
+  var nichosP = buscarLista('nichos_do_site'), usouNichos = false;
+  Promise.race([nichosP, new Promise(function (r) { setTimeout(function () { r(null); }, 5000); })]).then(function (lista) {
+    if (lista) { usouNichos = true; usarNichosDoPainel(lista); }
+    nichosP.then(function (l) { if (l && !usouNichos) { usouNichos = true; usarNichosDoPainel(l); } });
   });
   /* ---------- menu, sanduíche e seção ativa ---------- */
   var topo = $('#topo'), burger = $('.burger'), menu = $('#menu');

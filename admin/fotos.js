@@ -8,6 +8,7 @@
   var P = window.Painel; if (!P) return;
   var esc = P.esc, $ = P.$;
 
+  /* Lista provisória até a aba carregar a de verdade (ver entrar()), para o formulário nunca abrir sem opções. */
   var NICHOS = ['beleza', 'skincare', 'moda', 'comida', 'casa e decoração', 'fitness', 'pet', 'tech'];
   /* formato = a moldura em que a foto aparece no site */
   var FORMATOS = [['foto 4:5', 4 / 5], ['foto 1:1', 1], ['foto 3:4', 3 / 4], ['foto 2:3', 2 / 3], ['foto 9:16', 9 / 16], ['foto 16:9', 16 / 9], ['foto 3:2', 3 / 2]];
@@ -23,7 +24,10 @@
   }
 
   function entrar() {
-    return P.Dados.listar('fotos', { ordem: [['ordem', true], ['id', true]] }).then(function (r) { fotos = r.dados; desenhar(); });
+    return Promise.all([
+      P.Dados.listar('fotos', { ordem: [['ordem', true], ['id', true]] }),
+      P.listarNichos()
+    ]).then(function (r) { fotos = r[0].dados; NICHOS = r[1]; desenhar(); });
   }
 
   function razao(formato) { var m = /(\d+):(\d+)/.exec(formato || ''); return m ? (+m[1] / +m[2]) : 0.8; }
